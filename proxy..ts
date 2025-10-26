@@ -1,4 +1,5 @@
 // proxy.ts (ROOT)
+
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import Negotiator from "negotiator";
@@ -22,20 +23,16 @@ export function proxy(request: NextRequest) {
   const hasLocale = locales.some(
     (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`)
   );
-  if (hasLocale) return; // ничего не делаем
+  if (hasLocale) return;
 
-  // Добавляем префикс локали
+  // Редиректим / и любые пути без локали -> /{locale}/...
   const locale = getLocale(request);
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname}`;
   return NextResponse.redirect(url);
 }
 
-// Важно: настроить matcher для Proxy
+// ОБЯЗАТЕЛЬНО: матчим корень и все пути, кроме статики
 export const config = {
-  matcher: [
-    "/((?!_next|.*\\..*).*)", // не трогаем статику
-    // Если хочешь, чтобы работало и на API, добавь следующую строку:
-    // "/api/:path*",
-  ],
+  matcher: ["/", "/((?!_next|.*\\..*).*)"],
 };
