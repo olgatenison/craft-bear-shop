@@ -1,5 +1,6 @@
 import Hero from "@/app/components/Hero";
 import { getMessages, type Locale } from "./messages";
+import ShopCategory from "../components/ShopCategory";
 
 export default async function Home({
   params,
@@ -21,7 +22,14 @@ export default async function Home({
         ctaHref={shopHref}
         // imageUrl можешь подменять данными с бэка
       />
-      {/* дальше размещаем блоки: категории, популярное и т.п. */}
+      <ShopCategory
+        title={t.ShopCategory.title}
+        browseAll={t.ShopCategory.browseAll}
+        cta={t.ShopCategory.cta}
+        names={t.ShopCategory.names}
+        alts={t.ShopCategory.alts}
+        lang={lang}
+      />
     </main>
   );
 }
