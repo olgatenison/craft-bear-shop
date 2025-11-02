@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "tailwindcss.com" },
+
+      { protocol: "https", hostname: "cdn.shopify.com" },
+      { protocol: "https", hostname: "*.cdn.shopify.com" },
     ],
     // or simpler:
     // domains: ["images.unsplash.com", "tailwindcss.com"],
