@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/app/lib/locale";
+import RowLink from "./ui/RowLink";
 
 type Props = {
   title: string;
@@ -23,37 +24,30 @@ export default function ShopCategory({
     {
       key: "beer" as const,
       href: `/${lang}/shop?category=beer`,
-      img: "https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-featured-category.jpg",
+      img: "/category/fresh-light-beer-mug.jpg",
       alt: alts.beer,
       big: true,
     },
     {
       key: "cider" as const,
       href: `/${lang}/shop?category=cider`,
-      img: "https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-category-01.jpg",
+      img: "/category/photo_2025-11-02_14-54-50.jpg",
       alt: alts.cider,
     },
     {
       key: "snacks" as const,
       href: `/${lang}/shop?category=snacks`,
-      img: "https://tailwindcss.com/plus-assets/img/ecommerce-images/home-page-03-category-02.jpg",
+      img: "/category/photo_2025-11-02_14-55-04.jpg",
       alt: alts.snacks,
     },
   ];
 
   return (
-    <div className="bg-gray-50">
+    <div className="">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div className="sm:flex sm:items-baseline sm:justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-            {title}
-          </h2>
-          <Link
-            href={`/${lang}/shop`}
-            className="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block"
-          >
-            {browseAll} <span aria-hidden="true"> &rarr;</span>
-          </Link>
+          <h2 className="text-2xl  tracking-tight text-white">{title}</h2>
+          <RowLink href={`/${lang}/shop`} label={browseAll} />
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
@@ -61,7 +55,7 @@ export default function ShopCategory({
             <div
               key={c.key}
               className={[
-                "group relative overflow-hidden rounded-lg",
+                "group relative overflow-hidden rounded-lg transform translate-all duration-300",
                 c.big
                   ? "aspect-2/1 sm:row-span-2 sm:aspect-square"
                   : "aspect-2/1 sm:aspect-auto",
@@ -72,7 +66,7 @@ export default function ShopCategory({
                 height={640}
                 alt={c.alt}
                 src={c.img}
-                className="absolute size-full object-cover group-hover:opacity-75"
+                className="absolute size-full object-cover group-hover:opacity-45 transform translate-all duration-300 "
                 priority={c.big}
               />
               <div
@@ -81,15 +75,20 @@ export default function ShopCategory({
               />
               <div className="absolute inset-0 flex items-end p-6">
                 <div>
-                  <h3 className="font-semibold text-white">
+                  <h3
+                    className="relative font-extrabold uppercase leading-none
+               text-transparent transform translate-all duration-300 group-hover:text-yellow-500  text-5xl sm:text-6xl lg:text-7xl xl:text-8xl
+               [-webkit-text-stroke:2px_white] 
+               [paint-order:stroke_fill]"
+                  >
                     <Link href={c.href}>
                       <span className="absolute inset-0" />
                       {names[c.key]}
                     </Link>
                   </h3>
-                  <p aria-hidden="true" className="mt-1 text-sm text-white">
+                  {/* <p aria-hidden="true" className="mt-1 text-sm text-white">
                     {cta}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>

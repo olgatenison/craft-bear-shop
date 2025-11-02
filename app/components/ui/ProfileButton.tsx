@@ -25,7 +25,7 @@ export default function ProfileButton({
         >
           <button
             aria-label="Account"
-            className="-m-2 p-2 text-gray-500 hover:text-gray-900"
+            className="-m-2 p-2 text-gray-200 hover:text-yellow-500 "
           >
             <UserIcon aria-hidden="true" className="size-6" />
             <span className="sr-only">Account</span>

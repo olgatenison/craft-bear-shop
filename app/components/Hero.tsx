@@ -12,27 +12,27 @@ export default function Hero({
   subtitle,
   ctaLabel,
   ctaHref = "/en/shop",
-  imageUrl = "https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=1600&auto=format&fit=crop",
+  imageUrl = "/category/golden-beer-bubbles-drop-wet-glass-generated-by-ai.jpg",
 }: HeroProps) {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden max-w-7xl mx-auto rounded-3xl mt-6 ">
       <div className="absolute inset-0">
         <Image
           src={imageUrl}
           alt=""
-          className="h-full w-full object-cover opacity-70"
+          className="h-full w-full object-cover"
           width={640}
           height={480}
         />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/40" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-28 sm:py-36">
-        <div className="max-w-2xl">
-          <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl">
+        <div className="max-w-xl">
+          <h1 className="text-6xl font-semibold leading-tight text-white  ">
             {title}
           </h1>
-          <p className="mt-4 text-lg text-white/90">{subtitle}</p>
+          <p className="mt-4 text-xl text-white/90">{subtitle}</p>
           <a
             href={ctaHref}
             className="mt-8 inline-block rounded-2xl bg-white px-6 py-3 text-sm font-medium text-gray-900 shadow"

@@ -1,6 +1,7 @@
 import Hero from "@/app/components/Hero";
 import { getMessages, type Locale } from "./messages";
 import ShopCategory from "../components/ShopCategory";
+import TrendingProducts from "../components/TrendingProducts";
 
 export default async function Home({
   params,
@@ -30,6 +31,7 @@ export default async function Home({
         alts={t.ShopCategory.alts}
         lang={lang}
       />
+      <TrendingProducts />
     </main>
   );
 }
