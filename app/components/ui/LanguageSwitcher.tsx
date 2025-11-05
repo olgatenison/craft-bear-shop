@@ -28,7 +28,7 @@ export default function LanguageSwitcher({ current }: { current?: Locale }) {
 
   return (
     <Popover className="relative">
-      <PopoverButton className="inline-flex items-center gap-x-1 text-sm/6 font-semibold text-gray-200 hover:text-yellow-500">
+      <PopoverButton className="inline-flex items-center gap-x-1 text-sm/6 font-semibold text-gray-400 hover:text-yellow-500">
         <span>{LOCALE_LABEL[active]}</span>
         <ChevronDownIcon aria-hidden="true" className="size-5" />
       </PopoverButton>

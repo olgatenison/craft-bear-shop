@@ -15,7 +15,7 @@ export default function Hero({
   imageUrl = "/category/golden-beer-bubbles-drop-wet-glass-generated-by-ai.jpg",
 }: HeroProps) {
   return (
-    <section className="relative overflow-hidden max-w-7xl mx-auto rounded-3xl mt-6 ">
+    <section className="relative overflow-hidden max-w-7xl mx-auto rounded-3xl ">
       <div className="absolute inset-0">
         <Image
           src={imageUrl}

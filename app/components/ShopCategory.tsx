@@ -77,7 +77,7 @@ export default function ShopCategory({
                 <div>
                   <h3
                     className="relative font-extrabold uppercase leading-none
-               text-transparent transform translate-all duration-300 group-hover:text-yellow-500  text-5xl sm:text-6xl lg:text-7xl xl:text-8xl
+               text-transparent transform translate-all duration-300 group-hover:text-yellow-500  text-5xl sm:text-6xl lg:text-7xl 
                [-webkit-text-stroke:2px_white] 
                [paint-order:stroke_fill]"
                   >
