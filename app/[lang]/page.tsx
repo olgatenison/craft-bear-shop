@@ -3,6 +3,8 @@ import { getMessages, type Locale } from "./messages";
 import ShopCategory from "../components/ShopCategory";
 import TrendingProducts from "../components/TrendingProducts";
 import BannerSection from "../components/BannerSection";
+import TextBlockCenter from "../components/ui/TextBlockCenter";
+import BrandSection from "../components/BrandSection";
 
 export default async function Home({
   params,
@@ -24,6 +26,7 @@ export default async function Home({
         ctaHref={shopHref}
         // imageUrl можешь подменять данными с бэка
       />
+      <TextBlockCenter />
       <ShopCategory
         title={t.ShopCategory.title}
         browseAll={t.ShopCategory.browseAll}
@@ -46,6 +49,9 @@ export default async function Home({
         ctaLabel={t.BannerSection.cta}
         ctaHref={`/${lang}/shop`}
       />
+
+      <TextBlockCenter />
+      <BrandSection />
     </main>
   );
 }

@@ -31,7 +31,7 @@ export default function ShopCategory({
     {
       key: "cider" as const,
       href: `/${lang}/shop?category=cider`,
-      img: "/category/photo_2025-11-02_14-54-50.jpg",
+      img: "/category/cider.jpg",
       alt: alts.cider,
     },
     {
@@ -44,7 +44,7 @@ export default function ShopCategory({
 
   return (
     <div className="">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pt-16 pb-10 sm:px-6 sm:pt-24 lg:px-8">
         <div className="sm:flex sm:items-baseline sm:justify-between">
           <h2 className="text-2xl  tracking-tight text-white">{title}</h2>
           <RowLink href={`/${lang}/shop`} label={browseAll} />

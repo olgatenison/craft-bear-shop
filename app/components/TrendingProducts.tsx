@@ -64,8 +64,7 @@ const products = [
     name: "Zip Tote Basket",
     color: "White and black",
     href: "#",
-    imageSrc:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-related-product-01.jpg",
+    imageSrc: "/category/Steam_Beer_700x700px.webp",
     imageAlt:
       "Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.",
     price: "$140",
@@ -77,8 +76,7 @@ const products = [
     name: "Zip High Wall Tote",
     color: "White and blue",
     href: "#",
-    imageSrc:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-related-product-02.jpg",
+    imageSrc: "/category/Steam_Beer_700x700px.webp",
     imageAlt:
       "Front of zip tote bag with white canvas, blue canvas straps and handle, and front zipper pocket.",
     price: "$150",
@@ -90,8 +88,7 @@ const products = [
     name: "Halfsize Tote",
     color: "Clay",
     href: "#",
-    imageSrc:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-related-product-03.jpg",
+    imageSrc: "/category/Steam_Beer_700x700px.webp",
     imageAlt:
       "Front of tote with monochrome natural canvas body, straps, roll top, and handles.",
     price: "$210",
@@ -104,7 +101,7 @@ const products = [
     color: "Black and orange",
     href: "#",
     imageSrc:
-      "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-03-related-product-04.jpg",
+      "/category/stoelzle-lausitz-bierglaeser-glass-mug-full-beer-foam.webp",
     imageAlt:
       "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
     price: "$210",
@@ -128,14 +125,14 @@ export default function TrendingProducts({
 }: TrendingProductsProps) {
   return (
     <div>
-      <div className="mx-auto max-w-2xl px-4 pt-8  pb-16 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-2xl px-4 pt-6  pb-26 sm:px-6 lg:max-w-7xl lg:px-8 ">
         <h2 className="text-2xl tracking-tight text-white">{title}</h2>
 
         <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
           {products.map((product) => (
             <div key={product.id}>
               <div className="relative">
-                <div className="relative aspect-square w-full overflow-hidden rounded-lg">
+                <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-stone-300">
                   <Image
                     src={product.imageSrc}
                     alt={product.imageAlt}

@@ -7,8 +7,8 @@ import ShoppingCart from "./ui/ShoppingCart";
 
 export default function Header({ lang }: { lang: Locale }) {
   return (
-    <header className="relative z-10 shadow-sm backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-end px-6 py-8 gap-3">
+    <header className="relative z-10 shadow-sm backdrop-blur-md ">
+      <div className="mx-auto flex max-w-7xl items-center justify-end px-6 py-8 gap-3 border-b border-gray-400">
         <LanguageSwitcher current={lang} />
         <HeaderSearch lang={lang} />
         <ProfileButton lang={lang} />

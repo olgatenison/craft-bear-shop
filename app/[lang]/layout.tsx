@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { enUS, fiFI, ukUA, ruRU } from "@clerk/localizations";
 import { etEE } from "@/app/i18n/clerk-et";
+import Footer from "../components/Footer";
 
 type ClerkLocale = typeof enUS;
 
@@ -48,6 +49,7 @@ export default async function RootLayout({
         <ClerkProvider localization={MAP[lang]}>
           <Header lang={lang} />
           {children}
+          <Footer />
         </ClerkProvider>
       </body>
     </html>

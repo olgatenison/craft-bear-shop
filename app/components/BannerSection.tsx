@@ -22,10 +22,10 @@ export default function BannerSection({
 }: BannerSectionProps) {
   return (
     <section
-      className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl"
+      className="mx-auto max-w-2xl px-4 pb-16 sm:px-6  lg:max-w-7xl "
       aria-labelledby="banner-heading"
     >
-      <div className="relative overflow-hidden rounded-lg">
+      <div className="relative overflow-hidden rounded-b-lg border-t border-gray-400">
         {/* контейнер под responsive-картинку */}
         <div className="relative  w-full lg:h-96 lg:aspect-auto">
           <Image
@@ -41,12 +41,17 @@ export default function BannerSection({
         </div>
 
         {/* карточка с текстом/кнопкой */}
-        <div className="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black/60 p-6 backdrop-blur-sm sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-96 lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg">
+        <div className="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black/60 p-10 backdrop-blur-sm sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-lg lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg">
           <div>
-            <h2 id="banner-heading" className="text-xl font-bold text-white">
+            <h2
+              id="banner-heading"
+              className="text-3xl font-bold text-white pt-20"
+            >
               {title}
             </h2>
-            <p className="mt-1 text-sm text-gray-200">{subtitle}</p>
+            <p className="mt-1 text-sm text-gray-200 pt-6 max-w-80">
+              {subtitle}
+            </p>
           </div>
 
           <Link
