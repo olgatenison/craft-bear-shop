@@ -19,7 +19,15 @@
     "title": "Trendaavat tuotteet",
     "stars": "5:stä tähdestä",
     "reviews": "arvostelua",
-    "add": "Lisää ostoskoriin"
+    "add": "Lisää ostoskoriin",
+    "alcohol": "Alkoholi vaba"
+  },
+  "AllProducts": {
+    "title": "Kaikki tuotteet",
+    "stars": "5:stä tähdestä",
+    "reviews": "arvostelua",
+    "add": "Lisää ostoskoriin",
+    "alcohol": "Alkoholi vaba"
   },
   "HeaderSearch": {
     "label": "Hae tuotteita",

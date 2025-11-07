@@ -31,7 +31,7 @@ export default function ShopCategory({
     {
       key: "cider" as const,
       href: `/${lang}/shop?category=cider`,
-      img: "/category/cider.jpg",
+      img: "/category/photo_2025-11-06_21-25-42.jpg",
       alt: alts.cider,
     },
     {

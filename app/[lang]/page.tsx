@@ -5,6 +5,7 @@ import TrendingProducts from "../components/TrendingProducts";
 import BannerSection from "../components/BannerSection";
 import TextBlockCenter from "../components/ui/TextBlockCenter";
 import BrandSection from "../components/BrandSection";
+import AllProducts from "../components/AllProducts";
 
 export default async function Home({
   params,
@@ -40,6 +41,7 @@ export default async function Home({
         stars={t.TrendingProducts.stars}
         reviews={t.TrendingProducts.reviews}
         add={t.TrendingProducts.add}
+        alcohol={t.TrendingProducts.alcohol}
       />
       <BannerSection
         imageSrc="/category/golden-beer-bubbles-drop-wet-glass-generated-by-ai.jpg"
@@ -52,6 +54,13 @@ export default async function Home({
 
       <TextBlockCenter />
       <BrandSection />
+      <AllProducts
+        title={t.TrendingProducts.title}
+        stars={t.TrendingProducts.stars}
+        reviews={t.TrendingProducts.reviews}
+        add={t.TrendingProducts.add}
+        alcohol={t.TrendingProducts.alcohol}
+      />
     </main>
   );
 }

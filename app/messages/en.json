@@ -19,7 +19,15 @@
     "title": "Trending Products",
     "stars": "out of 5 stars",
     "reviews": "reviews",
-    "add": "Add to cart"
+    "add": "Add to cart",
+    "alcohol": "Alcohol free"
+  },
+  "AllProducts": {
+    "title": "All Products",
+    "stars": "out of 5 stars",
+    "reviews": "reviews",
+    "add": "Add to cart",
+    "alcohol": "Alcohol free"
   },
   "HeaderSearch": {
     "label": "Search products",

@@ -19,7 +19,15 @@
     "title": "Trendikad tooted",
     "stars": "5-st tärnist",
     "reviews": "arvustust",
-    "add": "Lisa korvi"
+    "add": "Lisa korvi",
+    "alcohol": "Alkoholi vaba"
+  },
+  "AllProducts": {
+    "title": "Kõik tooted",
+    "stars": "5-st tärnist",
+    "reviews": "arvustust",
+    "add": "Lisa korvi",
+    "alcohol": "Alkoholi vaba"
   },
   "HeaderSearch": {
     "label": "Otsi tooteid",
