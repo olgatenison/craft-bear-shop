@@ -22,11 +22,11 @@ export default async function ShopPage({
 
       {/* список всех товаров */}
       <AllProducts
-        title={t.TrendingProducts.title}
-        stars={t.TrendingProducts.stars}
-        reviews={t.TrendingProducts.reviews}
-        add={t.TrendingProducts.add}
-        alcohol={t.TrendingProducts.alcohol}
+        title={t.AllProducts.title}
+        stars={t.AllProducts.stars}
+        reviews={t.AllProducts.reviews}
+        add={t.AllProducts.add}
+        alcohol={t.AllProducts.alcohol}
       />
     </main>
   );

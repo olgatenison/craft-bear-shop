@@ -5,7 +5,6 @@ import TrendingProducts from "../components/TrendingProducts";
 import BannerSection from "../components/BannerSection";
 import TextBlockCenter from "../components/ui/TextBlockCenter";
 import BrandSection from "../components/BrandSection";
-import AllProducts from "../components/AllProducts";
 
 export default async function Home({
   params,
@@ -27,7 +26,10 @@ export default async function Home({
         ctaHref={shopHref}
         // imageUrl можешь подменять данными с бэка
       />
-      <TextBlockCenter />
+      <TextBlockCenter
+        title={t.TextBlockCategory.title}
+        subtitle={t.TextBlockCategory.subtitle}
+      />
       <ShopCategory
         title={t.ShopCategory.title}
         browseAll={t.ShopCategory.browseAll}
@@ -52,15 +54,12 @@ export default async function Home({
         ctaHref={`/${lang}/shop`}
       />
 
-      <TextBlockCenter />
-      <BrandSection />
-      <AllProducts
-        title={t.TrendingProducts.title}
-        stars={t.TrendingProducts.stars}
-        reviews={t.TrendingProducts.reviews}
-        add={t.TrendingProducts.add}
-        alcohol={t.TrendingProducts.alcohol}
+      <TextBlockCenter
+        title={t.LogoSection.title}
+        subtitle={t.LogoSection.subtitle}
       />
+
+      <BrandSection />
     </main>
   );
 }

@@ -35,16 +35,16 @@ const products = [
   },
   {
     id: 3,
-    name: "Halfsize Tote",
-    color: "Clay",
+    name: "High Wall Tote",
+    color: "Black and orange",
     href: "#",
     imageSrc: "/category/ananas.png",
     imageAlt:
-      "Front of tote with monochrome natural canvas body, straps, roll top, and handles.",
+      "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
     price: "$210",
-    rating: 3,
-    reviewCount: 41,
-    abv: 4.7,
+    rating: 4,
+    reviewCount: 63,
+    abv: 0,
   },
   {
     id: 4,
@@ -53,6 +53,19 @@ const products = [
     href: "#",
     imageSrc:
       "/category/stoelzle-lausitz-bierglaeser-glass-mug-full-beer-foam.webp",
+    imageAlt:
+      "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
+    price: "$210",
+    rating: 4,
+    reviewCount: 63,
+    abv: 0,
+  },
+  {
+    id: 5,
+    name: "High Wall Tote",
+    color: "Black and orange",
+    href: "#",
+    imageSrc: "/category/ananas.png",
     imageAlt:
       "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
     price: "$210",
@@ -82,7 +95,7 @@ export default function AllProducts({
       <div className="mx-auto max-w-2xl px-4 pt-6  pb-26 sm:px-6 lg:max-w-7xl lg:px-8 ">
         <h2 className="text-2xl tracking-tight text-white">{title}</h2>
 
-        <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+        <div className="mt-8 grid grid-cols-1 gap-y-16 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
           {products.map((product) => (
             <div key={product.id} className="group">
               <div className="relative">

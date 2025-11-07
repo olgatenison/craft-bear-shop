@@ -4,6 +4,10 @@
     "subtitle": "Avasta iseseisvate pruulikodade piiratud väljalasked.",
     "cta": "Osta nüüd"
   },
+  "TextBlockCategory": {
+    "title": "Avasta uusi maitseid",
+    "subtitle": "Klassika ja piiratud väljaanded, käsitöölemmikud, hooajalised uued tulijad ja haruldused — mugavad kureeritud valikud õlle- ja siidristiilide kaupa ning suupisted kõik ühes kohas."
+  },
   "ShopCategory": {
     "title": "Osta kategooria kaupa",
     "browseAll": "Sirvi kõiki kategooriaid",
@@ -43,5 +47,9 @@
     "title": "Töökoha kollektsioon",
     "subtitle": "Uuenda oma töölauda esemetega, mis aitavad hoida korda ja selget meelt.",
     "cta": "Vaata kollektsiooni"
+  },
+  "LogoSection": {
+    "title": "Sinu lemmikbrändid — meie riiulitel",
+    "subtitle": "Oleme uhked, et teeme koostööd juhtivate sõltumatute õlletehaste ja suupistete tarnijatega, et pakkuda sulle parimat valikut käsitööõlut ja seotud tooteid."
   }
 }

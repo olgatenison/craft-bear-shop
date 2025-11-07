@@ -4,6 +4,10 @@
     "subtitle": "Löydä itsenäisten panimoiden rajatut erät.",
     "cta": "Osta nyt"
   },
+  "TextBlockCategory": {
+    "title": "Löydä uusia makuja",
+    "subtitle": "Klassikot ja limited-julkaisut, craft-suosikit, kausiuutuudet ja harvinaisuudet — kätevät kuratoidut valikoimat olut- ja siiderityyleittäin sekä naposteltavat yhdessä paikassa."
+  },
   "ShopCategory": {
     "title": "Osta kategorioittain",
     "browseAll": "Selaa kaikkia kategorioita",
@@ -43,5 +47,9 @@
     "title": "Työpiste-kokoelma",
     "subtitle": "Päivitä työpöytäsi esineillä, jotka pitävät sinut järjestyksessä ja ajatukset kirkkaina.",
     "cta": "Näytä kokoelma"
+  },
+  "LogoSection": {
+    "title": "Suosikkibrändisi — hyllyillämme",
+    "subtitle": "Olemme ylpeitä tehdessämme yhteistyötä johtavien itsenäisten panimoiden ja välipalatoimittajien kanssa tarjotaksemme parhaan valikoiman käsityöoluita ja oheistuotteita."
   }
 }

@@ -4,6 +4,10 @@
     "subtitle": "Discover limited releases from independent breweries.",
     "cta": "Shop now"
   },
+  "TextBlockCategory": {
+    "title": "Discover new flavors",
+    "subtitle": "Classics and limited releases, craft favorites, seasonal drops and rarities — convenient curated picks by beer and cider styles, plus snacks, all in one place."
+  },
   "ShopCategory": {
     "title": "Shop by Category",
     "browseAll": "Browse all categories",
@@ -43,5 +47,9 @@
     "title": "Workspace Collection",
     "subtitle": "Upgrade your desk with objects that keep you organized and clear-minded.",
     "cta": "View the collection"
+  },
+  "LogoSection": {
+    "title": "Your favorite brands — on our shelves",
+    "subtitle": "We’re proud to partner with leading independent breweries and snack suppliers to offer you the best selection of craft beer and related products."
   }
 }
