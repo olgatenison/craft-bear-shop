@@ -33,6 +33,36 @@
     "add": "Lisää ostoskoriin",
     "alcohol": "Alkoholi vaba"
   },
+  "OneProduct": {
+    "perUnit": "1 kpl",
+    "abv": "ABV",
+    "ibu": "IBU",
+    "fg": "FG",
+    "country": "Maa",
+    "brand": "Merkki",
+    "style": "Tyyli",
+    "addToCart": "Lisää ostoskoriin",
+    "reviews": "Arvostelut",
+    "outOf5Stars": "viidestä tähdestä",
+    "viewAllReviews": "Näytä kaikki arvostelut",
+    "leaveAReview": "Jätä arvostelu",
+    "imagesSectionTitle": "Kuvat",
+    "description": "Kuvaus",
+    "tastedBestWith": "Parhaiten nautittuna",
+    "allergens": "Allergeenit",
+    "ingredients": "Ainesosat"
+  },
+  "CustomerReviews": {
+    "title": "Customer Reviews",
+    "stars": "out of 5 stars",
+    "base1": "Based on ",
+    "base2": "reviews",
+    "starRew": "star reviews",
+    "CTATitle": "Share your thoughts",
+    "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
+    "button": "Write a review",
+    "recentReviews": "Recent reviews"
+  },
   "HeaderSearch": {
     "label": "Hae tuotteita",
     "placeholder": "Hae tuotteita…"

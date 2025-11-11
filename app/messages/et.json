@@ -33,6 +33,36 @@
     "add": "Lisa korvi",
     "alcohol": "Alkoholi vaba"
   },
+  "OneProduct": {
+    "perUnit": "1 tk kohta",
+    "abv": "ABV",
+    "ibu": "IBU",
+    "fg": "FG",
+    "country": "Riik",
+    "brand": "Bränd",
+    "style": "Stiil",
+    "addToCart": "Lisa ostukorvi",
+    "reviews": "Arvustused",
+    "outOf5Stars": "5-st tärnist",
+    "viewAllReviews": "Vaata kõiki arvustusi",
+    "leaveAReview": "Jäta arvustus",
+    "imagesSectionTitle": "Pildid",
+    "description": "Kirjeldus",
+    "tastedBestWith": "Sobib hästi koos",
+    "allergens": "Allergeenid",
+    "ingredients": "Koostisosad"
+  },
+  "CustomerReviews": {
+    "title": "Customer Reviews",
+    "stars": "out of 5 stars",
+    "base1": "Based on ",
+    "base2": "reviews",
+    "starRew": "star reviews",
+    "CTATitle": "Share your thoughts",
+    "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
+    "button": "Write a review",
+    "recentReviews": "Recent reviews"
+  },
   "HeaderSearch": {
     "label": "Otsi tooteid",
     "placeholder": "Otsi tooteid…"

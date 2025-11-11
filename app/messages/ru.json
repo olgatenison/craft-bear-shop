@@ -34,6 +34,36 @@
     "add": "В корзину",
     "alcohol": "Безалкогольное"
   },
+  "OneProduct": {
+    "perUnit": "за 1 шт",
+    "abv": "ABV",
+    "ibu": "IBU",
+    "fg": "FG",
+    "country": "Страна",
+    "brand": "Бренд",
+    "style": "Стиль",
+    "addToCart": "Добавить в корзину",
+    "reviews": "Отзывы",
+    "outOf5Stars": "из 5 звёзд",
+    "viewAllReviews": "Смотреть все отзывы",
+    "leaveAReview": "Оставить отзыв",
+    "imagesSectionTitle": "Изображения",
+    "description": "Описание",
+    "tastedBestWith": "Лучше всего сочетается с",
+    "allergens": "Аллергены",
+    "ingredients": "Ингредиенты"
+  },
+  "CustomerReviews": {
+    "title": "Customer Reviews",
+    "stars": "out of 5 stars",
+    "base1": "Based on ",
+    "base2": "reviews",
+    "starRew": "star reviews",
+    "CTATitle": "Share your thoughts",
+    "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
+    "button": "Write a review",
+    "recentReviews": "Recent reviews"
+  },
   "HeaderSearch": {
     "label": "Поиск по товарам",
     "placeholder": "Поиск по товарам…"

@@ -33,6 +33,36 @@
     "add": "Додати в кошик",
     "alcohol": "Безалкогольне"
   },
+  "OneProduct": {
+    "perUnit": "за 1 шт",
+    "abv": "ABV",
+    "ibu": "IBU",
+    "fg": "FG",
+    "country": "Країна",
+    "brand": "Бренд",
+    "style": "Стиль",
+    "addToCart": "Додати в кошик",
+    "reviews": "Відгуки",
+    "outOf5Stars": "із 5 зірок",
+    "viewAllReviews": "Переглянути всі відгуки",
+    "leaveAReview": "Залишити відгук",
+    "imagesSectionTitle": "Зображення",
+    "description": "Опис",
+    "tastedBestWith": "Найкраще смакує з",
+    "allergens": "Алергени",
+    "ingredients": "Інгредієнти"
+  },
+  "CustomerReviews": {
+    "title": "Customer Reviews",
+    "stars": "out of 5 stars",
+    "base1": "Based on ",
+    "base2": "reviews",
+    "starRew": "star reviews",
+    "CTATitle": "Share your thoughts",
+    "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
+    "button": "Write a review",
+    "recentReviews": "Recent reviews"
+  },
   "HeaderSearch": {
     "label": "Пошук товарів",
     "placeholder": "Пошук товарів…"

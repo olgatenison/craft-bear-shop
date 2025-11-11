@@ -5,13 +5,34 @@ import {
   CurrencyDollarIcon,
   GlobeAmericasIcon,
 } from "@heroicons/react/24/outline";
+import CustomerReviews from "./CustomerReviews";
+
+type ProductOverviewsProps = {
+  perUnit: string;
+  abv: string;
+  ibu: string;
+  fg: string;
+  country: string;
+  brand: string;
+  style: string;
+  addToCart: string;
+  reviews: string;
+  outOf5Stars: string;
+  viewAllReviews: string;
+  leaveAReview: string;
+  imagesSectionTitle: string;
+  description: string;
+  tastedBestWith: string;
+  allergens: string;
+  ingredients: string;
+};
 
 const product = {
-  name: "Basic Tee",
-  price: "$35",
+  name: "Kultowe Bez Glutenu Miodowe (Honey beer Gluten-Free)",
+  price: "35",
   GTIN: "djfhvjhsvf",
-  rating: 3.9,
-  reviewCount: 512,
+  rating: 4.5,
+  reviewCount: 2,
   href: "#",
   breadcrumbs: [
     { id: 1, name: "Women", href: "#" },
@@ -32,7 +53,11 @@ const product = {
     },
   ],
   country: "Poland",
-  abv: "4.7%",
+  brand: "Browar Staropolski",
+  style: "Flavored beer",
+  abv: "4.7",
+  ibu: "",
+  fg: "6",
   packSize: "0.5",
   allergens: "contains gluten",
   ingredients:
@@ -53,7 +78,25 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ProductOverviews() {
+export default function ProductOverviews({
+  perUnit,
+  abv,
+  ibu,
+  fg,
+  country,
+  brand,
+  style,
+  addToCart,
+  reviews,
+  outOf5Stars,
+  viewAllReviews,
+  leaveAReview,
+  imagesSectionTitle,
+  description,
+  tastedBestWith,
+  allergens,
+  ingredients,
+}: ProductOverviewsProps) {
   return (
     <div>
       <div className="pb-16 pt-6 sm:pb-24">
@@ -67,7 +110,7 @@ export default function ProductOverviews() {
                 <div className="flex items-center">
                   <a
                     href={breadcrumb.href}
-                    className="mr-4 text-sm font-medium text-gray-900"
+                    className="mr-4 text-sm font-medium text-gray-300 "
                   >
                     {breadcrumb.name}
                   </a>
@@ -88,7 +131,7 @@ export default function ProductOverviews() {
               <a
                 href={product.href}
                 aria-current="page"
-                className="font-medium text-gray-500 hover:text-gray-600"
+                className="font-medium text-gray-200 hover:text-yellow-500"
               >
                 {product.name}
               </a>
@@ -101,63 +144,137 @@ export default function ProductOverviews() {
             {/* title and price */}
             <div className="lg:col-span-5 lg:col-start-8">
               <div className="flex justify-between items-baseline">
-                <h1 className="text-4xl tracking-tight font-semibold text-yellow-400">
+                <h1 className="text-3xl tracking-tight font-semibold text-yellow-400 max-w-md">
                   {product.name}
-                  <span className="ml-3 ">{product.packSize} L</span>
+                  {product.packSize && (
+                    <span className="ml-3 text-white text-xl">
+                      {product.packSize} L
+                    </span>
+                  )}
                 </h1>
 
                 <div className="flex flex-col items-end text-right">
-                  <span className="text-2xl font-medium text-white">
-                    {product.price}
+                  <span className="text-2xl font-medium text-white whitespace-nowrap">
+                    {product.price} €
                   </span>
-                  <span className="text-base/8 text-gray-300">грн за 1 шт</span>
+                  <span className="text-base text-gray-300 whitespace-nowrap">
+                    {perUnit}
+                  </span>
                 </div>
+              </div>
+              {/* Product country and abv ibu fg */}
+              <div className="mt-10 w-full flex gap-5 justify-start items-center">
+                {product.abv && (
+                  <>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-lg text-white font-semibold whitespace-nowrap">
+                        {abv}:
+                      </span>
+                      <span className="text-base text-gray-300">
+                        {product.abv}%
+                      </span>
+                    </div>
+                    {(product.ibu || product.fg) && "|"}
+                  </>
+                )}
+
+                {product.ibu && (
+                  <>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-lg text-white font-semibold whitespace-nowrap">
+                        {ibu}:
+                      </span>
+                      <span className="text-base text-gray-300">
+                        {product.ibu}
+                      </span>
+                    </div>
+                    {product.fg && "|"}
+                  </>
+                )}
+
+                {product.fg && (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-lg text-white font-semibold whitespace-nowrap">
+                      {fg}:
+                    </span>
+                    <span className="text-base text-gray-300">
+                      {product.fg}°
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {/* Product country and avd */}
-              <div className="mt-5 w-full flex items-baseline gap-2">
-                <span className="text-lg/8 text-white font-semibold whitespace-nowrap">
-                  Avb:
-                </span>
-                <span className="text-base/8 text-gray-300">{product.abv}</span>
-              </div>
-              <div className="w-full flex items-baseline gap-2">
-                <span className="text-lg/8 text-white font-semibold whitespace-nowrap">
-                  Country:
-                </span>
-                <span className="text-base/8 text-gray-300">
-                  {product.country}
-                </span>
-              </div>
-              {/* Reviews */}
-              <div className="mt-4">
-                <h2 className="sr-only">Reviews</h2>
-                <div className="flex items-center">
-                  <div className="mr-2 flex items-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
-                        key={rating}
-                        aria-hidden="true"
-                        className={classNames(
-                          product.rating > rating
-                            ? "text-yellow-400"
-                            : "text-gray-500",
-                          "size-5 shrink-0"
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-500">
-                    {product.rating}
-                    <span className="sr-only"> out of 5 stars</span>
-                  </p>
+              {product.country && (
+                <div className="w-full flex items-baseline gap-2">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {country}:
+                  </span>
+                  <span className="text-base text-gray-300">
+                    {product.country}
+                  </span>
                 </div>
+              )}
+
+              {product.brand && (
+                <div className="w-full flex items-baseline gap-2">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {brand}:
+                  </span>
+                  <span className="text-base text-gray-300">
+                    {product.brand}
+                  </span>
+                </div>
+              )}
+              {product.style && (
+                <div className="w-full flex items-baseline gap-2 mt-10">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {style}:
+                  </span>
+                  <span className="text-base text-gray-300">
+                    {product.style}
+                  </span>
+                </div>
+              )}
+              {/* Reviews */}
+              <div className="mt-10">
+                <h2 className="sr-only">{reviews}</h2>
+                <button
+                  // onClick={() => {
+                  //   /* handle navigate to reviews */
+                  // }}
+                  className="w-full flex items-center justify-between hover:opacity-80 transition-opacity"
+                >
+                  <div className="flex items-center">
+                    <div className="mr-2 flex items-center">
+                      {[0, 1, 2, 3, 4].map((rating) => (
+                        <StarIcon
+                          key={rating}
+                          aria-hidden="true"
+                          className={classNames(
+                            product.rating > rating
+                              ? "text-yellow-400"
+                              : "text-gray-500",
+                            "size-5 shrink-0"
+                          )}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      {product.rating}
+                      <span className="sr-only">{outOf5Stars}</span>
+                    </p>
+                  </div>
+
+                  <span className="text-sm font-medium text-gray-400 hover:text-yellow-500 transition-colors">
+                    {product.reviewCount > 0 ? viewAllReviews : leaveAReview}
+                  </span>
+                </button>
               </div>
             </div>
 
             {/* Image gallery */}
             <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:-mt-6">
-              <h2 className="sr-only">Images</h2>
+              <h2 className="sr-only">{imagesSectionTitle}</h2>
 
               <div className="group grid grid-cols-1 lg:grid-cols-2 lg:gap-8 p-6">
                 {product.images.map((image) => (
@@ -189,60 +306,71 @@ export default function ProductOverviews() {
               <form>
                 <button
                   type="submit"
-                  className="relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 w-full"
+                  className=" inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 sm:w-auto lg:w-full duration-300"
                 >
-                  Add to cart
+                  {addToCart}
                 </button>
               </form>
 
-              {/* Product Description*/}
-              <div className="mt-10">
-                <h2 className="mx-auto mt-6 max-w-lg  text-lg/8 text-white font-semibold">
-                  Description
-                </h2>
+              {/* Product Description */}
+              {product.description && (
+                <div className="mt-10">
+                  <h2 className="mx-auto mt-6 max-w-lg text-lg text-white font-semibold">
+                    {description}
+                  </h2>
 
-                <div
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                  className="mx-auto mt-6 max-w-xl text-pretty text-base/8 text-gray-300 "
-                />
-              </div>
-              {/* Tasted best with */}
-              <div className="mt-8 border-t border-gray-200 pt-8">
-                <h2 className="mx-auto mt-6 max-w-lg text-pretty text-lg/8 text-white font-semibold">
-                  Tasted best with
-                </h2>
-
-                <div className="mt-4">
-                  <ul
-                    role="list"
-                    className="list-disc space-y-1 pl-5 text-sm/6 text-gray-300 marker:text-gray-300"
-                  >
-                    {product.details.map((item) => (
-                      <li key={item} className="pl-2">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                    className="mx-auto mt-6 max-w-xl text-pretty text-base text-gray-300"
+                  />
                 </div>
-              </div>
+              )}
+
+              {/* Tasted best with */}
+              {product.details && product.details.length > 0 && (
+                <div className="mt-8 border-t border-gray-200 pt-8">
+                  <h2 className="mx-auto mt-6 max-w-lg text-pretty text-lg text-white font-semibold">
+                    {tastedBestWith}
+                  </h2>
+
+                  <div className="mt-4">
+                    <ul
+                      role="list"
+                      className="list-disc space-y-1 pl-5 text-sm text-gray-300 marker:text-gray-300"
+                    >
+                      {product.details.map((item) => (
+                        <li key={item} className="pl-2">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
+
               {/* Allergens */}
-              <div className="w-full flex items-baseline gap-2 mt-6">
-                <span className="text-lg/8 text-white font-semibold whitespace-nowrap">
-                  Allergens:
-                </span>
-                <span className="text-base/8 text-gray-300">
-                  {product.allergens}
-                </span>
-              </div>
+              {product.allergens && (
+                <div className="w-full flex items-baseline gap-2 mt-6">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {allergens}:
+                  </span>
+                  <span className="text-base text-gray-300">
+                    {product.allergens}
+                  </span>
+                </div>
+              )}
+
               {/* Ingredients */}
-              <div className="w-full flex items-baseline gap-2 mt-6">
-                <span className="text-lg/8 text-white font-semibold whitespace-nowrap">
-                  Ingridients:
-                </span>
-                <span className="text-base/8 text-gray-300">
-                  {product.ingredients}
-                </span>
-              </div>
+              {product.ingredients && (
+                <div className="w-full flex items-baseline gap-2 mt-6">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {ingredients}:
+                  </span>
+                  <span className="text-base text-gray-300">
+                    {product.ingredients}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

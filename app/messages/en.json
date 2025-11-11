@@ -33,6 +33,39 @@
     "add": "Add to cart",
     "alcohol": "Alcohol free"
   },
+  "OneProduct": {
+    "perUnit": "per 1 pc",
+    "abv": "ABV",
+    "ibu": "IBU",
+    "fg": "FG",
+    "country": "Country",
+    "brand": "Brand",
+    "style": "Style",
+    "addToCart": "Add to cart",
+
+    "reviews": "Reviews",
+    "outOf5Stars": "out of 5 stars",
+    "viewAllReviews": "View all reviews",
+    "leaveAReview": "Leave a review",
+    "images": "Images",
+    "description": "Description",
+    "tastedBestWith": "Tasted best with",
+    "allergens": "Allergens",
+    "ingredients": "Ingredients"
+  },
+
+  "CustomerReviews": {
+    "title": "Customer Reviews",
+    "stars": "out of 5 stars",
+    "base1": "Based on ",
+    "base2": "reviews",
+    "starRew": "star reviews",
+    "CTATitle": "Share your thoughts",
+    "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
+    "button": "Write a review",
+    "recentReviews": "Recent reviews"
+  },
+
   "HeaderSearch": {
     "label": "Search products",
     "placeholder": "Search products…"
