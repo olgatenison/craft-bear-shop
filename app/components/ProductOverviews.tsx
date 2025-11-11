@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/20/solid";
+
 import {
   CurrencyDollarIcon,
   GlobeAmericasIcon,
@@ -8,6 +9,7 @@ import {
 const product = {
   name: "Basic Tee",
   price: "$35",
+  GTIN: "djfhvjhsvf",
   rating: 3.9,
   reviewCount: 512,
   href: "#",
@@ -18,15 +20,23 @@ const product = {
   images: [
     {
       id: 1,
-      imageSrc:
-        "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-featured-product-shot.jpg",
+      imageSrc: "/category/ananas.png",
+      imageAlt: "Back of women's Basic Tee in black.",
+      primary: true,
+    },
+    {
+      id: 2,
+      imageSrc: "/category/Steam_Beer_700x700px.webp",
       imageAlt: "Back of women's Basic Tee in black.",
       primary: true,
     },
   ],
   country: "Poland",
   abv: "4.7%",
-
+  packSize: "0.5",
+  allergens: "contains gluten",
+  ingredients:
+    "water, barley malt, hops, pineapple juice/concentrate, sugar or glucose-fructose syrup, pineapple flavoring",
   description: `
     <p>The Basic tee is an honest new take on a classic. The tee uses super soft, pre-shrunk cotton for true comfort and a dependable fit. They are hand cut and sewn locally, with a special dye technique that gives each tee it's own look.</p>
     <p>Looking to stock your closet? The Basic tee also comes in a 3-pack or 5-pack at a bundle discount.</p>
@@ -38,19 +48,6 @@ const product = {
     "Machine wash cold with similar colors",
   ],
 };
-
-const policies = [
-  {
-    name: "International delivery",
-    icon: GlobeAmericasIcon,
-    description: "Get your order in 2 years",
-  },
-  {
-    name: "Loyalty rewards",
-    icon: CurrencyDollarIcon,
-    description: "Don't look at other tees",
-  },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -98,19 +95,22 @@ export default function ProductOverviews() {
             </li>
           </ol>
         </nav> */}
+
         <div className="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
           <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
+            {/* title and price */}
             <div className="lg:col-span-5 lg:col-start-8">
               <div className="flex justify-between items-baseline">
                 <h1 className="text-4xl tracking-tight font-semibold text-yellow-400">
                   {product.name}
+                  <span className="ml-3 ">{product.packSize} L</span>
                 </h1>
 
                 <div className="flex flex-col items-end text-right">
                   <span className="text-2xl font-medium text-white">
                     {product.price}
                   </span>
-                  <span className="text-base/8 text-gray-300">грн за 1 кг</span>
+                  <span className="text-base/8 text-gray-300">грн за 1 шт</span>
                 </div>
               </div>
 
@@ -156,28 +156,35 @@ export default function ProductOverviews() {
             </div>
 
             {/* Image gallery */}
-            <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
+            <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:-mt-6">
               <h2 className="sr-only">Images</h2>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
+              <div className="group grid grid-cols-1 lg:grid-cols-2 lg:gap-8 p-6">
                 {product.images.map((image) => (
-                  <Image
-                    width={640}
-                    height={640}
+                  <div
                     key={image.id}
-                    alt={image.imageAlt}
-                    src={image.imageSrc}
                     className={classNames(
                       image.primary
                         ? "lg:col-span-2 lg:row-span-2"
                         : "hidden lg:block",
-                      "rounded-lg max-w-lg object-cover object-center"
+                      // квадратная карточка со сглаженной анимацией фона
+                      "relative aspect-square w-full overflow-hidden rounded-lg bg-stone-200 transition-colors duration-300 "
                     )}
-                  />
+                  >
+                    <Image
+                      alt={image.imageAlt}
+                      src={image.imageSrc}
+                      fill
+                      sizes="(min-width:1024px) 50vw, 100vw"
+                      className="object-contain object-center"
+                      priority={image.primary}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
 
+            {/* button  and right side under*/}
             <div className="mt-16 lg:col-span-5">
               <form>
                 <button
@@ -188,7 +195,7 @@ export default function ProductOverviews() {
                 </button>
               </form>
 
-              {/* Product details */}
+              {/* Product Description*/}
               <div className="mt-10">
                 <h2 className="mx-auto mt-6 max-w-lg  text-lg/8 text-white font-semibold">
                   Description
@@ -199,7 +206,7 @@ export default function ProductOverviews() {
                   className="mx-auto mt-6 max-w-xl text-pretty text-base/8 text-gray-300 "
                 />
               </div>
-
+              {/* Tasted best with */}
               <div className="mt-8 border-t border-gray-200 pt-8">
                 <h2 className="mx-auto mt-6 max-w-lg text-pretty text-lg/8 text-white font-semibold">
                   Tasted best with
@@ -217,6 +224,24 @@ export default function ProductOverviews() {
                     ))}
                   </ul>
                 </div>
+              </div>
+              {/* Allergens */}
+              <div className="w-full flex items-baseline gap-2 mt-6">
+                <span className="text-lg/8 text-white font-semibold whitespace-nowrap">
+                  Allergens:
+                </span>
+                <span className="text-base/8 text-gray-300">
+                  {product.allergens}
+                </span>
+              </div>
+              {/* Ingredients */}
+              <div className="w-full flex items-baseline gap-2 mt-6">
+                <span className="text-lg/8 text-white font-semibold whitespace-nowrap">
+                  Ingridients:
+                </span>
+                <span className="text-base/8 text-gray-300">
+                  {product.ingredients}
+                </span>
               </div>
             </div>
           </div>
