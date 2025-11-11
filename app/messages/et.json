@@ -31,7 +31,15 @@
     "stars": "5-st tärnist",
     "reviews": "arvustust",
     "add": "Lisa korvi",
-    "alcohol": "Alkoholi vaba"
+    "alcohol": "Alkoholi vaba",
+    "noProducts": "Tooteid ei leitud",
+    "noProductsDescription": "Selles kategoorias pole veel tooteid. Vaata hiljem uuesti või sirvi teisi kategooriaid.",
+    "categories": {
+      "all": "Kõik tooted",
+      "beer": "Õlu",
+      "cider": "Siider",
+      "snacks": "Suupisted"
+    }
   },
   "OneProduct": {
     "perUnit": "1 tk kohta",
@@ -53,15 +61,15 @@
     "ingredients": "Koostisosad"
   },
   "CustomerReviews": {
-    "title": "Customer Reviews",
-    "stars": "out of 5 stars",
-    "base1": "Based on ",
-    "base2": "reviews",
-    "starRew": "star reviews",
-    "CTATitle": "Share your thoughts",
-    "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
-    "button": "Write a review",
-    "recentReviews": "Recent reviews"
+    "title": "Kliendiarvustused",
+    "stars": "5-st tärnist",
+    "base1": "Põhineb ",
+    "base2": "arvustustel",
+    "starRew": "{stars}-tärni arvustused",
+    "CTATitle": "Jaga oma mõtteid",
+    "CTASubtitle": "Kui oled seda toodet kasutanud, jaga oma kogemust teiste ostjatega",
+    "button": "Kirjuta arvustus",
+    "recentReviews": "Hiljutised arvustused"
   },
   "HeaderSearch": {
     "label": "Otsi tooteid",

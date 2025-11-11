@@ -31,7 +31,15 @@
     "stars": "out of 5 stars",
     "reviews": "reviews",
     "add": "Add to cart",
-    "alcohol": "Alcohol free"
+    "alcohol": "Alcohol free",
+    "noProducts": "No products found",
+    "noProductsDescription": "There are no products in this category yet. Check back soon or browse other categories.",
+    "categories": {
+      "all": "All Products",
+      "beer": "Beer",
+      "cider": "Cider",
+      "snacks": "Snacks"
+    }
   },
   "OneProduct": {
     "perUnit": "per 1 pc",

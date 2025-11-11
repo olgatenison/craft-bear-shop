@@ -31,7 +31,15 @@
     "stars": "з 5 зірок",
     "reviews": "відгуків",
     "add": "Додати в кошик",
-    "alcohol": "Безалкогольне"
+    "alcohol": "Безалкогольне",
+    "noProducts": "Товари не знайдено",
+    "noProductsDescription": "У цій категорії поки що немає товарів. Завітайте пізніше або перегляньте інші категорії.",
+    "categories": {
+      "all": "Усі продукти",
+      "beer": "Пиво",
+      "cider": "Сидр",
+      "snacks": "Закуски"
+    }
   },
   "OneProduct": {
     "perUnit": "за 1 шт",
@@ -53,15 +61,15 @@
     "ingredients": "Інгредієнти"
   },
   "CustomerReviews": {
-    "title": "Customer Reviews",
-    "stars": "out of 5 stars",
-    "base1": "Based on ",
-    "base2": "reviews",
-    "starRew": "star reviews",
-    "CTATitle": "Share your thoughts",
-    "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
-    "button": "Write a review",
-    "recentReviews": "Recent reviews"
+    "title": "Відгуки покупців",
+    "stars": "із 5 зірок",
+    "base1": "На основі ",
+    "base2": "відгуків",
+    "starRew": "відгуки на {stars} зірок",
+    "CTATitle": "Поділіться своїми враженнями",
+    "CTASubtitle": "Якщо ви користувалися цим продуктом, поділіться враженнями з іншими покупцями",
+    "button": "Написати відгук",
+    "recentReviews": "Нещодавні відгуки"
   },
   "HeaderSearch": {
     "label": "Пошук товарів",

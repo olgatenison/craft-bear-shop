@@ -2,85 +2,22 @@ import Image from "next/image";
 import { StarIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { WineOff } from "lucide-react";
+import type { FlattenedProduct } from "../data/mappers";
+import type { Locale } from "@/app/[lang]/messages";
 
 const classNames = (...xs: Array<string | false | null | undefined>) =>
   xs.filter(Boolean).join(" ");
 
-const products = [
-  {
-    id: 1,
-    name: "Zip Tote Basket",
-    color: "White and black",
-    href: "#",
-    imageSrc: "/category/czekolada.png",
-    imageAlt:
-      "Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.",
-    price: "$140",
-    rating: 4,
-    reviewCount: 87,
-    abv: 4.7,
-  },
-  {
-    id: 2,
-    name: "Zip High Wall Tote",
-    color: "White and blue",
-    href: "#",
-    imageSrc: "/category/Steam_Beer_700x700px.webp",
-    imageAlt:
-      "Front of zip tote bag with white canvas, blue canvas straps and handle, and front zipper pocket.",
-    price: "$150",
-    rating: 5,
-    reviewCount: 112,
-    abv: 4.7,
-  },
-  {
-    id: 3,
-    name: "High Wall Tote",
-    color: "Black and orange",
-    href: "#",
-    imageSrc: "/category/ananas.png",
-    imageAlt:
-      "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
-    price: "$210",
-    rating: 4,
-    reviewCount: 63,
-    abv: 0,
-  },
-  {
-    id: 4,
-    name: "High Wall Tote",
-    color: "Black and orange",
-    href: "#",
-    imageSrc:
-      "/category/stoelzle-lausitz-bierglaeser-glass-mug-full-beer-foam.webp",
-    imageAlt:
-      "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
-    price: "$210",
-    rating: 4,
-    reviewCount: 63,
-    abv: 0,
-  },
-  {
-    id: 5,
-    name: "High Wall Tote",
-    color: "Black and orange",
-    href: "#",
-    imageSrc: "/category/ananas.png",
-    imageAlt:
-      "Front of zip tote bag with black canvas, black handles, and orange drawstring top.",
-    price: "$210",
-    rating: 4,
-    reviewCount: 63,
-    abv: 0,
-  },
-];
-
 type AllProductsProps = {
   title: string;
-  stars: string;
-  reviews: string;
-  add: string;
-  alcohol: string;
+  stars: string; // локалізація для "out of 5 stars"
+  reviews: string; // локалізація для "reviews"
+  add: string; // кнопка "Add"
+  alcohol: string; // бейдж для безалкогольних
+  rating?: string; // якщо є переклад для слова "rating" (необов'язково)
+
+  lang: Locale;
+  products: FlattenedProduct[];
 };
 
 export default function AllProducts({
@@ -89,29 +26,61 @@ export default function AllProducts({
   reviews,
   add,
   alcohol,
+  // rating, // не використовується прямо тут; лишив у пропсах на випадок подальшого UX
+  lang,
+  products,
 }: AllProductsProps) {
   return (
-    <div>
-      <div className="mx-auto max-w-2xl px-4 pt-6  pb-26 sm:px-6 lg:max-w-7xl lg:px-8 ">
-        <h2 className="text-2xl tracking-tight text-white">{title}</h2>
+    <div className="mx-auto max-w-2xl px-4 pt-6 sm:px-6 lg:max-w-7xl lg:px-8">
+      <h2 className="text-2xl tracking-tight text-white">{title}</h2>
 
-        <div className="mt-8 grid grid-cols-1 gap-y-16 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-          {products.map((product) => (
-            <div key={product.id} className="group">
+      <div className="mt-8 grid grid-cols-1 gap-y-16 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+        {products.map((p) => {
+          const img = p.featuredImage;
+          const price = p.priceRange?.minVariantPrice;
+
+          // ABV (кріпкість) та об'єм
+          const abvRaw = p.specs?.abv; // "4.7" | "0" | undefined
+          const abvNum =
+            abvRaw !== undefined && abvRaw !== "" ? Number(abvRaw) : null;
+          const hasAbv = abvNum !== null && !Number.isNaN(abvNum);
+          const isAlcoholFree = hasAbv && abvNum === 0;
+
+          let packText: string | null = null;
+          if (p.specs?.pack_size_l) packText = `${p.specs.pack_size_l} L`;
+          // якщо хочеш підтримати мл:
+          // else if (p.specs?.pack_size_ml) packText = `${p.specs.pack_size_ml} ml`;
+
+          const metaParts: string[] = [];
+          if (hasAbv) metaParts.push(`${abvNum} %`);
+          if (packText) metaParts.push(packText);
+          const meta = metaParts.join(" • ");
+
+          // рейтинг (поки немає — буде 0)
+          // const productRating = Number((p as any).rating ?? 0);
+          const productRating = p.rating ?? 0;
+
+          // маршрут до сторінки товару — налаштуй під себе
+          const href = `/${lang}/product/${p.handle}`;
+
+          return (
+            <div key={p.id} className="group">
               <div className="relative">
                 <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-stone-600 transition-colors duration-300 group-hover:bg-white">
-                  <Image
-                    src={product.imageSrc}
-                    alt={product.imageAlt}
-                    fill
-                    sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw"
-                    className="object-contain p-3 transition-transform duration-300 transform-gpu will-change-transform group-hover:scale-105"
-                    priority={false}
-                  />{" "}
-                  {Number(product.abv) === 0 && (
+                  {img?.url && (
+                    <Image
+                      src={img.url}
+                      alt={img.altText ?? p.title}
+                      fill
+                      sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw"
+                      className="object-contain p-3 transition-transform duration-300 transform-gpu will-change-transform group-hover:scale-105"
+                    />
+                  )}
+
+                  {isAlcoholFree && (
                     <span
                       className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/95 px-2 py-1 text-[10px] font-semibold uppercase text-white shadow-lg ring-1 ring-black/10"
-                      aria-label="Alcohol-free"
+                      aria-label={alcohol}
                     >
                       <WineOff className="h-3.5 w-3.5" aria-hidden="true" />
                       {alcohol}
@@ -124,25 +93,29 @@ export default function AllProducts({
                   <div>
                     <h3 className="text-lg font-medium text-yellow-400">
                       <Link
-                        href={product.href}
+                        href={href}
                         className="focus:outline-none focus:ring-2 focus:ring-white/30 rounded"
                       >
-                        {product.name}
+                        {p.title}
                         <span
                           className="absolute inset-0 rounded-lg"
                           aria-hidden="true"
                         />
                       </Link>
                     </h3>
-                    <p>{product.abv} %</p>
+
+                    {/* Метадані: ABV • Обʼєм — тільки якщо є що показати */}
+                    {meta && <p className="text-sm text-gray-300">{meta}</p>}
                   </div>
+
                   <p className="text-lg font-semibold text-white">
-                    {product.price}
+                    {price ? `${price.amount} ${price.currencyCode}` : "—"}
                   </p>
                 </div>
+
                 <div className="mt-3 flex flex-col">
                   <span className="sr-only">
-                    {product.rating} {stars}
+                    {productRating} {stars}
                   </span>
                   <div className="flex">
                     {[0, 1, 2, 3, 4].map((i) => (
@@ -150,33 +123,29 @@ export default function AllProducts({
                         key={i}
                         aria-hidden="true"
                         className={classNames(
-                          product.rating > i ? "text-white" : "text-gray-500",
+                          productRating > i ? "text-white" : "text-gray-500",
                           "size-3 shrink-0"
                         )}
                       />
                     ))}
                   </div>
-                  <p className="mt-1 text-sm text-gray-500">
-                    {product.reviewCount} {reviews}
-                  </p>
+                  {/* Shopify Storefront не повертає reviewCount — поки ставимо 0 */}
+                  <p className="mt-1 text-sm text-gray-500">0 {reviews}</p>
                 </div>
-                <p className="my-4 font-normal text-sm text-white/80">
-                  {product.imageAlt}
-                </p>
               </div>
 
               <div className="mt-6">
                 <Link
-                  href={product.href}
+                  href={href}
                   className="relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
                 >
                   {add}
-                  <span className="sr-only">, {product.name}</span>
+                  <span className="sr-only">, {p.title}</span>
                 </Link>
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
   );

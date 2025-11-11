@@ -32,7 +32,15 @@
     "stars": "из 5 звёзд",
     "reviews": "отзывов",
     "add": "В корзину",
-    "alcohol": "Безалкогольное"
+    "alcohol": "Безалкогольное",
+    "noProducts": "Товары не найдены",
+    "noProductsDescription": "В этой категории пока нет товаров. Загляните позже или посмотрите другие категории.",
+    "categories": {
+      "all": "Все продукты",
+      "beer": "Пиво",
+      "cider": "Сидр",
+      "snacks": "Закуски"
+    }
   },
   "OneProduct": {
     "perUnit": "за 1 шт",
@@ -54,15 +62,15 @@
     "ingredients": "Ингредиенты"
   },
   "CustomerReviews": {
-    "title": "Customer Reviews",
-    "stars": "out of 5 stars",
-    "base1": "Based on ",
-    "base2": "reviews",
-    "starRew": "star reviews",
-    "CTATitle": "Share your thoughts",
-    "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
-    "button": "Write a review",
-    "recentReviews": "Recent reviews"
+    "title": "Отзывы покупателей",
+    "stars": "из 5 звёзд",
+    "base1": "На основе ",
+    "base2": "отзывов",
+    "starRew": "отзывы на {stars} звёзд",
+    "CTATitle": "Поделитесь своим мнением",
+    "CTASubtitle": "Если вы пользовались этим товаром, поделитесь опытом с другими покупателями",
+    "button": "Написать отзыв",
+    "recentReviews": "Недавние отзывы"
   },
   "HeaderSearch": {
     "label": "Поиск по товарам",
