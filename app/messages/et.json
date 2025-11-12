@@ -54,7 +54,6 @@
     "outOf5Stars": "5-st tärnist",
     "viewAllReviews": "Vaata kõiki arvustusi",
     "leaveAReview": "Jäta arvustus",
-    "imagesSectionTitle": "Pildid",
     "description": "Kirjeldus",
     "tastedBestWith": "Sobib hästi koos",
     "allergens": "Allergeenid",
@@ -89,5 +88,6 @@
   "LogoSection": {
     "title": "Sinu lemmikbrändid — meie riiulitel",
     "subtitle": "Oleme uhked, et teeme koostööd juhtivate sõltumatute õlletehaste ja suupistete tarnijatega, et pakkuda sulle parimat valikut käsitööõlut ja seotud tooteid."
-  }
+  },
+  "common": { "pageNotFound": "Page not found", "goHome": "Go to homepage" }
 }

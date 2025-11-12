@@ -33,13 +33,13 @@
     "add": "Lisää ostoskoriin",
     "alcohol": "Alkoholi vaba",
     "noProducts": "Tuotteita ei löytynyt",
-  "noProductsDescription": "Tässä kategoriassa ei vielä ole tuotteita. Tule myöhemmin takaisin tai katso muita kategorioita.", "categories": {
-    "all": "Kaikki tuotteet",
-    "beer": "Olut",
-    "cider": "Siideri",
-    "snacks": "Välipalat"
-  }
-}
+    "noProductsDescription": "Tässä kategoriassa ei vielä ole tuotteita. Tule myöhemmin takaisin tai katso muita kategorioita.",
+    "categories": {
+      "all": "Kaikki tuotteet",
+      "beer": "Olut",
+      "cider": "Siideri",
+      "snacks": "Välipalat"
+    }
   },
   "OneProduct": {
     "perUnit": "1 kpl",
@@ -54,7 +54,6 @@
     "outOf5Stars": "viidestä tähdestä",
     "viewAllReviews": "Näytä kaikki arvostelut",
     "leaveAReview": "Jätä arvostelu",
-    "imagesSectionTitle": "Kuvat",
     "description": "Kuvaus",
     "tastedBestWith": "Parhaiten nautittuna",
     "allergens": "Allergeenit",
@@ -89,5 +88,9 @@
   "LogoSection": {
     "title": "Suosikkibrändisi — hyllyillämme",
     "subtitle": "Olemme ylpeitä tehdessämme yhteistyötä johtavien itsenäisten panimoiden ja välipalatoimittajien kanssa tarjotaksemme parhaan valikoiman käsityöoluita ja oheistuotteita."
+  },
+  "common": {
+    "pageNotFound": "Page not found",
+    "goHome": "Go to homepage"
   }
 }

@@ -28,6 +28,8 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
           metafields(
             identifiers: [
               { namespace: "specs", key: "abv" }
+              { namespace: "specs", key: "ibu" }
+              { namespace: "specs", key: "fg" }
               { namespace: "specs", key: "allergens" }
               { namespace: "specs", key: "brand" }
               { namespace: "specs", key: "country" }
@@ -55,8 +57,6 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
     }
   }
 `;
-
-// коллекции
 
 export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
   query ProductsByCollection(
@@ -96,6 +96,8 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
             metafields(
               identifiers: [
                 { namespace: "specs", key: "abv" }
+                { namespace: "specs", key: "ibu" }
+                { namespace: "specs", key: "fg" }
                 { namespace: "specs", key: "pack_size_l" }
                 { namespace: "specs", key: "country" }
                 { namespace: "specs", key: "brand" }
@@ -120,9 +122,6 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
     }
   }
 `;
-
-// один продукт
-
 // lib/shopify/queries/products.gql.ts
 export const PRODUCT_BY_HANDLE = /* GraphQL */ `
   query ProductByHandle($handle: String!) {
@@ -159,11 +158,14 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
       metafields(
         identifiers: [
           { namespace: "specs", key: "abv" }
+          { namespace: "specs", key: "ibu" }
+          { namespace: "specs", key: "fg" }
           { namespace: "specs", key: "pack_size_l" }
           { namespace: "specs", key: "country" }
           { namespace: "specs", key: "brand" }
           { namespace: "specs", key: "ingredients" }
           { namespace: "specs", key: "allergens" }
+          { namespace: "specs", key: "pairing" }
           { namespace: "shopify", key: "beer-style" }
         ]
       ) {
@@ -171,6 +173,15 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
         key
         type
         value
+        reference {
+          ... on Metaobject {
+            handle
+            fields {
+              key
+              value
+            }
+          }
+        }
       }
     }
   }

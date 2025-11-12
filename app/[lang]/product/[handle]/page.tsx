@@ -7,36 +7,54 @@ import { notFound } from "next/navigation";
 export default async function ProductPage({
   params,
 }: {
-  params: { lang: Locale; handle: string };
+  params: Promise<{ lang: Locale; handle: string }>;
 }) {
-  const { lang, handle } = params;
+  const { lang, handle } = await params;
+
   const t = await getMessages(lang);
   const product = await fetchProductByHandleFlattened(handle);
 
-  if (!product) notFound();
+  if (!product) {
+    // console.log("⚠️ Продукт не найден, показываем 404");
+    notFound();
+  }
+
+  // console.log("🔍 Запрошен продукт:", { lang, handle });
+  // console.log("📦 Получен продукт:", product ? "✅ Найден" : "❌ Не найден");
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <ProductOverviews
-        perUnit={t.perUnit}
-        abv={t.abv}
-        ibu={t.ibu}
-        fg={t.fg}
-        country={t.country}
-        brand={t.brand}
-        addToCart={t.addToCart}
-        reviews={t.reviews}
-        outOf5Stars={t.outOf5Stars}
-        viewAllReviews={t.viewAllReviews}
-        leaveAReview={t.leaveAReview}
-        imagesSectionTitle={t.imagesSectionTitle}
-        description={t.description}
-        tastedBestWith={t.tastedBestWith}
-        allergens={t.allergens}
-        ingredients={t.ingredients}
-        // і сам продукт передай у компонент (додай проп у ProductOverviews)
-        // product={product}
+        product={product}
+        perUnit={t.OneProduct.perUnit}
+        abv={t.OneProduct.abv}
+        ibu={t.OneProduct.ibu}
+        fg={t.OneProduct.fg}
+        country={t.OneProduct.country}
+        brand={t.OneProduct.brand}
+        style={t.OneProduct.style}
+        addToCart={t.OneProduct.addToCart}
+        reviews={t.OneProduct.reviews}
+        outOf5Stars={t.OneProduct.outOf5Stars}
+        viewAllReviews={t.OneProduct.viewAllReviews}
+        leaveAReview={t.OneProduct.leaveAReview}
+        description={t.OneProduct.description}
+        tastedBestWith={t.OneProduct.tastedBestWith}
+        allergens={t.OneProduct.allergens}
+        ingredients={t.OneProduct.ingredients}
       />
     </main>
   );
 }
+
+/* <CustomerReviews
+        title={t.CustomerReviews.title}
+        stars={t.CustomerReviews.stars}
+        base1={t.CustomerReviews.base1}
+        base2={t.CustomerReviews.base2}
+        starRew={t.CustomerReviews.starRew}
+        CTATitle={t.CustomerReviews.CTATitle}
+        CTASubtitle={t.CustomerReviews.CTASubtitle}
+        button={t.CustomerReviews.button}
+        recentReviews={t.CustomerReviews.recentReviews}
+      /> */

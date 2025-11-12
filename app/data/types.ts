@@ -6,21 +6,38 @@ export type Metafield = {
   key: string;
   type: string;
   value: string | null;
+  reference?: {
+    // ✅ Добавьте это
+    handle?: string;
+    fields?: Array<{
+      key: string;
+      value: string;
+    }>;
+  } | null;
 };
-
 export type ProductNode = {
   id: string;
   title: string;
   handle: string;
+  descriptionHtml?: string;
   updatedAt?: string;
   featuredImage?: { url: string; altText?: string | null } | null;
+  images: {
+    // ✅ Уберите ? чтобы сделать обязательным
+    edges: {
+      node: {
+        url: string;
+        altText: string | null;
+      };
+    }[];
+  };
   priceRange: { minVariantPrice: Money };
   metafields: Metafield[];
   collections?: {
     edges: {
       node: {
         handle: string;
-        title: string;
+        title?: string;
       };
     }[];
   };
@@ -43,3 +60,7 @@ export type ProductsByCollectionResponse = {
     };
   } | null;
 };
+
+export interface ProductByHandleResponse {
+  product: ProductNode | null;
+}

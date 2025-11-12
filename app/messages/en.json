@@ -50,12 +50,10 @@
     "brand": "Brand",
     "style": "Style",
     "addToCart": "Add to cart",
-
     "reviews": "Reviews",
     "outOf5Stars": "out of 5 stars",
     "viewAllReviews": "View all reviews",
     "leaveAReview": "Leave a review",
-    "images": "Images",
     "description": "Description",
     "tastedBestWith": "Tasted best with",
     "allergens": "Allergens",
@@ -92,5 +90,6 @@
   "LogoSection": {
     "title": "Your favorite brands — on our shelves",
     "subtitle": "We’re proud to partner with leading independent breweries and snack suppliers to offer you the best selection of craft beer and related products."
-  }
+  },
+  "common": { "pageNotFound": "Page not found", "goHome": "Go to homepage" }
 }

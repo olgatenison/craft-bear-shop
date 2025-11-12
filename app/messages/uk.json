@@ -54,7 +54,6 @@
     "outOf5Stars": "із 5 зірок",
     "viewAllReviews": "Переглянути всі відгуки",
     "leaveAReview": "Залишити відгук",
-    "imagesSectionTitle": "Зображення",
     "description": "Опис",
     "tastedBestWith": "Найкраще смакує з",
     "allergens": "Алергени",
@@ -89,5 +88,6 @@
   "LogoSection": {
     "title": "Ваші улюблені бренди — на наших полицях",
     "subtitle": "Ми пишаємося партнерством із провідними незалежними пивоварнями та постачальниками закусок, щоб запропонувати вам найкращий вибір крафтового пива та супутніх товарів."
-  }
+  },
+  "common": { "pageNotFound": "Page not found", "goHome": "Go to homepage" }
 }

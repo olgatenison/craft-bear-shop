@@ -3,11 +3,13 @@ import { shopifyFetch } from "../lib/shopify/client";
 import {
   PRODUCTS_ALL_WITH_METAFIELDS,
   PRODUCTS_BY_COLLECTION,
+  PRODUCT_BY_HANDLE,
 } from "../lib/shopify/queries/products.gql";
 import {
   ProductsAllResponse,
   ProductNode,
   ProductsByCollectionResponse,
+  ProductByHandleResponse, // ✅ Добавьте этот импорт
 } from "./types";
 import { flattenMetafields, FlattenedProduct } from "./mappers";
 
@@ -69,12 +71,11 @@ export async function fetchCollectionProductsFlattened(
 }
 
 // один продукт
-
 export async function fetchProductByHandleFlattened(
   handle: string
 ): Promise<FlattenedProduct | null> {
   if (!handle) return null;
-  const data = await shopifyFetch<ProductByHandleResponse>(
+  const data = await shopifyFetch<ProductByHandleResponse>( // ✅ Теперь тип известен
     PRODUCT_BY_HANDLE,
     { handle },
     60
