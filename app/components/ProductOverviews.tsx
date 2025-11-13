@@ -57,7 +57,7 @@ export default function ProductOverviews({
   const productAllergens = product.specs?.allergens;
   const productIngredients = product.specs?.ingredients;
   const productPairing = product.specs?.pairing;
-
+  console.log(productStyle);
   const images =
     product.images?.edges.map((edge, index) => ({
       id: index + 1,

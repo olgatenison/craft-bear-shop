@@ -1,20 +1,40 @@
 // app/data/types.ts
 export type Money = { amount: string; currencyCode: string };
 
+export type MetaobjectField = {
+  key: string;
+  value: string;
+  type?: string;
+  references?: {
+    edges: Array<{
+      node: {
+        handle?: string;
+        fields?: MetaobjectField[];
+      };
+    }>;
+  };
+};
+
+export type MetaobjectReference = {
+  id?: string;
+  handle?: string;
+  type?: string;
+  fields?: MetaobjectField[];
+};
+
 export type Metafield = {
   namespace: string;
   key: string;
   type: string;
   value: string | null;
-  reference?: {
-    // ✅ Добавьте это
-    handle?: string;
-    fields?: Array<{
-      key: string;
-      value: string;
+  reference?: MetaobjectReference | null;
+  references?: {
+    edges: Array<{
+      node: MetaobjectReference;
     }>;
   } | null;
 };
+
 export type ProductNode = {
   id: string;
   title: string;
@@ -23,7 +43,6 @@ export type ProductNode = {
   updatedAt?: string;
   featuredImage?: { url: string; altText?: string | null } | null;
   images: {
-    // ✅ Уберите ? чтобы сделать обязательным
     edges: {
       node: {
         url: string;

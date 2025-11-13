@@ -173,12 +173,32 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
         key
         type
         value
-        reference {
-          ... on Metaobject {
-            handle
-            fields {
-              key
-              value
+        references(first: 10) {
+          edges {
+            node {
+              ... on Metaobject {
+                id
+                handle
+                type
+                fields {
+                  key
+                  value
+                  type
+                  references(first: 5) {
+                    edges {
+                      node {
+                        ... on Metaobject {
+                          handle
+                          fields {
+                            key
+                            value
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }

@@ -28,18 +28,52 @@ export type FlattenedProduct = Omit<
   reviewCount?: number;
 };
 
-// ✅ Функция для извлечения значения из metafield
 function extractMetafieldValue(mf: Metafield): string | null {
-  // Если это reference (beer-style), берем значение из fields
-  if (mf.type.includes("reference") && mf.reference?.fields) {
-    // Ищем поле 'name' или 'value' в metaobject
-    const nameField = mf.reference.fields.find(
-      (f) => f.key === "name" || f.key === "value" || f.key === "title"
-    );
-    return nameField?.value || mf.reference.handle || null;
+  if (
+    mf.type.includes("list.") &&
+    mf.type.includes("reference") &&
+    mf.references?.edges
+  ) {
+    const names: string[] = [];
+
+    for (const edge of mf.references.edges) {
+      const metaobject = edge.node;
+      if (!metaobject.fields) continue;
+
+      const nameField = metaobject.fields.find(
+        (f) => f.key === "name" || f.key === "title" || f.key === "value"
+      );
+
+      if (nameField?.value) {
+        names.push(nameField.value);
+      } else if (metaobject.handle) {
+        names.push(metaobject.handle);
+      }
+    }
+
+    return names.length > 0 ? names.join(", ") : null;
   }
 
-  // Для обычных полей возвращаем value
+  if (
+    mf.type.includes("reference") &&
+    !mf.type.includes("list.") &&
+    mf.reference?.fields
+  ) {
+    const nameField = mf.reference.fields.find(
+      (f) => f.key === "name" || f.key === "title" || f.key === "value"
+    );
+
+    if (nameField?.value) {
+      return nameField.value;
+    }
+
+    if (mf.reference.handle) {
+      return mf.reference.handle;
+    }
+
+    return null;
+  }
+
   return mf.value;
 }
 
@@ -50,9 +84,14 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
     if (!mf) continue;
 
     const value = extractMetafieldValue(mf);
+
     if (!value) continue;
 
-    (grouped[mf.namespace] ??= {})[mf.key] = value;
+    if (!grouped[mf.namespace]) {
+      grouped[mf.namespace] = {};
+    }
+
+    grouped[mf.namespace][mf.key] = value;
   }
 
   const collections = p.collections?.edges.map((e) => e.node.handle) || [];
@@ -60,7 +99,56 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
   return {
     ...p,
     collections,
-    specs: grouped["specs"],
-    shopify: grouped["shopify"],
+    specs: grouped["specs"] as FlattenedProduct["specs"],
+    shopify: grouped["shopify"] as FlattenedProduct["shopify"],
   };
+}
+
+export function getMetafieldValue(
+  product: FlattenedProduct,
+  namespace: "specs" | "shopify",
+  key: string
+): string | undefined {
+  const nsData = product[namespace];
+  if (!nsData) return undefined;
+  return nsData[key as keyof typeof nsData];
+}
+
+export function getBeerStyle(product: FlattenedProduct): string | undefined {
+  return product.shopify?.["beer-style"];
+}
+
+export function getProductSpecs(product: FlattenedProduct): Array<{
+  label: string;
+  value: string;
+}> {
+  const specs: Array<{ label: string; value: string }> = [];
+
+  if (product.specs) {
+    const specsMap: Record<string, string> = {
+      abv: "ABV",
+      ibu: "IBU",
+      fg: "FG",
+      pack_size_l: "Volume",
+      country: "Country",
+      brand: "Brand",
+      allergens: "Allergens",
+      pairing: "Pairing",
+      ingredients: "Ingredients",
+    };
+
+    for (const [key, label] of Object.entries(specsMap)) {
+      const value = product.specs[key as keyof typeof product.specs];
+      if (value) {
+        specs.push({ label, value });
+      }
+    }
+  }
+
+  const beerStyle = getBeerStyle(product);
+  if (beerStyle) {
+    specs.unshift({ label: "Style", value: beerStyle });
+  }
+
+  return specs;
 }
