@@ -33,7 +33,6 @@ export default async function Home({
       <ShopCategory
         title={t.ShopCategory.title}
         browseAll={t.ShopCategory.browseAll}
-        cta={t.ShopCategory.cta}
         names={t.ShopCategory.names}
         alts={t.ShopCategory.alts}
         lang={lang}

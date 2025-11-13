@@ -6,17 +6,17 @@
   },
   "TextBlockCategory": {
     "title": "Löydä uusia makuja",
-    "subtitle": "Klassikot ja limited-julkaisut, craft-suosikit, kausiuutuudet ja harvinaisuudet — kätevät kuratoidut valikoimat olut- ja siiderityyleittäin sekä naposteltavat yhdessä paikassa."
+    "subtitle": "Klassikot ja limited-julkaisut, craft-suosikit, kausiuutuudet ja harvinaisuudet — kätevät kuratoidut valikoimat olut- ja siiderityyleittäin sekä snacksit yhdessä paikassa."
   },
   "ShopCategory": {
     "title": "Osta kategorioittain",
     "browseAll": "Selaa kaikkia kategorioita",
-    "cta": "Osta nyt",
-    "names": { "beer": "Olut", "cider": "Siideri", "snacks": "Naposteltavat" },
+
+    "names": { "beer": "Olut", "cider": "Siideri", "snacks": "snacksit" },
     "alts": {
       "beer": "Valikoima pienpanimo-oluita hyllyllä.",
       "cider": "Valikoima pullotettuja siidereitä.",
-      "snacks": "Herkullisia naposteltavia puisen tarjottimen vieressä."
+      "snacks": "Herkullisia snacksit puisen tarjottimen vieressä."
     }
   },
   "TrendingProducts": {
@@ -90,7 +90,9 @@
     "subtitle": "Olemme ylpeitä tehdessämme yhteistyötä johtavien itsenäisten panimoiden ja välipalatoimittajien kanssa tarjotaksemme parhaan valikoiman käsityöoluita ja oheistuotteita."
   },
   "common": {
-    "pageNotFound": "Page not found",
-    "goHome": "Go to homepage"
+    "home": "Etusivu",
+    "shop": "Kauppa",
+    "pageNotFound": "Sivua ei löytynyt",
+    "goHome": "Palaa etusivulle"
   }
 }

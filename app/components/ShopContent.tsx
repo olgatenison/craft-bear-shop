@@ -1,11 +1,14 @@
 // app/components/ShopContent.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Tabs from "./ui/Tabs";
 import AllProducts from "./AllProducts";
 import type { FlattenedProduct } from "@/app/data/mappers";
 import type { Locale } from "@/app/[lang]/messages";
+
+type CategoryKey = "all" | "beer" | "cider" | "snacks";
 
 interface ShopContentProps {
   products: FlattenedProduct[];
@@ -17,39 +20,66 @@ interface ShopContentProps {
     alcohol: string;
     noProducts: string;
     noProductsDescription: string;
-    categories: {
-      all: string;
-      beer: string;
-      cider: string;
-      snacks: string;
-    };
+    categories: Record<CategoryKey, string>;
   };
   lang: Locale;
 }
+
+const CATEGORIES: CategoryKey[] = ["all", "beer", "cider", "snacks"];
 
 export default function ShopContent({
   products,
   translations,
   lang,
 }: ShopContentProps) {
-  const [activeTab, setActiveTab] = useState("all");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const filteredProducts = products.filter((product) => {
-    if (activeTab === "all") return true;
-    return product.collections.includes(activeTab);
-  });
+  // читаем таб из URL
+  const tabFromUrl = (searchParams.get("category") ?? "all") as string;
+  const initialTab: CategoryKey = CATEGORIES.includes(tabFromUrl as CategoryKey)
+    ? (tabFromUrl as CategoryKey)
+    : "all";
 
-  // Получаем название категории
+  const [activeTab, setActiveTab] = useState<CategoryKey>(initialTab);
+
+  // если URL поменялся извне — синхронизируем состояние
+  useEffect(() => {
+    const urlTab = (searchParams.get("category") ?? "all") as string;
+    const nextTab: CategoryKey = CATEGORIES.includes(urlTab as CategoryKey)
+      ? (urlTab as CategoryKey)
+      : "all";
+    setActiveTab((prev) => (prev === nextTab ? prev : nextTab));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  // обёртка, чтобы менять и состояние, и URL
+  const handleTabChange = (tab: CategoryKey) => {
+    setActiveTab(tab);
+    const params = new URLSearchParams(searchParams);
+    if (tab === "all") {
+      params.delete("category");
+    } else {
+      params.set("category", tab);
+    }
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
+
+  const filteredProducts = useMemo(() => {
+    if (activeTab === "all") return products;
+    return products.filter((p) => p.collections?.includes(activeTab));
+  }, [products, activeTab]);
+
   const categoryTitle =
-    translations.categories[
-      activeTab as keyof typeof translations.categories
-    ] || translations.categories.all;
+    translations.categories[activeTab] ?? translations.categories.all;
 
   return (
     <>
       <Tabs
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
         labels={translations.categories}
       />
 

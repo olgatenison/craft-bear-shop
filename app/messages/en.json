@@ -11,7 +11,7 @@
   "ShopCategory": {
     "title": "Shop by Category",
     "browseAll": "Browse all categories",
-    "cta": "Shop now",
+
     "names": { "beer": "Beer", "cider": "Cider", "snacks": "Snacks" },
     "alts": {
       "beer": "Assorted craft beers on a shelf.",
@@ -91,5 +91,10 @@
     "title": "Your favorite brands — on our shelves",
     "subtitle": "We’re proud to partner with leading independent breweries and snack suppliers to offer you the best selection of craft beer and related products."
   },
-  "common": { "pageNotFound": "Page not found", "goHome": "Go to homepage" }
+  "common": {
+    "home": "Home",
+    "shop": "Shop",
+    "pageNotFound": "Page not found",
+    "goHome": "Go to homepage"
+  }
 }

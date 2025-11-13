@@ -11,12 +11,12 @@
   "ShopCategory": {
     "title": "Osta kategooria kaupa",
     "browseAll": "Sirvi kõiki kategooriaid",
-    "cta": "Osta nüüd",
-    "names": { "beer": "Õlu", "cider": "Siider", "snacks": "Suupisted" },
+
+    "names": { "beer": "Õlu", "cider": "Siider", "snacks": "Snäkid" },
     "alts": {
       "beer": "Valik käsitööõllesid riiulil.",
       "cider": "Valik pudelisiidreid.",
-      "snacks": "Maitsvad suupisted puidust aluse kõrval."
+      "snacks": "Maitsvad snäkid puidust aluse kõrval."
     }
   },
   "TrendingProducts": {
@@ -89,5 +89,10 @@
     "title": "Sinu lemmikbrändid — meie riiulitel",
     "subtitle": "Oleme uhked, et teeme koostööd juhtivate sõltumatute õlletehaste ja suupistete tarnijatega, et pakkuda sulle parimat valikut käsitööõlut ja seotud tooteid."
   },
-  "common": { "pageNotFound": "Page not found", "goHome": "Go to homepage" }
+  "common": {
+    "home": "Avaleht",
+    "shop": "Pood",
+    "pageNotFound": "Lehte ei leitud",
+    "goHome": "Mine avalehele"
+  }
 }

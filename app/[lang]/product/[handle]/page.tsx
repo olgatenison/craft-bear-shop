@@ -3,6 +3,25 @@ import { fetchProductByHandleFlattened } from "../../../data/repo";
 import { getMessages, type Locale } from "../../messages";
 import ProductOverviews from "../../../components/ProductOverviews";
 import { notFound } from "next/navigation";
+import Breadcrumbs from "@/app/components/ui/Breadcrumbs";
+
+// Функция для определения категории из коллекций
+function getCategoryFromProduct(
+  collections: string[] | undefined
+): string | undefined {
+  if (!collections || collections.length === 0) return undefined;
+
+  const lowerCollections = collections.map((c) => c.toLowerCase());
+
+  if (lowerCollections.some((c) => c.includes("beer") || c.includes("пиво")))
+    return "beer";
+  if (lowerCollections.some((c) => c.includes("cider") || c.includes("сидр")))
+    return "cider";
+  if (lowerCollections.some((c) => c.includes("snack") || c.includes("снек")))
+    return "snacks";
+
+  return undefined;
+}
 
 export default async function ProductPage({
   params,
@@ -15,15 +34,23 @@ export default async function ProductPage({
   const product = await fetchProductByHandleFlattened(handle);
 
   if (!product) {
-    // console.log("⚠️ Продукт не найден, показываем 404");
     notFound();
   }
 
-  // console.log("🔍 Запрошен продукт:", { lang, handle });
-  // console.log("📦 Получен продукт:", product ? "✅ Найден" : "❌ Не найден");
+  const productCategory = getCategoryFromProduct(product.collections);
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
+      <Breadcrumbs
+        lang={lang}
+        labels={{
+          home: t.common.home,
+          shop: t.common.shop,
+          categories: t.AllProducts.categories,
+        }}
+        productCategory={productCategory}
+        currentLabel={product.title}
+      />
       <ProductOverviews
         product={product}
         perUnit={t.OneProduct.perUnit}
