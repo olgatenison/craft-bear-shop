@@ -1,7 +1,7 @@
 // app/components/ShopContent.tsx
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Tabs from "./ui/Tabs";
 import AllProducts from "./AllProducts";
@@ -44,25 +44,19 @@ export default function ShopContent({
 
   const [activeTab, setActiveTab] = useState<CategoryKey>(initialTab);
 
-  // если URL поменялся извне — синхронизируем состояние
-  useEffect(() => {
-    const urlTab = (searchParams.get("category") ?? "all") as string;
-    const nextTab: CategoryKey = CATEGORIES.includes(urlTab as CategoryKey)
-      ? (urlTab as CategoryKey)
-      : "all";
-    setActiveTab((prev) => (prev === nextTab ? prev : nextTab));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-
   // обёртка, чтобы менять и состояние, и URL
   const handleTabChange = (tab: CategoryKey) => {
     setActiveTab(tab);
-    const params = new URLSearchParams(searchParams);
+
+    // searchParams — ReadonlyURLSearchParams, поэтому создаём новый
+    const params = new URLSearchParams(searchParams.toString());
+
     if (tab === "all") {
       params.delete("category");
     } else {
       params.set("category", tab);
     }
+
     const qs = params.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
@@ -75,11 +69,17 @@ export default function ShopContent({
   const categoryTitle =
     translations.categories[activeTab] ?? translations.categories.all;
 
+  // категория для карточек (без "all")
+  const currentCategory =
+    activeTab !== "all"
+      ? (activeTab as "beer" | "cider" | "snacks")
+      : undefined;
+
   return (
     <>
       <Tabs
         activeTab={activeTab}
-        onTabChange={handleTabChange}
+        onTabChange={(tab) => handleTabChange(tab as CategoryKey)}
         labels={translations.categories}
       />
 
@@ -102,6 +102,7 @@ export default function ShopContent({
           alcohol={translations.alcohol}
           lang={lang}
           products={filteredProducts}
+          category={currentCategory}
         />
       )}
     </>

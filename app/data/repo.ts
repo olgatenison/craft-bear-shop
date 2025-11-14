@@ -1,5 +1,5 @@
 // app/data/repo.ts
-import { shopifyFetch } from "../lib/shopify/client";
+import { shopifyFetchWithLocale } from "../lib/shopify/client";
 import {
   PRODUCTS_ALL_WITH_METAFIELDS,
   PRODUCTS_BY_COLLECTION,
@@ -9,22 +9,39 @@ import {
   ProductsAllResponse,
   ProductNode,
   ProductsByCollectionResponse,
-  ProductByHandleResponse, // ✅ Добавьте этот импорт
+  ProductByHandleResponse,
 } from "./types";
-import { flattenMetafields, FlattenedProduct } from "./mappers";
+import {
+  flattenMetafields,
+  flattenProducts,
+  FlattenedProduct,
+} from "./mappers";
 
-export async function fetchAllProducts(): Promise<ProductNode[]> {
+// Локали фронта
+export type Locale = "en" | "uk" | "ru" | "et" | "fi";
+
+// вспомогательный тип для edges
+type Edge<T> = { cursor?: string | null; node: T };
+
+/** ---------- Все продукты ---------- */
+export async function fetchAllProducts(
+  locale: Locale = "en"
+): Promise<ProductNode[]> {
   const pageSize = 250;
   let after: string | null = null;
   const acc: ProductNode[] = [];
 
   do {
-    const data: ProductsAllResponse = await shopifyFetch<ProductsAllResponse>(
+    const data = await shopifyFetchWithLocale<ProductsAllResponse>(
       PRODUCTS_ALL_WITH_METAFIELDS,
       { first: pageSize, after },
+      locale,
       60
     );
-    acc.push(...data.products.edges.map((e: { node: ProductNode }) => e.node));
+
+    const edges = data.products.edges as Array<Edge<ProductNode>>;
+    acc.push(...edges.map((e) => e.node));
+
     after = data.products.pageInfo.hasNextPage
       ? data.products.pageInfo.endCursor
       : null;
@@ -33,30 +50,49 @@ export async function fetchAllProducts(): Promise<ProductNode[]> {
   return acc;
 }
 
-export async function fetchAllProductsFlattened(): Promise<FlattenedProduct[]> {
-  const nodes = await fetchAllProducts();
-  return nodes.map(flattenMetafields);
+export async function fetchAllProductsFlattened(
+  locale: Locale = "en"
+): Promise<FlattenedProduct[]> {
+  const nodes = await fetchAllProducts(locale);
+
+  // // Логирование для проверки
+  // if (process.env.NODE_ENV === "development" && nodes.length > 0) {
+  //   console.log(`[${locale}] Sample product:`, {
+  //     title: nodes[0].title,
+  //     description: nodes[0].descriptionHtml?.substring(0, 80),
+  //   });
+  // }
+
+  return flattenProducts(nodes);
 }
 
+/** ---------- Продукты по коллекции ---------- */
 export async function fetchCollectionProducts(
-  handle: string
+  handle: string,
+  locale: Locale = "en"
 ): Promise<ProductNode[]> {
   const pageSize = 250;
   let after: string | null = null;
   const acc: ProductNode[] = [];
 
   do {
-    const data: ProductsByCollectionResponse =
-      await shopifyFetch<ProductsByCollectionResponse>(
-        PRODUCTS_BY_COLLECTION,
-        { handle, first: pageSize, after },
-        60
-      );
+    const data = await shopifyFetchWithLocale<ProductsByCollectionResponse>(
+      PRODUCTS_BY_COLLECTION,
+      { handle, first: pageSize, after },
+      locale,
+      60
+    );
 
-    const block = data.collection?.products;
+    const block = data.collection?.products as
+      | {
+          edges: Array<Edge<ProductNode>>;
+          pageInfo: { hasNextPage: boolean; endCursor: string | null };
+        }
+      | undefined;
+
     if (!block) break;
 
-    acc.push(...block.edges.map((e: { node: ProductNode }) => e.node));
+    acc.push(...block.edges.map((e) => e.node));
     after = block.pageInfo.hasNextPage ? block.pageInfo.endCursor : null;
   } while (after);
 
@@ -64,22 +100,28 @@ export async function fetchCollectionProducts(
 }
 
 export async function fetchCollectionProductsFlattened(
-  handle: string
+  handle: string,
+  locale: Locale = "en"
 ): Promise<FlattenedProduct[]> {
-  const nodes = await fetchCollectionProducts(handle);
-  return nodes.map(flattenMetafields);
+  const nodes = await fetchCollectionProducts(handle, locale);
+  return flattenProducts(nodes);
 }
 
-// один продукт
+/** ---------- Один продукт по handle ---------- */
 export async function fetchProductByHandleFlattened(
-  handle: string
+  handle: string,
+  locale: Locale = "en"
 ): Promise<FlattenedProduct | null> {
   if (!handle) return null;
-  const data = await shopifyFetch<ProductByHandleResponse>( // ✅ Теперь тип известен
+
+  const data = await shopifyFetchWithLocale<ProductByHandleResponse>(
     PRODUCT_BY_HANDLE,
     { handle },
+    locale,
     60
   );
+
   if (!data.product) return null;
+
   return flattenMetafields(data.product);
 }

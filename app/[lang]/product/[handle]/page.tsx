@@ -31,7 +31,7 @@ export default async function ProductPage({
   const { lang, handle } = await params;
 
   const t = await getMessages(lang);
-  const product = await fetchProductByHandleFlattened(handle);
+  const product = await fetchProductByHandleFlattened(handle, lang);
 
   if (!product) {
     notFound();

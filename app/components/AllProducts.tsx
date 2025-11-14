@@ -8,16 +8,19 @@ import type { Locale } from "@/app/[lang]/messages";
 const classNames = (...xs: Array<string | false | null | undefined>) =>
   xs.filter(Boolean).join(" ");
 
+type CategoryKey = "beer" | "cider" | "snacks";
+
 type AllProductsProps = {
   title: string;
-  stars: string; // локалізація для "out of 5 stars"
-  reviews: string; // локалізація для "reviews"
+  stars: string; // локализация "out of 5 stars"
+  reviews: string; // локализация "reviews"
   add: string; // кнопка "Add"
-  alcohol: string; // бейдж для безалкогольних
-  rating?: string; // якщо є переклад для слова "rating" (необов'язково)
+  alcohol: string; // бейдж "безалкогольное"
+  rating?: string; // опционально, если понадобится
 
   lang: Locale;
   products: FlattenedProduct[];
+  category?: CategoryKey; // ← активная категория для построения ссылок
 };
 
 export default function AllProducts({
@@ -26,9 +29,9 @@ export default function AllProducts({
   reviews,
   add,
   alcohol,
-  // rating, // не використовується прямо тут; лишив у пропсах на випадок подальшого UX
   lang,
   products,
+  category,
 }: AllProductsProps) {
   return (
     <div className="mx-auto max-w-2xl px-4 pt-6 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -39,7 +42,7 @@ export default function AllProducts({
           const img = p.featuredImage;
           const price = p.priceRange?.minVariantPrice;
 
-          // ABV (кріпкість) та об'єм
+          // ABV (крепость) и объём
           const abvRaw = p.specs?.abv; // "4.7" | "0" | undefined
           const abvNum =
             abvRaw !== undefined && abvRaw !== "" ? Number(abvRaw) : null;
@@ -48,20 +51,18 @@ export default function AllProducts({
 
           let packText: string | null = null;
           if (p.specs?.pack_size_l) packText = `${p.specs.pack_size_l} L`;
-          // якщо хочеш підтримати мл:
-          // else if (p.specs?.pack_size_ml) packText = `${p.specs.pack_size_ml} ml`;
 
           const metaParts: string[] = [];
           if (hasAbv) metaParts.push(`${abvNum} %`);
           if (packText) metaParts.push(packText);
           const meta = metaParts.join(" • ");
 
-          // рейтинг (поки немає — буде 0)
-          // const productRating = Number((p as any).rating ?? 0);
           const productRating = p.rating ?? 0;
 
-          // маршрут до сторінки товару — налаштуй під себе
-          const href = `/${lang}/product/${p.handle}`;
+          // ссылка на товар с сохранением текущей категории
+          const href = `/${lang}/product/${p.handle}${
+            category ? `?category=${category}` : ""
+          }`;
 
           return (
             <div key={p.id} className="group">
@@ -104,7 +105,6 @@ export default function AllProducts({
                       </Link>
                     </h3>
 
-                    {/* Метадані: ABV • Обʼєм — тільки якщо є що показати */}
                     {meta && <p className="text-sm text-gray-300">{meta}</p>}
                   </div>
 
@@ -129,7 +129,6 @@ export default function AllProducts({
                       />
                     ))}
                   </div>
-                  {/* Shopify Storefront не повертає reviewCount — поки ставимо 0 */}
                   <p className="mt-1 text-sm text-gray-500">0 {reviews}</p>
                 </div>
               </div>

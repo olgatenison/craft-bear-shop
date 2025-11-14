@@ -1,84 +1,95 @@
 // app/data/types.ts
-export type Money = { amount: string; currencyCode: string };
 
-export type MetaobjectField = {
-  key: string;
-  value: string;
-  type?: string;
-  references?: {
-    edges: Array<{
-      node: {
-        handle?: string;
-        fields?: MetaobjectField[];
-      };
-    }>;
-  };
-};
-
-export type MetaobjectReference = {
-  id?: string;
-  handle?: string;
-  type?: string;
-  fields?: MetaobjectField[];
-};
-
-export type Metafield = {
-  namespace: string;
-  key: string;
-  type: string;
-  value: string | null;
-  reference?: MetaobjectReference | null;
-  references?: {
-    edges: Array<{
-      node: MetaobjectReference;
-    }>;
-  } | null;
-};
-
-export type ProductNode = {
+export interface ProductNode {
   id: string;
   title: string;
   handle: string;
   descriptionHtml?: string;
-  updatedAt?: string;
-  featuredImage?: { url: string; altText?: string | null } | null;
-  images: {
-    edges: {
+  featuredImage?: {
+    url: string;
+    altText?: string;
+  };
+  images?: {
+    edges: Array<{
       node: {
         url: string;
-        altText: string | null;
+        altText?: string;
       };
-    }[];
+    }>;
   };
-  priceRange: { minVariantPrice: Money };
-  metafields: Metafield[];
+  priceRange: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
   collections?: {
-    edges: {
+    edges: Array<{
       node: {
         handle: string;
         title?: string;
       };
-    }[];
+    }>;
   };
-};
+  metafields?: Metafield[];
+  translations?: Array<{ key: string; value: string }>;
+}
 
-export type ProductsAllResponse = {
+export interface Metafield {
+  namespace: string;
+  key: string;
+  type: string;
+  value: string;
+  reference?: {
+    handle?: string;
+    fields?: Array<{
+      key: string;
+      value: string;
+    }>;
+  };
+  references?: {
+    edges: Array<{
+      node: {
+        handle?: string;
+        fields?: Array<{
+          key: string;
+          value: string;
+        }>;
+      };
+    }>;
+  };
+}
+
+// Response types
+export interface ProductsAllResponse {
   products: {
-    edges: { cursor: string; node: ProductNode }[];
-    pageInfo: { hasNextPage: boolean; endCursor: string | null };
+    edges: Array<{
+      node: ProductNode;
+      cursor: string;
+    }>;
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string;
+    };
   };
-};
+}
 
-export type ProductsByCollectionResponse = {
-  collection: {
+export interface ProductsByCollectionResponse {
+  collection?: {
     id: string;
     title: string;
     products: {
-      edges: { cursor: string; node: ProductNode }[];
-      pageInfo: { hasNextPage: boolean; endCursor: string | null };
+      edges: Array<{
+        node: ProductNode;
+        cursor: string;
+      }>;
+      pageInfo: {
+        hasNextPage: boolean;
+        endCursor: string;
+      };
     };
-  } | null;
-};
+  };
+}
 
 export interface ProductByHandleResponse {
   product: ProductNode | null;

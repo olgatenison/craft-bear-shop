@@ -3,7 +3,7 @@ import type { ProductNode, Metafield } from "./types";
 
 export type FlattenedProduct = Omit<
   ProductNode,
-  "metafields" | "collections"
+  "metafields" | "collections" | "translations"
 > & {
   collections: string[];
   specs?: Partial<{
@@ -35,22 +35,15 @@ function extractMetafieldValue(mf: Metafield): string | null {
     mf.references?.edges
   ) {
     const names: string[] = [];
-
     for (const edge of mf.references.edges) {
       const metaobject = edge.node;
-      if (!metaobject.fields) continue;
-
+      if (!metaobject?.fields) continue;
       const nameField = metaobject.fields.find(
         (f) => f.key === "name" || f.key === "title" || f.key === "value"
       );
-
-      if (nameField?.value) {
-        names.push(nameField.value);
-      } else if (metaobject.handle) {
-        names.push(metaobject.handle);
-      }
+      if (nameField?.value) names.push(nameField.value);
+      else if (metaobject.handle) names.push(metaobject.handle);
     }
-
     return names.length > 0 ? names.join(", ") : null;
   }
 
@@ -62,42 +55,41 @@ function extractMetafieldValue(mf: Metafield): string | null {
     const nameField = mf.reference.fields.find(
       (f) => f.key === "name" || f.key === "title" || f.key === "value"
     );
-
-    if (nameField?.value) {
-      return nameField.value;
-    }
-
-    if (mf.reference.handle) {
-      return mf.reference.handle;
-    }
-
+    if (nameField?.value) return nameField.value;
+    if (mf.reference.handle) return mf.reference.handle;
     return null;
   }
 
   return mf.value;
 }
 
+/** Преобразует ProductNode в плоскую структуру FlattenedProduct */
 export function flattenMetafields(p: ProductNode): FlattenedProduct {
   const grouped: Record<string, Record<string, string>> = {};
 
-  for (const mf of p.metafields ?? []) {
-    if (!mf) continue;
-
-    const value = extractMetafieldValue(mf);
-
-    if (!value) continue;
-
-    if (!grouped[mf.namespace]) {
-      grouped[mf.namespace] = {};
+  if (p.metafields) {
+    for (const mf of p.metafields) {
+      if (!mf) continue;
+      const value = extractMetafieldValue(mf);
+      if (!value) continue;
+      if (!grouped[mf.namespace]) grouped[mf.namespace] = {};
+      grouped[mf.namespace][mf.key] = value;
     }
-
-    grouped[mf.namespace][mf.key] = value;
   }
 
-  const collections = p.collections?.edges.map((e) => e.node.handle) || [];
+  const collections = p.collections?.edges?.map((e) => e.node.handle) || [];
+
+  type ProductBase = Omit<
+    ProductNode,
+    "metafields" | "collections" | "translations"
+  >;
+  const base: ProductBase = {
+    // TS: мы сознательно отбрасываем эти поля типом ProductBase
+    ...(p as ProductBase),
+  };
 
   return {
-    ...p,
+    ...base,
     collections,
     specs: grouped["specs"] as FlattenedProduct["specs"],
     shopify: grouped["shopify"] as FlattenedProduct["shopify"],
@@ -139,16 +131,16 @@ export function getProductSpecs(product: FlattenedProduct): Array<{
 
     for (const [key, label] of Object.entries(specsMap)) {
       const value = product.specs[key as keyof typeof product.specs];
-      if (value) {
-        specs.push({ label, value });
-      }
+      if (value) specs.push({ label, value });
     }
   }
 
   const beerStyle = getBeerStyle(product);
-  if (beerStyle) {
-    specs.unshift({ label: "Style", value: beerStyle });
-  }
+  if (beerStyle) specs.unshift({ label: "Style", value: beerStyle });
 
   return specs;
+}
+
+export function flattenProducts(products: ProductNode[]): FlattenedProduct[] {
+  return products.map((p) => flattenMetafields(p));
 }
