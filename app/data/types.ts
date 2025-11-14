@@ -94,3 +94,9 @@ export interface ProductsByCollectionResponse {
 export interface ProductByHandleResponse {
   product: ProductNode | null;
 }
+
+export interface ShopifyPage {
+  id: string;
+  title: string;
+  body: string; // HTML из Shopify
+}

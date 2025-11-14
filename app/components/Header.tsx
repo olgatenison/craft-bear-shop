@@ -1,5 +1,5 @@
 // app/components/Header.tsx
-import type { Locale } from "@/app/lib/locale";
+import type { Locale } from "../lib/locale";
 import LanguageSwitcher from "./ui/LanguageSwitcher";
 import ProfileButton from "./ui/ProfileButton";
 import HeaderSearch from "./ui/HeaderSearch";

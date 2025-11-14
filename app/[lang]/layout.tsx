@@ -49,7 +49,7 @@ export default async function RootLayout({
         <ClerkProvider localization={MAP[lang]}>
           <Header lang={lang} />
           {children}
-          <Footer />
+          <Footer lang={lang} />
         </ClerkProvider>
       </body>
     </html>

@@ -1,15 +1,19 @@
 // app/data/repo.ts
 import { shopifyFetchWithLocale } from "../lib/shopify/client";
+
 import {
   PRODUCTS_ALL_WITH_METAFIELDS,
   PRODUCTS_BY_COLLECTION,
   PRODUCT_BY_HANDLE,
 } from "../lib/shopify/queries/products.gql";
+import { PAGE_BY_HANDLE } from "../lib/shopify/queries/pages.gql";
+
 import {
   ProductsAllResponse,
   ProductNode,
   ProductsByCollectionResponse,
   ProductByHandleResponse,
+  ShopifyPage,
 } from "./types";
 import {
   flattenMetafields,
@@ -115,4 +119,21 @@ export async function fetchProductByHandleFlattened(
   if (!data.product) return null;
 
   return flattenMetafields(data.product);
+}
+
+/** ---------- Страница по handle (Shopify Pages) ---------- */
+export async function fetchPageByHandle(
+  handle: string,
+  locale: Locale = "en"
+): Promise<ShopifyPage | null> {
+  if (!handle) return null;
+
+  const data = await shopifyFetchWithLocale<{ page: ShopifyPage | null }>(
+    PAGE_BY_HANDLE,
+    { handle },
+    locale,
+    60
+  );
+
+  return data.page;
 }

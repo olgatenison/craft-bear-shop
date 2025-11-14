@@ -1,7 +1,7 @@
 "use client";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import type { Locale } from "@/app/lib/locale";
+import type { Locale } from "../../lib/locale";
 
 type ShoppingCartMsgs = {
   ariaLabel: string;

@@ -1,5 +1,13 @@
+import Link from "next/link";
 import { SVGProps } from "react";
 import { JSX } from "react/jsx-runtime";
+// app/components/Footer.tsx
+
+import type { Locale } from "@/app/lib/locale";
+
+type FooterProps = {
+  lang: Locale;
+};
 
 const navigation = [
   {
@@ -65,10 +73,16 @@ const navigation = [
   },
 ];
 
-export default function Footer() {
+export default function Footer({ lang }: FooterProps) {
   return (
     <footer>
       <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8 border-t border-gray-400">
+        <Link
+          href={`/${lang}/privacy-policy`}
+          className="underline hover:no-underline text-white"
+        >
+          Privacy policy
+        </Link>
         <div className="flex justify-center gap-x-6 md:order-2 ">
           {navigation.map((item) => (
             <a
