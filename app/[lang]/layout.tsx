@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
+// import { LOCALES, type Locale } from "../lib/locale";
 const LOCALES = ["en", "et", "fi", "uk", "ru"] as const;
 type Locale = (typeof LOCALES)[number];
 const MAP: Record<Locale, ClerkLocale> = {

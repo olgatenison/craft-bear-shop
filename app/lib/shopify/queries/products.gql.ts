@@ -270,6 +270,7 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
               { namespace: "specs", key: "shelf_life_days" }
               { namespace: "shopify", key: "beer-style" }
               { namespace: "shopify", key: "package-type" }
+              { namespace: "marketing", key: "trending" }
             ]
           ) {
             namespace
@@ -337,6 +338,7 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
           { namespace: "specs", key: "pairing" }
           { namespace: "shopify", key: "beer-style" }
           { namespace: "shopify", key: "package-type" }
+          { namespace: "marketing", key: "trending" }
         ]
       ) {
         namespace
@@ -427,6 +429,7 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
                 { namespace: "specs", key: "allergens" }
                 { namespace: "shopify", key: "beer-style" }
                 { namespace: "shopify", key: "package-type" }
+                { namespace: "marketing", key: "trending" }
               ]
             ) {
               namespace

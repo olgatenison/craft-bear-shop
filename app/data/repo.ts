@@ -18,8 +18,7 @@ import {
 } from "./mappers";
 
 // Локали фронта
-export type Locale = "en" | "uk" | "ru" | "et" | "fi";
-
+import type { Locale } from "../lib/locale";
 // вспомогательный тип для edges
 type Edge<T> = { cursor?: string | null; node: T };
 
@@ -54,14 +53,6 @@ export async function fetchAllProductsFlattened(
   locale: Locale = "en"
 ): Promise<FlattenedProduct[]> {
   const nodes = await fetchAllProducts(locale);
-
-  // // Логирование для проверки
-  // if (process.env.NODE_ENV === "development" && nodes.length > 0) {
-  //   console.log(`[${locale}] Sample product:`, {
-  //     title: nodes[0].title,
-  //     description: nodes[0].descriptionHtml?.substring(0, 80),
-  //   });
-  // }
 
   return flattenProducts(nodes);
 }

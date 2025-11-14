@@ -24,6 +24,7 @@ export type FlattenedProduct = Omit<
     "beer-style": string;
     "package-type": string;
   }>;
+  trending?: boolean;
   rating?: number;
   reviewCount?: number;
 };
@@ -84,18 +85,22 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
     "metafields" | "collections" | "translations"
   >;
   const base: ProductBase = {
-    // TS: мы сознательно отбрасываем эти поля типом ProductBase
     ...(p as ProductBase),
   };
+
+  const marketing = grouped["marketing"] || {};
 
   return {
     ...base,
     collections,
     specs: grouped["specs"] as FlattenedProduct["specs"],
     shopify: grouped["shopify"] as FlattenedProduct["shopify"],
+    // Shopify хранит boolean как строку "true"/"false"/"1"
+    trending: marketing["trending"] === "true" || marketing["trending"] === "1",
   };
 }
 
+/** Утилита, если где-то нужно достать одно поле из specs или shopify */
 export function getMetafieldValue(
   product: FlattenedProduct,
   namespace: "specs" | "shopify",

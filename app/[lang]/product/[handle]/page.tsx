@@ -1,6 +1,7 @@
 // app/[lang]/product/[handle]/page.tsx
 import { fetchProductByHandleFlattened } from "../../../data/repo";
-import { getMessages, type Locale } from "../../messages";
+import { getMessages } from "../../messages";
+import type { Locale } from "../../../lib/locale";
 import ProductOverviews from "../../../components/ProductOverviews";
 import { notFound } from "next/navigation";
 import Breadcrumbs from "@/app/components/ui/Breadcrumbs";

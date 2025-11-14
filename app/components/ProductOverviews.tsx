@@ -87,7 +87,7 @@ export default function ProductOverviews({
             {/* title and price */}
             <div className="lg:col-span-5 lg:col-start-8">
               {/* ... весь предыдущий код без изменений ... */}
-              <div className="flex justify-between items-baseline">
+              <div className="flex justify-between items-baseline gap-10">
                 <h1 className="text-3xl tracking-tight font-semibold text-yellow-400 max-w-md">
                   {product.title}
                   {packSize && (
@@ -285,7 +285,7 @@ export default function ProductOverviews({
                       className="list-disc space-y-1 pl-5 text-sm text-gray-300 marker:text-gray-300"
                     >
                       {pairingList.map((item, index) => (
-                        <li key={index} className="pl-2">
+                        <li key={index} className="pl-2 text-base ">
                           {item}
                         </li>
                       ))}
