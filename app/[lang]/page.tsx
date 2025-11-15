@@ -7,6 +7,7 @@ import BannerSection from "../components/BannerSection";
 import TextBlockCenter from "../components/ui/TextBlockCenter";
 import BrandSection from "../components/BrandSection";
 import { fetchAllProductsFlattened } from "../data/repo";
+import LinksList from "../components/ui/LinksList";
 
 export default async function Home({
   params,

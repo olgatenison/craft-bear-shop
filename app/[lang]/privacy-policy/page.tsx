@@ -2,6 +2,7 @@
 import { fetchPageByHandle } from "@/app/data/repo";
 import { notFound } from "next/navigation";
 import type { Locale } from "@/app/lib/locale";
+import { LegalPageLayout } from "@/app/components/LegalPageLayout";
 
 export default async function PrivacyPolicyPage({
   params,
@@ -15,13 +16,5 @@ export default async function PrivacyPolicyPage({
     notFound();
   }
 
-  return (
-    <main className="max-w-5xl mx-auto py-20">
-      <h1 className="text-3xl font-bold mb-6 ">{page.title}</h1>
-      <article
-        className="prose max-w-none"
-        dangerouslySetInnerHTML={{ __html: page.body }}
-      />
-    </main>
-  );
+  return <LegalPageLayout title={page.title} html={page.body} />;
 }

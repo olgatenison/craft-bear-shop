@@ -33,6 +33,7 @@ export default async function ShopPage({
     </main>
   );
 }
+
 // type ShopPageProps = {
 //   params: { lang: Locale };
 // };

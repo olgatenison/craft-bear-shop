@@ -94,5 +94,17 @@
     "shop": "Kauppa",
     "pageNotFound": "Sivua ei löytynyt",
     "goHome": "Palaa etusivulle"
+  },
+  "Footer": {
+    "about": "Tietoa meistä",
+    "terms": "Käyttöehdot",
+    "delivery": "Toimitustiedot",
+    "refunds": "Palautukset",
+    "contact": "Yhteystiedot",
+    "cookiesPolicy": "Evästekäytäntö",
+    "privacyPolicy": "Tietosuojakäytäntö",
+    "followUs": "Seuraa meitä",
+    "copyright": "© 2025 Craft Bear Shop. Kaikki oikeudet pidätetään.",
+    "prodused": "Tuottanut Dvi"
   }
 }

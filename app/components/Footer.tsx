@@ -1,15 +1,16 @@
-import Link from "next/link";
-import { SVGProps } from "react";
-import { JSX } from "react/jsx-runtime";
 // app/components/Footer.tsx
 
+import { SVGProps } from "react";
+import { JSX } from "react/jsx-runtime";
 import type { Locale } from "@/app/lib/locale";
+import LinksList from "./ui/LinksList";
+import { getMessages } from "@/app/[lang]/messages";
 
 type FooterProps = {
   lang: Locale;
 };
 
-const navigation = [
+const social = [
   {
     name: "Facebook",
     href: "#",
@@ -73,31 +74,39 @@ const navigation = [
   },
 ];
 
-export default function Footer({ lang }: FooterProps) {
+export default async function Footer({ lang }: FooterProps) {
+  // грузим переводы для текущего языка
+  const messages = await getMessages(lang);
+  const t = messages.Footer;
+
   return (
     <footer>
-      <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8 border-t border-gray-400">
-        <Link
-          href={`/${lang}/privacy-policy`}
-          className="underline hover:no-underline text-white"
-        >
-          Privacy policy
-        </Link>
-        <div className="flex justify-center gap-x-6 md:order-2 ">
-          {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-gray-400 hover:text-yellow-500"
-            >
-              <span className="sr-only">{item.name}</span>
-              <item.icon aria-hidden="true" className="size-6" />
-            </a>
-          ))}
+      <div className="mx-auto max-w-7xl px-6 py-12 border-t border-gray-400 md:flex md:items-center md:justify-between lg:px-8">
+        {/* Линки правовых страниц */}
+        <LinksList lang={lang} footerMessages={t} />
+
+        {/* Соцсети */}
+        <div className="flex flex-col items-center gap-y-2 md:items-end md:order-2">
+          <p className="text-sm text-gray-400">{t.followUs}</p>
+          <div className="flex justify-center gap-x-6">
+            {social.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-gray-400 hover:text-yellow-500"
+              >
+                <span className="sr-only">{item.name}</span>
+                <item.icon aria-hidden="true" className="size-6" />
+              </a>
+            ))}
+          </div>
         </div>
-        <p className="mt-8 text-center text-sm/6 text-gray-400 md:order-1 md:mt-0">
-          &copy; 2024 Your Company, Inc. All rights reserved.
-        </p>
+
+        {/* Копирайт */}
+        <div className="mt-8 text-center md:text-left md:order-1 md:mt-0">
+          <p className="text-sm text-gray-400">{t.copyright}</p>
+          <p className="text-xs text-gray-500">{t.prodused}</p>
+        </div>
       </div>
     </footer>
   );

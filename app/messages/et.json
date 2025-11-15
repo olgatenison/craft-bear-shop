@@ -94,5 +94,17 @@
     "shop": "Pood",
     "pageNotFound": "Lehte ei leitud",
     "goHome": "Mine avalehele"
+  },
+  "Footer": {
+    "about": "Meist",
+    "terms": "Tingimused ja reeglid",
+    "delivery": "Tarneinfo",
+    "refunds": "Tagastused",
+    "contact": "Kontakt",
+    "cookiesPolicy": "Küpsiste poliitika",
+    "privacyPolicy": "Privaatsuspoliitika",
+    "followUs": "Jälgi meid",
+    "copyright": "© 2025 Craft Bear Shop. Kõik õigused kaitstud.",
+    "prodused": "Loodud Dvi poolt"
   }
 }

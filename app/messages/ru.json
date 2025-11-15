@@ -98,5 +98,17 @@
     "shop": "Магазин",
     "pageNotFound": "Страница не найдена",
     "goHome": "Перейти на главную"
+  },
+  "Footer": {
+    "about": "О нас",
+    "terms": "Условия и положения",
+    "delivery": "Информация о доставке",
+    "refunds": "Возврат и обмен",
+    "contact": "Контакты",
+    "cookiesPolicy": "Политика файлов cookie",
+    "privacyPolicy": "Политика конфиденциальности",
+    "followUs": "Подписывайтесь на нас",
+    "copyright": "© 2025 Craft Bear Shop. Все права защищены.",
+    "prodused": "Создано Dvi"
   }
 }

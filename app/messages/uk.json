@@ -94,5 +94,17 @@
     "shop": "Магазин",
     "pageNotFound": "Сторінка не знайдена",
     "goHome": "Повернутися на головну"
+  },
+  "Footer": {
+    "about": "Про нас",
+    "terms": "Правила та умови",
+    "delivery": "Інформація про доставку",
+    "refunds": "Повернення",
+    "contact": "Контакти",
+    "cookiesPolicy": "Політика файлів cookie",
+    "privacyPolicy": "Політика конфіденційності",
+    "followUs": "Слідкуйте за нами",
+    "copyright": "© 2025 Craft Bear Shop. Усі права захищено.",
+    "prodused": "Створено Dvi"
   }
 }

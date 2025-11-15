@@ -96,5 +96,17 @@
     "shop": "Shop",
     "pageNotFound": "Page not found",
     "goHome": "Go to homepage"
+  },
+  "Footer": {
+    "about": " About Us",
+    "terms": " Terms & Conditions",
+    "delivery": " Delivery Information",
+    "refunds": " Refunds",
+    "contact": " Contact",
+    "cookiesPolicy": " Cookies policy",
+    "privacyPolicy": " Privacy policy",
+    "followUs": " Follow Us",
+    "copyright": " © 2025 Craft Bear Shop. All rights reserved.",
+    "prodused": "Produced by Dvi"
   }
 }
