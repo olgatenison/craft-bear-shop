@@ -106,5 +106,11 @@
     "followUs": "Jälgi meid",
     "copyright": "© 2025 Craft Bear Shop. Kõik õigused kaitstud.",
     "prodused": "Loodud Dvi poolt"
+  },
+  "CookieBanner": {
+    "text": "Kasutame küpsiseid, et parandada lehe kasutuskogemust, analüüsida liiklust ja isikupärastada sisu. Võid nõustuda mitteoluliste küpsistega või need tagasi lükata.",
+    "accept": "Nõustu kõigiga",
+    "reject": "Lükka kõik tagasi",
+    "policyLink": "Küpsisepoliitika"
   }
 }

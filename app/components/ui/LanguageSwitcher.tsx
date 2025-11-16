@@ -36,16 +36,16 @@ export default function LanguageSwitcher({ current }: { current?: Locale }) {
       <PopoverPanel
         transition
         className="absolute left-1/2 z-50 mt-5 -translate-x-1/2
-    w-auto
-    px-4 py-3
-    data-closed:translate-y-1 data-closed:opacity-0
-    data-enter:duration-200 data-leave:duration-150 data-enter:ease-out data-leave:ease-in
+        w-auto
+        px-4 py-3
+        data-closed:translate-y-1 data-closed:opacity-0
+        data-enter:duration-200 data-leave:duration-150 data-enter:ease-out data-leave:ease-in
 
-    rounded-2xl shadow-2xl shadow-black/50
-    ring-1 ring-white/15 dark:ring-stone/20
-    bg-linear-to-b from-white/55 to-white/20
-    dark:from-stone-950/75 dark:to-stone-950/80
-    backdrop-blur-sm"
+        rounded-2xl shadow-2xl shadow-black/50
+        ring-1 ring-white/15 dark:ring-stone/20
+        bg-linear-to-b from-white/55 to-white/20
+        dark:from-stone-950/75 dark:to-stone-950/80
+        backdrop-blur-sm"
       >
         <div className="w-56 shrink rounded-xl  p-4 text-sm/6 font-semibold text-gray-200 shadow-lg  outline-1 outline-gray-900/5">
           {LOCALES.map((loc) => {

@@ -108,5 +108,11 @@
     "followUs": " Follow Us",
     "copyright": " © 2025 Craft Bear Shop. All rights reserved.",
     "prodused": "Produced by Dvi"
+  },
+  "CookieBanner": {
+    "text": "We use cookies to improve your browsing experience, analyse traffic and personalize content. You can accept or reject non-essential cookies.",
+    "accept": "Accept all",
+    "reject": "Reject all",
+    "policyLink": "Cookie policy"
   }
 }

@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { enUS, fiFI, ukUA, ruRU } from "@clerk/localizations";
 import { etEE } from "@/app/i18n/clerk-et";
 import Footer from "../components/Footer";
+import BannerCookie from "@/app/components/BannerCookie";
 
 type ClerkLocale = typeof enUS;
 
@@ -50,6 +51,7 @@ export default async function RootLayout({
           <Header lang={lang} />
           {children}
           <Footer lang={lang} />
+          <BannerCookie lang={lang} />
         </ClerkProvider>
       </body>
     </html>

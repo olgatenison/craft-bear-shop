@@ -116,13 +116,13 @@ export default function Hero({
           <a
             href={ctaHref}
             className="
-    mt-16 inline-block rounded-sm
-    bg-stone-950/40 px-6 py-3 text-sm font-medium uppercase text-white
-    border-2 border-white
-    hover:bg-white hover:text-gray-900
-    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80
-    transition-colors  w-sm transform translate-all duration-300
-  "
+            mt-16 inline-block rounded-sm
+            bg-stone-950/40 px-6 py-3 text-sm font-medium uppercase text-white
+            border-2 border-white
+            hover:bg-white hover:text-gray-900
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80
+            transition-colors  w-sm transform translate-all duration-300
+          "
           >
             {ctaLabel}
           </a>{" "}

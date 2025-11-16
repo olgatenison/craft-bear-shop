@@ -12,16 +12,16 @@ export function LegalPageLayout({
   html,
   children,
 }: LegalPageLayoutProps) {
-  console.log(html);
+  //   console.log(html);
 
   return (
-    <div className="px-6 py-20 lg:px-8 max-w-3xl mx-auto">
-      <div className="text-base/7">
+    <div className="px-6 py-20 lg:px-8 max-w-4xl mx-auto">
+      <div className="">
         <h1 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
           {title}
         </h1>
 
-        <div className="text-base text-gray-300">
+        <div className=" text-gray-300 text-base/7">
           {html ? (
             <div
               className="
@@ -31,12 +31,12 @@ export function LegalPageLayout({
               prose-strong:text-white
 
               [&_p]:my-6 [&_p]:text-gray-300
-[&_a]:text-white [&_a:hover]:text-yellow-500
-               [&_ul]:my-6 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:text-gray-300
-    [&_ul>li]:marker:text-gray-300
+             [&_a]:text-white [&_a:hover]:text-yellow-500 [&_a]:font-semibold
+              [&_ul]:my-6 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:text-gray-300
+              [&_ul>li]:marker:text-white [&_ul>li]:py-2 [&_ul>li>strong]:text-white  [&_ul>li>strong]:font-semibold
 
-    [&_ol]:my-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:text-gray-300
-    [&_ol>li]:marker:text-gray-300
+              [&_ol]:my-6 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:text-gray-300
+              [&_ol>li]:marker:text-gray-300
 
               [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:my-10 [&_h2]:text-white
               [&_h3]:text-lg  [&_h3]:font-semibold [&_h3]:my-8  [&_h3]:text-white [&_h3]:max-w-2xl
