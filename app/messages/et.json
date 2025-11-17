@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "Käsitööõlu, väikesed partiid, suur maitse",
+    "title": "Käsitööõlu, suur maitse",
     "subtitle": "Avasta iseseisvate pruulikodade piiratud väljalasked.",
     "cta": "Osta nüüd"
   },
@@ -112,5 +112,11 @@
     "accept": "Nõustu kõigiga",
     "reject": "Lükka kõik tagasi",
     "policyLink": "Küpsisepoliitika"
+  },
+  "AccountPage": {
+    "title": "My Account 2",
+    "welcome": "Welcome back, {name}!",
+    "orders": "My Orders",
+    "logout": "Log Out"
   }
 }

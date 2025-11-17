@@ -9,6 +9,8 @@ interface TabsProps {
     beer: string;
     cider: string;
     snacks: string;
+    nonAlcoholic?: string;
+    giftsSets?: string;
   };
 }
 
@@ -20,18 +22,21 @@ export default function Tabs({
     beer: "Beer",
     cider: "Cider",
     snacks: "Snacks",
+    nonAlcoholic: "Non-alcoholic",
+    giftsSets: "Gifts & Sets",
   },
 }: TabsProps) {
   const tabs = [
     { id: "all", label: labels.all },
     { id: "beer", label: labels.beer },
     { id: "cider", label: labels.cider },
+    { id: "non-alcoholic", label: labels.nonAlcoholic ?? "Non-alcoholic" },
     { id: "snacks", label: labels.snacks },
+    { id: "gifts-sets", label: labels.giftsSets ?? "Gifts & Sets" },
   ];
 
   return (
     <div className="mb-8">
-      {/* <h1 className="text-3xl font-bold mb-6">Shop</h1> */}
       <div className="flex gap-4 border-b border-gray-700">
         {tabs.map((tab) => (
           <button

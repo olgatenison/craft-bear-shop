@@ -106,8 +106,8 @@ export default function Hero({
           {" "}
           <p className="mt-6 text-xl text-white/90 max-w-sm">{subtitle}</p>
           <h1
-            className="max-w-xl mx-autorelative font-extrabold uppercase leading-none
-               text-transparent transform translate-all duration-300 group-hover:text-yellow-500  text-5xl sm:text-6xl lg:text-7xl 
+            className="max-w-3xl mx-autorelative font-extrabold uppercase leading-none
+               text-transparent transform translate-all duration-300 group-hover:text-yellow-500  text-5xl sm:text-6xl lg:text-7xl/22 
                [-webkit-text-stroke:2px_white] 
                [paint-order:stroke_fill] pt-8"
           >

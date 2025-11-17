@@ -5,7 +5,7 @@ import type { Locale } from "../../../lib/locale";
 import ProductOverviews from "../../../components/ProductOverviews";
 import { notFound } from "next/navigation";
 import Breadcrumbs from "@/app/components/ui/Breadcrumbs";
-
+import CustomerReviews from "@/app/components/CustomerReviews";
 // Функция для определения категории из коллекций
 function getCategoryFromProduct(
   collections: string[] | undefined
@@ -70,6 +70,17 @@ export default async function ProductPage({
         tastedBestWith={t.OneProduct.tastedBestWith}
         allergens={t.OneProduct.allergens}
         ingredients={t.OneProduct.ingredients}
+      />
+      <CustomerReviews
+        title={t.CustomerReviews.title}
+        stars={t.CustomerReviews.stars}
+        base1={t.CustomerReviews.base1}
+        base2={t.CustomerReviews.base2}
+        starRew={t.CustomerReviews.starRew}
+        CTATitle={t.CustomerReviews.CTATitle}
+        CTASubtitle={t.CustomerReviews.CTASubtitle}
+        button={t.CustomerReviews.button}
+        recentReviews={t.CustomerReviews.recentReviews}
       />
     </main>
   );

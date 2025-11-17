@@ -65,8 +65,9 @@ export default function AllProducts({
           }`;
 
           return (
-            <div key={p.id} className="group">
-              <div className="relative">
+            <div key={p.id} className="group flex flex-col h-full">
+              {/* верхняя часть карточки (растягивается) */}
+              <div className="relative flex-1 flex flex-col">
                 <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-stone-600 transition-colors duration-300 group-hover:bg-white">
                   {img?.url && (
                     <Image
@@ -112,27 +113,27 @@ export default function AllProducts({
                     {price ? `${price.amount} ${price.currencyCode}` : "—"}
                   </p>
                 </div>
-
-                <div className="mt-3 flex flex-col">
-                  <span className="sr-only">
-                    {productRating} {stars}
-                  </span>
-                  <div className="flex">
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <StarIcon
-                        key={i}
-                        aria-hidden="true"
-                        className={classNames(
-                          productRating > i ? "text-white" : "text-gray-500",
-                          "size-3 shrink-0"
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <p className="mt-1 text-sm text-gray-500">0 {reviews}</p>
-                </div>
               </div>
 
+              {/* кнопка прижата к низу карточки */}
+              <div className="mt-3 flex flex-col">
+                <span className="sr-only">
+                  {productRating} {stars}
+                </span>
+                <div className="flex">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <StarIcon
+                      key={i}
+                      aria-hidden="true"
+                      className={classNames(
+                        productRating > i ? "text-white" : "text-gray-500",
+                        "size-3 shrink-0"
+                      )}
+                    />
+                  ))}
+                </div>
+                <p className="mt-1 text-sm text-gray-500">0 {reviews}</p>
+              </div>
               <div className="mt-6">
                 <Link
                   href={href}

@@ -114,5 +114,11 @@
     "accept": "Accept all",
     "reject": "Reject all",
     "policyLink": "Cookie policy"
+  },
+  "AccountPage": {
+    "title": "My Account 2",
+    "welcome": "Welcome back, {name}!",
+    "orders": "My Orders",
+    "logout": "Log Out"
   }
 }
