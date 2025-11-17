@@ -52,14 +52,48 @@ export const CUSTOMER_BY_TOKEN_QUERY = `
   }
 `;
 
-export const CUSTOMER_RECOVER_MUTATION = /* GraphQL */ `
-  mutation customerRecover($email: String!) {
-    customerRecover(email: $email) {
+export const CUSTOMER_RESET_BY_URL_MUTATION = `
+  mutation customerResetByUrl($resetUrl: URL!, $password: String!) {
+    customerResetByUrl(resetUrl: $resetUrl, password: $password) {
+      customer {
+        id
+      }
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
       customerUserErrors {
+        code
         field
         message
-        code
       }
     }
   }
 `;
+
+export const CUSTOMER_RECOVER_MUTATION = `
+  mutation customerRecover($email: String!) {
+    customerRecover(email: $email) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+// export const CUSTOMER_CREATE_MUTATION = `
+//   mutation customerCreate($input: CustomerCreateInput!) {
+//     customerCreate(input: $input) {
+//       customer {
+//         id
+//       }
+//       customerUserErrors {
+//         code
+//         field
+//         message
+//       }
+//     }
+//   }
+// `;

@@ -1,7 +1,7 @@
 // app / api / auth / logout / route.ts
 import { NextResponse } from "next/server";
 
-const COOKIE_NAME = "shopify_customer_token";
+const COOKIE_NAME = "customerAccessToken";
 
 export async function POST() {
   const res = NextResponse.json({ ok: true });

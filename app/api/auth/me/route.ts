@@ -1,49 +1,80 @@
 // app/api/auth/me/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { shopifyFetch } from "../../../lib/shopify/client";
-import { CUSTOMER_BY_TOKEN_QUERY } from "../../../lib/shopify/queries/customer.gql";
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers"; // ← Додайте
 
-const COOKIE_NAME = "shopify_customer_token";
+const COOKIE_NAME = "customerAccessToken";
 
-type CustomerResponse = {
-  customer: {
-    id: string;
-    email: string;
-    firstName: string | null;
-    lastName: string | null;
-    phone: string | null;
-    defaultAddress: {
-      address1: string | null;
-      city: string | null;
-      country: string | null;
-      zip: string | null;
-    } | null;
-  } | null;
-};
+const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN!;
+const SHOPIFY_STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_TOKEN!;
+const SHOPIFY_API_VERSION = "2024-10";
 
-export async function GET(req: NextRequest) {
-  // ✅ берём куку прямо из req, без cookies()
-  const token = req.cookies.get(COOKIE_NAME)?.value;
+const ENDPOINT = `https://${SHOPIFY_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
+
+const CUSTOMER_QUERY = `
+  query getCustomer($customerAccessToken: String!) {
+    customer(customerAccessToken: $customerAccessToken) {
+      id
+      email
+      firstName
+      lastName
+      phone
+      acceptsMarketing
+    }
+  }
+`;
+
+export async function GET() {
+  // Спробуйте обидва способи
+  const cookieStore = await cookies();
+  const token = cookieStore.get(COOKIE_NAME)?.value;
+
+  console.log(
+    "[/api/auth/me] Token from cookies():",
+    token ? "EXISTS" : "MISSING"
+  );
+  console.log(
+    "[/api/auth/me] All cookies:",
+    cookieStore.getAll().map((c) => c.name)
+  );
 
   if (!token) {
-    return NextResponse.json({ customer: null }, { status: 401 });
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
   try {
-    const data = await shopifyFetch<CustomerResponse>(
-      CUSTOMER_BY_TOKEN_QUERY,
-      { customerAccessToken: token },
-      0
-    );
+    const resp = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN,
+      },
+      body: JSON.stringify({
+        query: CUSTOMER_QUERY,
+        variables: { customerAccessToken: token },
+      }),
+    });
 
-    if (!data.customer) {
-      return NextResponse.json({ customer: null }, { status: 401 });
+    const json = await resp.json();
+
+    if (!resp.ok || json.errors) {
+      console.log("[/api/auth/me] Shopify error:", json.errors);
+      cookieStore.delete(COOKIE_NAME);
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
-    return NextResponse.json({ customer: data.customer });
-  } catch (error: unknown) {
-    console.error("Customer by token error:", error);
+    const customer = json.data.customer;
 
+    if (!customer) {
+      console.log("[/api/auth/me] Invalid token, clearing cookie");
+      cookieStore.delete(COOKIE_NAME);
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    console.log("[/api/auth/me] Customer found:", customer.email);
+
+    return NextResponse.json({ customer });
+  } catch (error) {
+    console.error("Get customer error:", error);
     return NextResponse.json(
       { error: "Something went wrong" },
       { status: 500 }

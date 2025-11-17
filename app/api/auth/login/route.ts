@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers"; // ← Додайте цей імпорт
 
-const COOKIE_NAME = "shopify_customer_token";
+const COOKIE_NAME = "customerAccessToken";
 
 const SHOPIFY_DOMAIN = process.env.SHOPIFY_DOMAIN!;
 const SHOPIFY_STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_TOKEN!;
@@ -50,7 +51,6 @@ export async function POST(req: NextRequest) {
 
     console.log("[Shopify login response]", JSON.stringify(json, null, 2));
 
-    // Глобальная GraphQL-ошибка
     if (!resp.ok || json.errors) {
       const msg =
         json.errors?.[0]?.message || resp.statusText || "Shopify GraphQL error";
@@ -62,7 +62,6 @@ export async function POST(req: NextRequest) {
       customerUserErrors: ShopifyUserError[];
     };
 
-    // Ошибки уровня пользователя (неверный пароль и т.п.)
     if (data.customerUserErrors?.length || !data.customerAccessToken) {
       return NextResponse.json(
         { errors: data.customerUserErrors },
@@ -72,9 +71,9 @@ export async function POST(req: NextRequest) {
 
     const { accessToken, expiresAt } = data.customerAccessToken;
 
-    // 👉 куку ставим через NextResponse, без cookies()
-    const res = NextResponse.json({ ok: true });
-    res.cookies.set({
+    // Спробуйте через cookies() замість response.cookies
+    const cookieStore = await cookies();
+    cookieStore.set({
       name: COOKIE_NAME,
       value: accessToken,
       httpOnly: true,
@@ -84,7 +83,9 @@ export async function POST(req: NextRequest) {
       expires: new Date(expiresAt),
     });
 
-    return res;
+    console.log("[Cookie set via cookies()]", COOKIE_NAME, accessToken);
+
+    return NextResponse.json({ ok: true });
   } catch (err: unknown) {
     console.error("Login route error:", err);
 

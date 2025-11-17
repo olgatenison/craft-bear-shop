@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import type { Locale } from "@/app/lib/locale";
 import LoginRegisterForm from "./LoginRegisterForm";
 
@@ -23,7 +23,8 @@ type Customer = {
 export default function AccountContent({ lang }: { lang: Locale }) {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const [loggingOut, setLoggingOut] = useState(false); // ← Додано для UI feedback
+  //   const router = useRouter();
 
   useEffect(() => {
     let cancelled = false;
@@ -49,6 +50,20 @@ export default function AccountContent({ lang }: { lang: Locale }) {
       cancelled = true;
     };
   }, []);
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      // Жорсткий reload - гарантовано працює
+      window.location.href = `/${lang}/account`;
+    } catch (error) {
+      console.error("Logout error:", error);
+      setLoggingOut(false);
+      // Fallback якщо fetch не спрацював
+      window.location.href = `/${lang}/account`;
+    }
+  }
 
   if (loading) {
     return (
@@ -105,13 +120,11 @@ export default function AccountContent({ lang }: { lang: Locale }) {
 
       <div className="pt-2">
         <button
-          onClick={async () => {
-            await fetch("/api/auth/logout", { method: "POST" });
-            router.refresh();
-          }}
-          className="text-sm text-gray-400 hover:text-yellow-400"
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="text-sm text-gray-400 hover:text-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Log out
+          {loggingOut ? "Logging out..." : "Log out"}
         </button>
       </div>
     </div>

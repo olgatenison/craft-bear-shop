@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import type { Locale } from "@/app/lib/locale";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
@@ -47,7 +47,7 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
+  //   const router = useRouter();
   const { label: strengthLabel, className: strengthClass } =
     strengthMeta(passwordStrength);
 
@@ -95,14 +95,8 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
       }
 
       if (mode === "login") {
-        // успешный вход — чистим пароль и конфирм
-        setPassword("");
-        setConfirmPassword("");
-        setPasswordStrength(null);
-        setShowPassword(false);
-
-        router.push(`/${lang}/account`);
-        router.refresh();
+        // Успішний вхід - використовуємо window.location для гарантованого reload
+        window.location.href = `/${lang}/account`;
       } else {
         // успешная регистрация
         setSuccess("Account created. You can now sign in.");
@@ -150,7 +144,7 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
       }
 
       setSuccess(
-        "If this email exists, we have sent instructions to reset your password."
+        "Check your email! We've sent you a link to reset your password."
       );
     } catch {
       setError("Network error");
