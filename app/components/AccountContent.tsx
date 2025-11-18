@@ -1,130 +1,149 @@
-// app/components/AccountContent.tsx
+// "use client";
+
+// import { SignedIn, SignedOut, useUser, SignOutButton } from "@clerk/nextjs";
+// import type { Locale } from "@/app/lib/locale";
+// import LoginRegisterForm from "./LoginRegisterForm";
+
+// export default function AccountContent({ lang }: { lang: Locale }) {
+//   const { user } = useUser();
+
+//   return (
+//     <>
+//       <SignedOut>
+//         <LoginRegisterForm lang={lang} />
+//       </SignedOut>
+
+//       <SignedIn>
+//         <div className="mt-6 space-y-6">
+//           <section className="rounded-lg border border-white/10 bg-white/5 p-4 flex items-start justify-between gap-4">
+//             <div>
+//               <h2 className="text-lg font-semibold text-white">Profile</h2>
+//               <p className="mt-2 text-sm text-gray-300">
+//                 {user?.fullName || user?.primaryEmailAddress?.emailAddress}
+//               </p>
+//               <p className="text-sm text-gray-400">
+//                 {user?.primaryEmailAddress?.emailAddress}
+//               </p>
+//             </div>
+//           </section>
+
+//           <section className="rounded-lg border border-white/10 bg-white/5 p-4">
+//             <h2 className="text-lg font-semibold text-white">Orders</h2>
+//             <p className="mt-2 text-sm text-gray-400">
+//               Later we’ll show Shopify orders here.
+//             </p>
+//           </section>
+
+//           <div className="pt-2">
+//             <SignOutButton redirectUrl={`/${lang}/account`}>
+//               <button className="text-sm text-gray-400 hover:text-yellow-400">
+//                 Log out
+//               </button>
+//             </SignOutButton>
+//           </div>
+//         </div>
+//       </SignedIn>
+//     </>
+//   );
+// }
+
 "use client";
 
-import { useEffect, useState } from "react";
-// import { useRouter } from "next/navigation";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import type { Locale } from "@/app/lib/locale";
-import LoginRegisterForm from "./LoginRegisterForm";
-
-type Customer = {
-  id: string;
-  email: string;
-  firstName: string | null;
-  lastName: string | null;
-  phone: string | null;
-  defaultAddress: {
-    address1: string | null;
-    city: string | null;
-    country: string | null;
-    zip: string | null;
-  } | null;
-};
+import { useState } from "react";
+import LoginRegisterForm from "./LoginRegisterForm"; // ⬅️ вернуть импорт
 
 export default function AccountContent({ lang }: { lang: Locale }) {
-  const [customer, setCustomer] = useState<Customer | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [loggingOut, setLoggingOut] = useState(false); // ← Додано для UI feedback
-  //   const router = useRouter();
+  const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const res = await fetch("/api/auth/me");
-        if (!res.ok) {
-          if (!cancelled) setCustomer(null);
-          return;
-        }
-        const data = await res.json();
-        if (!cancelled) setCustomer(data.customer ?? null);
-      } catch {
-        if (!cancelled) setCustomer(null);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  async function handleLogout() {
-    setLoggingOut(true);
+  const handleSignOut = async () => {
+    setLoading(true);
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      // Жорсткий reload - гарантовано працює
-      window.location.href = `/${lang}/account`;
+      await signOut();
+      router.push(`/${lang}/account`);
+      router.refresh();
     } catch (error) {
-      console.error("Logout error:", error);
-      setLoggingOut(false);
-      // Fallback якщо fetch не спрацював
-      window.location.href = `/${lang}/account`;
+      console.error("Sign out error:", error);
+      setLoading(false);
     }
-  }
+  };
 
-  if (loading) {
+  if (!isLoaded) {
     return (
-      <div className="mt-6 text-sm text-gray-400">Loading your account...</div>
+      <div className="flex justify-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
+      </div>
     );
   }
 
-  if (!customer) {
-    // ❗ не залогинен → показываем твою форму
+  // ❗ Незалогинен — показываем нашу форму
+  if (!user) {
     return <LoginRegisterForm lang={lang} />;
   }
 
-  // ✅ залогинен → показываем кабинет
+  // ✅ Залогинен — личный кабинет
   return (
-    <div className="mt-6 space-y-6">
-      <section className="rounded-lg border border-white/10 bg-white/5 p-4 flex items-start justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-white">Profile</h2>
-          <p className="mt-2 text-sm text-gray-300">
-            {customer.firstName || customer.lastName
-              ? `${customer.firstName ?? ""} ${customer.lastName ?? ""}`.trim()
-              : customer.email}
-          </p>
-          <p className="text-sm text-gray-400">{customer.email}</p>
-          {customer.phone && (
-            <p className="mt-1 text-sm text-gray-400">{customer.phone}</p>
-          )}
-        </div>
-      </section>
+    <div className="space-y-6">
+      {/* Информация о пользователе */}
+      <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+        <h2 className="text-xl font-semibold text-white mb-4">
+          Profile Information
+        </h2>
 
-      <section className="rounded-lg border border-white/10 bg-white/5 p-4">
-        <h2 className="text-lg font-semibold text-white">Default address</h2>
-        {customer.defaultAddress ? (
-          <div className="mt-2 text-sm text-gray-300 space-y-1">
-            <p>{customer.defaultAddress.address1}</p>
-            <p>
-              {customer.defaultAddress.city}{" "}
-              {customer.defaultAddress.zip &&
-                `, ${customer.defaultAddress.zip}`}
+        <div className="space-y-3">
+          <div>
+            <p className="text-sm text-gray-400">Email</p>
+            <p className="text-base text-white">
+              {user.primaryEmailAddress?.emailAddress || "No email"}
             </p>
-            <p>{customer.defaultAddress.country}</p>
           </div>
-        ) : (
-          <p className="mt-2 text-sm text-gray-400">No default address yet.</p>
-        )}
-      </section>
 
-      <section className="rounded-lg border border-white/10 bg-white/5 p-4">
-        <h2 className="text-lg font-semibold text-white">Orders</h2>
-        <p className="mt-2 text-sm text-gray-400">
-          Order history will be shown here (позже подтянем из Shopify).
+          {(user.firstName || user.lastName) && (
+            <div>
+              <p className="text-sm text-gray-400">Name</p>
+              <p className="text-base text-white">
+                {user.firstName} {user.lastName || ""}
+              </p>
+            </div>
+          )}
+
+          <div>
+            <p className="text-sm text-gray-400">Account created</p>
+            <p className="text-base text-white">
+              {new Date(user.createdAt!).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Заказы — позже подцепим Shopify */}
+      <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+        <h2 className="text-xl font-semibold text-white mb-4">Recent Orders</h2>
+        <p className="text-gray-400">
+          Your orders will appear here once you make a purchase.
         </p>
-      </section>
+      </div>
 
-      <div className="pt-2">
+      {/* Действия */}
+      <div className="flex flex-col sm:flex-row gap-4">
         <button
-          onClick={handleLogout}
-          disabled={loggingOut}
-          className="text-sm text-gray-400 hover:text-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={() => router.push(`/${lang}/orders`)}
+          className="flex-1 px-6 py-3 rounded-md border border-white/10 bg-white/5 text-white hover:bg-white/10 transition-colors"
         >
-          {loggingOut ? "Logging out..." : "Log out"}
+          View All Orders
+        </button>
+
+        <button
+          onClick={handleSignOut}
+          disabled={loading}
+          className="flex-1 px-6 py-3 rounded-md border border-red-500/50 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? "Signing out..." : "Sign Out"}
         </button>
       </div>
     </div>

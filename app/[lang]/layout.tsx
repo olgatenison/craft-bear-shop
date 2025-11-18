@@ -3,29 +3,30 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Header from "../components/Header";
-// import { ClerkProvider } from "@clerk/nextjs";
-// import { enUS, fiFI, ukUA, ruRU } from "@clerk/localizations";
-// import { etEE } from "@/app/i18n/clerk-et";
+import { ClerkProvider } from "@clerk/nextjs";
+import { enUS, fiFI, ukUA, ruRU } from "@clerk/localizations";
+import { etEE } from "@/app/i18n/clerk-et";
 import Footer from "../components/Footer";
 import BannerCookie from "@/app/components/BannerCookie";
 
-// type ClerkLocale = typeof enUS;
+type ClerkLocale = typeof enUS;
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-import { LOCALES, type Locale } from "../lib/locale";
-// const LOCALES = ["en", "et", "fi", "uk", "ru"] as const;
-// type Locale = (typeof LOCALES)[number];
-// const MAP: Record<Locale, ClerkLocale> = {
-//   en: enUS,
-//   et: etEE, // временно эстонский = мой
-//   fi: fiFI,
-//   uk: ukUA,
-//   ru: ruRU,
-// };
+
+// import { LOCALES, type Locale } from "../lib/locale";
+const LOCALES = ["en", "et", "fi", "uk", "ru"] as const;
+type Locale = (typeof LOCALES)[number];
+const MAP: Record<Locale, ClerkLocale> = {
+  en: enUS,
+  et: etEE, // временно эстонский = мой
+  fi: fiFI,
+  uk: ukUA,
+  ru: ruRU,
+};
 
 export async function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
@@ -43,15 +44,17 @@ export default async function RootLayout({
   const { lang } = await params;
 
   return (
-    <html lang={lang}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header lang={lang} />
-        {children}
-        <Footer lang={lang} />
-        <BannerCookie lang={lang} />
-      </body>
-    </html>
+    <ClerkProvider localization={MAP[lang]}>
+      <html lang={lang}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Header lang={lang} />
+          {children}
+          <Footer lang={lang} />
+          <BannerCookie lang={lang} />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

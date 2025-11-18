@@ -1,6 +1,8 @@
 // app/[lang]/account/page.tsx
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { getMessages, Locale } from "../messages";
 import AccountContent from "../../components/AccountContent";
+import LoginRegisterForm from "../../components/LoginRegisterForm";
 
 export default async function AccountPage({
   params,
@@ -15,7 +17,16 @@ export default async function AccountPage({
       <h1 className="mb-4 text-2xl font-semibold">
         {messages.AccountPage?.title ?? "My account"}
       </h1>
-      <AccountContent lang={lang} />
+
+      {/* Если пользователь залогинен — показываем страницу аккаунта */}
+      <SignedIn>
+        <AccountContent lang={lang} />
+      </SignedIn>
+
+      {/* Если не залогинен — показываем нашу форму логина/регистрации */}
+      <SignedOut>
+        <LoginRegisterForm lang={lang} />
+      </SignedOut>
     </div>
   );
 }
