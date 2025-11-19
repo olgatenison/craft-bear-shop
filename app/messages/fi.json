@@ -114,9 +114,52 @@
     "policyLink": "Evästekäytäntö"
   },
   "AccountPage": {
-    "title": "My Account 2",
-    "welcome": "Welcome back, {name}!",
-    "orders": "My Orders",
-    "logout": "Log Out"
+    "title": "Oma tili",
+    "profileInformation": "Profiilin tiedot",
+    "email": "Sähköpostiosoite",
+    "name": "Nimi",
+    "accountCreated": "Tili luotu",
+    "recentOrders": "Viimeisimmät tilaukset",
+    "recentOrdersDescription": "Tilauksesi näkyvät täällä, kun olet tehnyt ensimmäisen ostoksen.",
+    "viewAllOrders": "Näytä kaikki tilaukset",
+    "signingOut": "Kirjaudutaan ulos...",
+    "signOut": "Kirjaudu ulos"
+  },
+  "auth": {
+    "signIn": "Kirjaudu sisään",
+    "signUp": "Luo tili",
+    "welcomeBack": "Tervetuloa takaisin! Kirjaudu sisään jatkaaksesi",
+    "createAccount": "Luo tili aloittaaksesi ostosten teon",
+    "email": "Sähköpostiosoite",
+    "password": "Salasana",
+    "confirmPassword": "Vahvista salasana",
+
+    "passwordStrength": "Salasanan vahvuus",
+    "passwordHint": "(vähintään 8 merkkiä, kirjaimia ja numeroita)",
+    "passwordStrengthWeak": "Heikko",
+    "passwordStrengthMedium": "Keskitaso",
+    "passwordStrengthStrong": "Vahva",
+
+    "showPasswordAria": "Näytä salasana",
+    "hidePasswordAria": "Piilota salasana",
+
+    "forgotPassword": "Unohditko salasanan?",
+    "submitSignIn": "Kirjaudu sisään",
+    "submitSignUp": "Luo tili",
+
+    "passwordsDontMatch": "Salasanat eivät täsmää.",
+    "enterEmailFirst": "Anna ensin sähköpostiosoitteesi.",
+    "resetSent": "Jos tällainen sähköpostiosoite on olemassa, lähetimme ohjeet salasanan palauttamiseksi.",
+    "weakPassword": "Salasanassa on oltava vähintään 8 merkkiä ja sen tulee sisältää sekä kirjaimia että numeroita.",
+
+    "accountCreated": "Tili on luotu onnistuneesti!",
+    "signInFlowIncomplete": "Viimeistele kirjautumisprosessi.",
+    "signUpFlowIncomplete": "Viimeistele rekisteröitymisprosessi.",
+    "somethingWentWrong": "Jotain meni vikaan. Yritä uudelleen.",
+
+    "forgotPasswordDescription": "Anna sähköpostiosoitteesi saadaksesi palautuskoodin.",
+    "resetPasswordDescription": "Syötä sähköpostiin tullut koodi ja uusi salasana.",
+    "sendResetCodeButton": "Lähetä koodi",
+    "resetPasswordButton": "Vaihda salasana"
   }
 }

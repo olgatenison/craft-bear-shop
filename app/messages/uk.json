@@ -114,9 +114,52 @@
     "policyLink": "Політика cookie"
   },
   "AccountPage": {
-    "title": "My Account 2",
-    "welcome": "Welcome back, {name}!",
-    "orders": "My Orders",
-    "logout": "Log Out"
+    "title": "Мій обліковий запис",
+    "profileInformation": "Інформація профілю",
+    "email": "Електронна пошта",
+    "name": "Ім’я",
+    "accountCreated": "Обліковий запис створено",
+    "recentOrders": "Останні замовлення",
+    "recentOrdersDescription": "Ваші замовлення з’являться тут після першої покупки.",
+    "viewAllOrders": "Переглянути всі замовлення",
+    "signingOut": "Вихід з облікового запису...",
+    "signOut": "Вийти"
+  },
+  "auth": {
+    "signIn": "Увійти",
+    "signUp": "Зареєструватися",
+    "welcomeBack": "З поверненням! Увійдіть, щоб продовжити",
+    "createAccount": "Створіть обліковий запис, щоб розпочати покупки",
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "confirmPassword": "Підтвердіть пароль",
+
+    "passwordStrength": "Надійність пароля",
+    "passwordHint": "(мінімум 8 символів, літери та цифри)",
+    "passwordStrengthWeak": "Слабкий",
+    "passwordStrengthMedium": "Середній",
+    "passwordStrengthStrong": "Сильний",
+
+    "showPasswordAria": "Показати пароль",
+    "hidePasswordAria": "Сховати пароль",
+
+    "forgotPassword": "Забули пароль?",
+    "submitSignIn": "Увійти",
+    "submitSignUp": "Створити обліковий запис",
+
+    "passwordsDontMatch": "Паролі не збігаються.",
+    "enterEmailFirst": "Спочатку введіть електронну пошту.",
+    "resetSent": "Якщо така електронна пошта існує, ми надіслали інструкції з відновлення пароля.",
+    "weakPassword": "Пароль має містити щонайменше 8 символів і включати літери та цифри.",
+
+    "accountCreated": "Обліковий запис успішно створено!",
+    "signInFlowIncomplete": "Завершіть вхід в обліковий запис.",
+    "signUpFlowIncomplete": "Завершіть реєстрацію.",
+    "somethingWentWrong": "Щось пішло не так. Спробуйте ще раз.",
+
+    "forgotPasswordDescription": "Введіть свою електронну пошту, щоб отримати код для скидання пароля.",
+    "resetPasswordDescription": "Введіть код з листа та новий пароль.",
+    "sendResetCodeButton": "Надіслати код",
+    "resetPasswordButton": "Скинути пароль"
   }
 }

@@ -1,11 +1,16 @@
 // app\components\LoginRegisterForm.tsx
+
 "use client";
 
 import { useState } from "react";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import type { Locale } from "@/app/lib/locale";
+
+import { AuthTabs } from "@/app/components/auth/AuthTabs";
+import { AuthAlert } from "@/app/components/auth/AuthAlert";
+import PasswordField from "@/app/components/auth/PasswordField";
+import type { AuthMessages } from "@/app/components/auth/types";
 
 type Strength = "weak" | "medium" | "strong";
 
@@ -23,14 +28,26 @@ function getPasswordStrength(pw: string): Strength | null {
   return "weak";
 }
 
-function strengthMeta(strength: Strength | null) {
+function strengthMeta(
+  strength: Strength | null,
+  messages: AuthMessages
+): { label: string; className: string } {
   switch (strength) {
     case "weak":
-      return { label: "Weak", className: "text-red-500" };
+      return {
+        label: messages.passwordStrengthWeak,
+        className: "text-red-500",
+      };
     case "medium":
-      return { label: "Medium", className: "text-yellow-400" };
+      return {
+        label: messages.passwordStrengthMedium,
+        className: "text-yellow-400",
+      };
     case "strong":
-      return { label: "Strong", className: "text-green-500" };
+      return {
+        label: messages.passwordStrengthStrong,
+        className: "text-green-500",
+      };
     default:
       return { label: "", className: "" };
   }
@@ -42,18 +59,32 @@ type ClerkErrorShape = {
   message?: string;
 };
 
-function getErrorMessage(err: unknown): string {
+function getErrorMessage(err: unknown, fallback: string): string {
   const e = err as ClerkErrorShape;
   return (
     e?.errors?.[0]?.longMessage ||
     e?.errors?.[0]?.message ||
     e?.message ||
-    "Something went wrong"
+    fallback
   );
 }
 
-export default function LoginRegisterForm({ lang }: { lang: Locale }) {
+export default function LoginRegisterForm({
+  messages,
+}: {
+  messages: AuthMessages;
+}) {
   const router = useRouter();
+  const params = useParams();
+
+  // забираем lang из URL, на всякий случай приводим к строке и подстраховываемся
+  const langFromParams = params?.lang;
+  const lang = (
+    Array.isArray(langFromParams) ? langFromParams[0] : langFromParams
+  ) as Locale | undefined;
+
+  const effectiveLang = (lang || "en") as Locale;
+
   const [mode, setMode] = useState<"login" | "register">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,8 +100,10 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
   const { isLoaded: signInLoaded, signIn, setActive } = useSignIn();
   const { isLoaded: signUpLoaded, signUp } = useSignUp();
 
-  const { label: strengthLabel, className: strengthClass } =
-    strengthMeta(passwordStrength);
+  const { label: strengthLabel, className: strengthClass } = strengthMeta(
+    passwordStrength,
+    messages
+  );
 
   function resetPasswords() {
     setPassword("");
@@ -87,22 +120,18 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
 
     try {
       if (mode === "register") {
-        // проверка пароля
         const strength = getPasswordStrength(password);
         if (strength === "weak") {
-          setError(
-            "Password must be at least 8 characters and contain letters and numbers."
-          );
+          setError(messages.weakPassword);
           setLoading(false);
           return;
         }
         if (password !== confirmPassword) {
-          setError("Passwords do not match.");
+          setError(messages.passwordsDontMatch);
           setLoading(false);
           return;
         }
 
-        // signUp и setActive могут быть undefined → проверяем
         if (!signUpLoaded || !signUp || !setActive) {
           setLoading(false);
           return;
@@ -116,14 +145,14 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
         if (result.status === "complete") {
           await setActive({ session: result.createdSessionId });
           resetPasswords();
-          setSuccess("Account created successfully!");
+          setSuccess(messages.accountCreated);
 
           setTimeout(() => {
-            router.push(`/${lang}/account`);
+            router.push(`/${effectiveLang}/account`);
             router.refresh();
           }, 500);
         } else {
-          setError("Please complete the sign-up flow.");
+          setError(messages.signUpFlowIncomplete);
         }
       } else {
         // LOGIN
@@ -141,92 +170,60 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
           await setActive({ session: result.createdSessionId });
           resetPasswords();
 
-          setTimeout(() => {
-            router.push(`/${lang}/account`);
-            router.refresh();
-          }, 300);
+          // просто перерисовываем текущую страницу с новым auth-состоянием
+          router.refresh();
         } else {
-          setError("Please complete the sign-in flow.");
+          setError(messages.signInFlowIncomplete);
         }
       }
     } catch (err: unknown) {
-      setError(getErrorMessage(err));
+      setError(getErrorMessage(err, messages.somethingWentWrong));
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleForgotPassword() {
-    setError(null);
-    setSuccess(null);
+  // async function handleForgotPassword() {
+  //   setError(null);
+  //   setSuccess(null);
 
-    if (!email) {
-      setError("Please enter your email first.");
-      return;
-    }
+  //   if (!email) {
+  //     setError(messages.enterEmailFirst);
+  //     return;
+  //   }
 
-    if (!signInLoaded || !signIn) return;
+  //   if (!signInLoaded || !signIn) return;
 
-    try {
-      await signIn.create({
-        strategy: "reset_password_email_code",
-        identifier: email,
-      });
+  //   try {
+  //     await signIn.create({
+  //       strategy: "reset_password_email_code",
+  //       identifier: email,
+  //     });
 
-      setSuccess(
-        "If this email exists, we have sent instructions to reset your password."
-      );
-    } catch (err: unknown) {
-      setError(getErrorMessage(err));
-    }
-  }
+  //     setSuccess(messages.resetSent);
+  //   } catch (err: unknown) {
+  //     setError(getErrorMessage(err, messages.somethingWentWrong));
+  //   }
+  // }
 
   return (
     <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-[480px] px-8 py-10">
-      {/* Табы Sign in / Sign up */}
-      <div className="mt-6 flex w-full border-b border-white/10">
-        <button
-          type="button"
-          onClick={() => {
-            setMode("login");
-            setError(null);
-            setSuccess(null);
-            resetPasswords();
-          }}
-          className={`flex-1 pb-6 px-1 text-center text-base font-semibold transition-colors border-b-2 ${
-            mode === "login"
-              ? "text-yellow-400 border-yellow-400"
-              : "text-gray-500 hover:text-white border-transparent"
-          }`}
-        >
-          Sign in
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setMode("register");
-            setError(null);
-            setSuccess(null);
-            resetPasswords();
-          }}
-          className={`flex-1 pb-3 px-1 text-center text-base font-semibold transition-colors border-b-2 ${
-            mode === "register"
-              ? "text-yellow-400 border-yellow-400"
-              : "text-gray-500 hover:text-white border-transparent"
-          }`}
-        >
-          Sign up
-        </button>
-      </div>
+      <AuthTabs
+        mode={mode}
+        onChange={(nextMode: "login" | "register") => {
+          setMode(nextMode);
+          setError(null);
+          setSuccess(null);
+          resetPasswords();
+        }}
+        signInLabel={messages.signIn}
+        signUpLabel={messages.signUp}
+      />
 
       <p className="mt-6 text-center text-base text-gray-300">
-        {mode === "login"
-          ? "Welcome back! Please sign in to continue"
-          : "Create your account to start shopping"}
+        {mode === "login" ? messages.welcomeBack : messages.createAccount}
       </p>
 
-      {/* Форма */}
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         {/* Email */}
         <div>
@@ -234,7 +231,7 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
             htmlFor="email"
             className="block text-sm/6 font-medium text-gray-300"
           >
-            Email address
+            {messages.email}
           </label>
           <div className="mt-2">
             <input
@@ -250,102 +247,71 @@ export default function LoginRegisterForm({ lang }: { lang: Locale }) {
           </div>
         </div>
 
-        {/* Password + глаз + индикатор */}
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm/6 font-medium text-gray-300"
-          >
-            Password
-          </label>
-          <div className="mt-2 relative">
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              required
-              autoComplete={
-                mode === "login" ? "current-password" : "new-password"
-              }
-              value={password}
-              onChange={(e) => {
-                const value = e.target.value;
-                setPassword(value);
-                setPasswordStrength(getPasswordStrength(value));
-              }}
-              className="block w-full rounded-md bg-white px-3 py-1.5 pr-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? (
-                <EyeSlashIcon className="h-5 w-5" aria-hidden="true" />
-              ) : (
-                <EyeIcon className="h-5 w-5" aria-hidden="true" />
-              )}
-            </button>
-          </div>
-          {mode === "register" && password && (
-            <p className={`mt-1 text-xs font-medium ${strengthClass}`}>
-              Password strength: {strengthLabel}{" "}
-              <span className="text-gray-400">
-                (min 8 chars, letters &amp; digits)
-              </span>
-            </p>
-          )}
-        </div>
+        {/* Password */}
+        <PasswordField
+          id="password"
+          name="password"
+          label={messages.password}
+          value={password}
+          onChange={(v) => {
+            setPassword(v);
+            setPasswordStrength(getPasswordStrength(v));
+          }}
+          showPassword={showPassword}
+          onToggleShow={() => setShowPassword((prev) => !prev)}
+          autoComplete={mode === "login" ? "current-password" : "new-password"}
+          showPasswordLabel={messages.showPasswordAria}
+          hidePasswordLabel={messages.hidePasswordAria}
+          hint={mode === "register" ? messages.passwordHint : undefined}
+        />
 
-        {/* Confirm password только при регистрации */}
-        {mode === "register" && (
-          <div>
-            <label
-              htmlFor="confirm-password"
-              className="block text-sm/6 font-medium text-gray-300"
-            >
-              Confirm password
-            </label>
-            <div className="mt-2">
-              <input
-                id="confirm-password"
-                name="confirm-password"
-                type={showPassword ? "text" : "password"}
-                required
-                autoComplete="new-password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-              />
-            </div>
-          </div>
+        {mode === "register" && password && passwordStrength && (
+          <p className={`mt-1 text-xs font-medium ${strengthClass}`}>
+            {messages.passwordStrength}: {strengthLabel}
+          </p>
         )}
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
-        {success && <p className="text-sm text-green-600">{success}</p>}
+        {mode === "register" && (
+          <PasswordField
+            id="confirm-password"
+            name="confirm-password"
+            label={messages.confirmPassword}
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+            showPassword={showPassword}
+            onToggleShow={() => setShowPassword((prev) => !prev)}
+            autoComplete="new-password"
+            showPasswordLabel={messages.showPasswordAria}
+            hidePasswordLabel={messages.hidePasswordAria}
+          />
+        )}
 
-        {/* Кнопка снизу формы */}
+        <AuthAlert error={error} success={success} />
+
         <div>
           <button
             type="submit"
             disabled={loading}
             className="flex w-full items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {loading ? "..." : mode === "login" ? "Sign in" : "Sign up"}
+            {loading
+              ? "..."
+              : mode === "login"
+              ? messages.submitSignIn
+              : messages.submitSignUp}
           </button>
         </div>
-        {/* Контейнер для Smart CAPTCHA от Clerk — нужен только на регистрации */}
+
         {mode === "register" && <div id="clerk-captcha" className="mt-4" />}
 
         {mode === "login" && (
           <div className="flex items-center">
             <button
               type="button"
-              onClick={handleForgotPassword}
-              className="mt-10 text-center text-base text-gray-500 hover:text-yellow-500"
+              onClick={() => router.push(`/${effectiveLang}/forgot-password`)}
+              className="text-center text-base text-gray-500 hover:text-yellow-500"
             >
-              Forgot password?
+              {messages.forgotPassword}
             </button>
           </div>
         )}
