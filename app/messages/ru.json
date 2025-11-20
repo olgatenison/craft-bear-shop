@@ -165,5 +165,20 @@
     "resetPasswordDescription": "Введите код из письма и новый пароль.",
     "sendResetCodeButton": "Отправить код",
     "resetPasswordButton": "Сбросить пароль"
+  },
+  "ShoppingCardOverviews": {
+    "shoppingCart": "Корзина",
+    "description": "Товары в вашей корзине",
+    "orderSummary": "Сводка заказа",
+    "subtotal": "Промежуточный итог",
+    "shippingEstimate": "Оценка доставки",
+    "shippingEstimateInfo": "Узнайте больше о том, как рассчитывается доставка",
+    "taxEstimate": "Оценка налогов",
+    "taxEstimateInfo": "Узнайте больше о том, как рассчитываются налоги",
+    "total": "Итого",
+    "checkout": "Оформить заказ",
+    "empty": "Ваша корзина пуста",
+    "emptyDescription": "Добавьте товары, чтобы начать!",
+    "CTAAdd": "Все товары"
   }
 }

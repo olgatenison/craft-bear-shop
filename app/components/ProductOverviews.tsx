@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { FlattenedProduct } from "../data/mappers";
+import AddToCartButton from "./ui/AddToCartButton";
 
 type ProductOverviewsProps = {
   product: FlattenedProduct;
@@ -65,7 +66,7 @@ export default function ProductOverviews({
       imageAlt: edge.node.altText || product.title,
       primary: index === 0,
     })) || [];
-
+  console.log(price);
   const rating = product.rating ?? 0;
   const reviewCount = product.reviewCount ?? 0;
 
@@ -248,14 +249,13 @@ export default function ProductOverviews({
 
             {/* button and right side under*/}
             <div className="mt-16 lg:col-span-5">
-              <form>
-                <button
+              {/* <button
                   type="submit"
-                  className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 sm:w-auto lg:w-full duration-300"
+                  className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 sm:w-auto lg:w-full duration-300"
                 >
                   {addToCart}
-                </button>
-              </form>
+                </button> */}
+              <AddToCartButton product={product} addToCart={addToCart} />
 
               {/* Product Description */}
               {product.descriptionHtml && (

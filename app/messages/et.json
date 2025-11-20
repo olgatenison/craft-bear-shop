@@ -161,5 +161,21 @@
     "resetPasswordDescription": "Sisesta e-kirjast saadud kood ja uus parool.",
     "sendResetCodeButton": "Saada kood",
     "resetPasswordButton": "Lähtesta parool"
+  },
+
+  "ShoppingCardOverviews": {
+    "shoppingCart": "Ostukorv",
+    "description": "Tooted sinu ostukorvis",
+    "orderSummary": "Tellimuse kokkuvõte",
+    "subtotal": "Vahesumma",
+    "shippingEstimate": "Tarne hinnang",
+    "shippingEstimateInfo": "Lisateave selle kohta, kuidas tarne arvutatakse",
+    "taxEstimate": "Maksu hinnang",
+    "taxEstimateInfo": "Lisateave selle kohta, kuidas maksud arvutatakse",
+    "total": "Kokku",
+    "checkout": "Mine kassasse",
+    "empty": "Sinu ostukorv on tühi",
+    "emptyDescription": "Lisa tooteid, et alustada!",
+    "CTAAdd": "Kõik tooted"
   }
 }

@@ -163,5 +163,20 @@
     "resetPasswordDescription": "Enter the code from the email and your new password.",
     "sendResetCodeButton": "Send reset code",
     "resetPasswordButton": "Reset password"
+  },
+  "ShoppingCardOverviews": {
+    "shoppingCart": "Shopping Cart",
+    "description": "Items in your shopping cart",
+    "orderSummary": "Order summary",
+    "subtotal": "Subtotal",
+    "shippingEstimate": "Shipping estimate",
+    "shippingEstimateInfo": "Learn more about how shipping is calculated",
+    "taxEstimate": "Tax estimate",
+    "taxEstimateInfo": "Learn more about how tax is calculated",
+    "total": "Total",
+    "checkout": "Checkout",
+    "empty": "Your cart is empty",
+    "emptyDescription": "Add some products to get started!",
+    "CTAAdd": "All Products"
   }
 }

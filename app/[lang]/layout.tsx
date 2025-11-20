@@ -8,7 +8,7 @@ import { enUS, fiFI, ukUA, ruRU } from "@clerk/localizations";
 import { etEE } from "@/app/i18n/clerk-et";
 import Footer from "../components/Footer";
 import BannerCookie from "@/app/components/BannerCookie";
-
+import { CartProvider } from "@/app/context/CartContext";
 type ClerkLocale = typeof enUS;
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -44,17 +44,19 @@ export default async function RootLayout({
   const { lang } = await params;
 
   return (
-    <ClerkProvider localization={MAP[lang]}>
-      <html lang={lang}>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <Header lang={lang} />
-          {children}
-          <Footer lang={lang} />
-          <BannerCookie lang={lang} />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang={lang}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ClerkProvider localization={MAP[lang]}>
+          <CartProvider>
+            <Header lang={lang} />
+            {children}
+            <Footer lang={lang} />
+            <BannerCookie lang={lang} />
+          </CartProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

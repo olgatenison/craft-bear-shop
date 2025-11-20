@@ -161,5 +161,20 @@
     "resetPasswordDescription": "Syötä sähköpostiin tullut koodi ja uusi salasana.",
     "sendResetCodeButton": "Lähetä koodi",
     "resetPasswordButton": "Vaihda salasana"
+  },
+  "ShoppingCardOverviews": {
+    "shoppingCart": "Ostoskori",
+    "description": "Tuotteet ostoskorissasi",
+    "orderSummary": "Tilausyhteenveto",
+    "subtotal": "Välisumma",
+    "shippingEstimate": "Toimitusarvio",
+    "shippingEstimateInfo": "Lue lisää, miten toimituskulut lasketaan",
+    "taxEstimate": "Veroarvio",
+    "taxEstimateInfo": "Lue lisää, miten verot lasketaan",
+    "total": "Yhteensä",
+    "checkout": "Siirry kassalle",
+    "empty": "Ostoskorisi on tyhjä",
+    "emptyDescription": "Lisää tuotteita aloittaaksesi!",
+    "CTAAdd": "Kaikki tuotteet"
   }
 }

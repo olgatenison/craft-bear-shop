@@ -161,5 +161,20 @@
     "resetPasswordDescription": "Введіть код з листа та новий пароль.",
     "sendResetCodeButton": "Надіслати код",
     "resetPasswordButton": "Скинути пароль"
+  },
+  "ShoppingCardOverviews": {
+    "shoppingCart": "Кошик",
+    "description": "Товари у вашому кошику",
+    "orderSummary": "Підсумок замовлення",
+    "subtotal": "Проміжний підсумок",
+    "shippingEstimate": "Орієнтовна доставка",
+    "shippingEstimateInfo": "Дізнайтесь більше про те, як розраховується доставка",
+    "taxEstimate": "Орієнтовний податок",
+    "taxEstimateInfo": "Дізнайтесь більше про те, як розраховуються податки",
+    "total": "Разом",
+    "checkout": "Оформити замовлення",
+    "empty": "Ваш кошик порожній",
+    "emptyDescription": "Додайте товари, щоб розпочати!",
+    "CTAAdd": "Усі товари"
   }
 }

@@ -45,7 +45,7 @@ export default function LanguageSwitcher({ current }: { current?: Locale }) {
         ring-1 ring-white/15 dark:ring-stone/20
         bg-linear-to-b from-white/55 to-white/20
         dark:from-stone-950/75 dark:to-stone-950/80
-        backdrop-blur-sm"
+       "
       >
         <div className="w-56 shrink rounded-xl  p-4 text-sm/6 font-semibold text-gray-200 shadow-lg  outline-1 outline-gray-900/5">
           {LOCALES.map((loc) => {
