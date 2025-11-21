@@ -41,7 +41,7 @@ export default function LanguageSwitcher({ current }: { current?: Locale }) {
         data-closed:translate-y-1 data-closed:opacity-0
         data-enter:duration-200 data-leave:duration-150 data-enter:ease-out data-leave:ease-in
 
-        rounded-2xl shadow-2xl shadow-black/50
+        rounded-2xl shadow-lg shadow-black/50
         ring-1 ring-white/15 dark:ring-stone/20
         bg-linear-to-b from-white/55 to-white/20
         dark:from-stone-950/75 dark:to-stone-950/80

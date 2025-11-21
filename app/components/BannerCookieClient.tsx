@@ -36,29 +36,34 @@ export default function BannerCookieClient({
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 px-6 pb-6 z-50">
-      <div className="pointer-events-auto ml-auto max-w-xl rounded-xl bg-gray-800 p-6  outline-1 -outline-offset-1 outline-white/10 shadow-xl">
-        <p className="text-sm/6 text-white">
+      <div
+        className="pointer-events-auto ml-auto rounded-2xl shadow-lg shadow-black/50 max-w-90 p-8
+        ring-1 ring-white/15 dark:ring-stone/20
+        bg-linear-to-b from-white/55 to-white/20
+        dark:from-stone-950/75 dark:to-stone-950/80"
+      >
+        <p className="text-base/6 text-gray-300">
           {text}{" "}
           <a
             href={policyHref}
-            className="font-semibold text-gray-400 underline hover:text-yellow-500"
+            className="font-semibold text-white underline hover:text-yellow-500"
           >
             {policyLabel}
           </a>
           .
         </p>
-        <div className="mt-4 flex items-center gap-x-5">
+        <div className="mt-8 flex items-center gap-x-10">
           <button
             type="button"
             onClick={() => handleChoice("accepted")}
-            className="rounded-md bg-gray-700 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-white/10 hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="rounded-md text-yellow-500 bg-linear-to-br from-stone-300/20 to-stone-900/50  px-3 py-2 text-base font-semibold  shadow-sm hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             {acceptLabel}
           </button>
           <button
             type="button"
             onClick={() => handleChoice("rejected")}
-            className="text-sm/6 font-semibold text-white hover:text-gray-300"
+            className="text-base/6 font-semibold text-white hover:text-gray-300"
           >
             {rejectLabel}
           </button>
