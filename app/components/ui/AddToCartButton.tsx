@@ -4,26 +4,33 @@ import { useCart } from "@/app/context/CartContext";
 import { FlattenedProduct } from "@/app/data/mappers";
 import QuantityCounter from "./QuantityCounter";
 
+const classNames = (...xs: Array<string | false | null | undefined>) =>
+  xs.filter(Boolean).join(" ");
+
 type AddToCartButtonProps = {
   product: FlattenedProduct;
-  addToCart: string; // ← название как раньше
+  addToCart: string;
+  className?: string;
 };
 
 export default function AddToCartButton({
   product,
-  addToCart, // ← название как раньше
+  addToCart,
+  className,
 }: AddToCartButtonProps) {
-  const { items, addToCart: addItemToCart } = useCart(); // ← переименовали функцию
+  const { items, addToCart: addItemToCart } = useCart();
 
-  const cartItem = items.find((item) => item.id === product.id);
+  const cartItem = items.find((item) => item.id === product.variantId);
 
   const handleAddToCart = () => {
     addItemToCart({
-      // ← используем переименованную функцию
-      id: product.id,
+      id: product.variantId,
       name: product.title,
       price: parseFloat(product.priceRange.minVariantPrice.amount),
-      imageSrc: product.images?.edges[0]?.node.url || "",
+      imageSrc:
+        product.images?.edges?.[0]?.node.url ??
+        product.featuredImage?.url ??
+        "",
       imageAlt: product.title,
       country: product.specs?.country,
       size: product.specs?.pack_size_l
@@ -35,17 +42,23 @@ export default function AddToCartButton({
 
   if (cartItem) {
     return (
-      <QuantityCounter productId={product.id} quantity={cartItem.quantity} />
+      <QuantityCounter
+        productId={product.variantId}
+        quantity={cartItem.quantity}
+      />
     );
   }
+
+  const defaultClasses =
+    "inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-sm font-semibold text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 sm:w-auto lg:w-full duration-300";
 
   return (
     <button
       type="button"
       onClick={handleAddToCart}
-      className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-sm font-semibold text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 sm:w-auto lg:w-full duration-300"
+      className={classNames(defaultClasses, className)}
     >
-      {addToCart} {/* ← текст кнопки */}
+      {addToCart}
     </button>
   );
 }

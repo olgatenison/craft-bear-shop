@@ -1,4 +1,22 @@
 // app/data/types.ts
+export interface ProductVariantNode {
+  id: string;
+  title: string;
+  price: {
+    amount: string;
+    currencyCode: string;
+  };
+  compareAtPrice?: {
+    amount: string;
+    currencyCode: string;
+  } | null;
+  availableForSale: boolean;
+  quantityAvailable?: number | null;
+  selectedOptions?: Array<{
+    name: string;
+    value: string;
+  }>;
+}
 
 export interface ProductNode {
   id: string;
@@ -23,6 +41,30 @@ export interface ProductNode {
       currencyCode: string;
     };
   };
+  // 👇 ДОБАВЬ ЭТО
+  variants?: {
+    edges: Array<{
+      node: {
+        id: string; // GID варианта
+        title: string;
+        price: {
+          amount: string;
+          currencyCode: string;
+        };
+        compareAtPrice?: {
+          amount: string;
+          currencyCode: string;
+        } | null;
+        availableForSale: boolean;
+        quantityAvailable?: number | null;
+        selectedOptions: Array<{
+          name: string;
+          value: string;
+        }>;
+      };
+    }>;
+  };
+
   collections?: {
     edges: Array<{
       node: {

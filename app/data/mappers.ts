@@ -1,4 +1,5 @@
 // app/data/mappers.ts
+// app/data/mappers.ts
 import type { ProductNode, Metafield } from "./types";
 
 export type FlattenedProduct = Omit<
@@ -6,6 +7,7 @@ export type FlattenedProduct = Omit<
   "metafields" | "collections" | "translations"
 > & {
   collections: string[];
+  variantId: string; // 👈 GID варианта (gid://shopify/ProductVariant/...)
   specs?: Partial<{
     abv: string;
     allergens: string;
@@ -30,6 +32,7 @@ export type FlattenedProduct = Omit<
 };
 
 function extractMetafieldValue(mf: Metafield): string | null {
+  // список reference-метаобъектов
   if (
     mf.type.includes("list.") &&
     mf.type.includes("reference") &&
@@ -48,6 +51,7 @@ function extractMetafieldValue(mf: Metafield): string | null {
     return names.length > 0 ? names.join(", ") : null;
   }
 
+  // одиночный reference
   if (
     mf.type.includes("reference") &&
     !mf.type.includes("list.") &&
@@ -61,6 +65,7 @@ function extractMetafieldValue(mf: Metafield): string | null {
     return null;
   }
 
+  // обычная строка
   return mf.value;
 }
 
@@ -84,18 +89,24 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
     ProductNode,
     "metafields" | "collections" | "translations"
   >;
+
   const base: ProductBase = {
     ...(p as ProductBase),
   };
 
   const marketing = grouped["marketing"] || {};
 
+  // 👇 Берём первый variant (для пива он, скорее всего, один)
+  const firstVariant = p.variants?.edges?.[0]?.node;
+  const variantId = firstVariant?.id ?? p.id; // если вдруг нет variants — fallback на product.id
+
   return {
     ...base,
     collections,
+    variantId,
     specs: grouped["specs"] as FlattenedProduct["specs"],
     shopify: grouped["shopify"] as FlattenedProduct["shopify"],
-    // Shopify хранит boolean как строку "true"/"false"/"1"
+    // Shopify хранит boolean как "true"/"false"/"1"
     trending: marketing["trending"] === "true" || marketing["trending"] === "1",
   };
 }

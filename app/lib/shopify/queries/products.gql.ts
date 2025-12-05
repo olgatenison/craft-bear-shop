@@ -25,6 +25,29 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
               currencyCode
             }
           }
+          # ДОБАВЛЕНО: variants для корзины
+          variants(first: 20) {
+            edges {
+              node {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+                compareAtPrice {
+                  amount
+                  currencyCode
+                }
+                availableForSale
+                quantityAvailable
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
           collections(first: 10) {
             edges {
               node {
@@ -94,6 +117,29 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
         minVariantPrice {
           amount
           currencyCode
+        }
+      }
+      # ДОБАВЛЕНО: variants для корзины
+      variants(first: 20) {
+        edges {
+          node {
+            id
+            title
+            price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
+              amount
+              currencyCode
+            }
+            availableForSale
+            quantityAvailable
+            selectedOptions {
+              name
+              value
+            }
+          }
         }
       }
       collections(first: 20) {
@@ -186,6 +232,29 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
               minVariantPrice {
                 amount
                 currencyCode
+              }
+            }
+            # ДОБАВЛЕНО: variants для корзины
+            variants(first: 20) {
+              edges {
+                node {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  compareAtPrice {
+                    amount
+                    currencyCode
+                  }
+                  availableForSale
+                  quantityAvailable
+                  selectedOptions {
+                    name
+                    value
+                  }
+                }
               }
             }
             collections(first: 10) {

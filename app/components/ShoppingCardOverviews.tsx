@@ -2,6 +2,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
   QuestionMarkCircleIcon,
@@ -44,13 +45,48 @@ export default function ShoppingCardOverviews({
   CTAAdd,
   lang,
 }: ShoppingCardOverviewsProps) {
-  const { items, removeFromCart, updateQuantity, totalPrice } = useCart();
+  const router = useRouter();
+  const { items, removeFromCart, updateQuantity, totalPrice, clearCart } =
+    useCart();
 
   const hasItems = items.length > 0;
   const shippingCost = hasItems ? 5.0 : 0;
   const taxRate = 0.084;
   const taxAmount = hasItems ? totalPrice * taxRate : 0;
   const orderTotal = totalPrice + shippingCost + taxAmount;
+
+  const handleCheckout = async () => {
+    if (!items.length) return;
+    console.log("CART ITEMS BEFORE CHECKOUT:", items);
+    try {
+      const res = await fetch("/api/shopify/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lang,
+          items: items.map((item) => ({
+            id: item.id,
+            quantity: item.quantity,
+          })),
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.checkoutUrl) {
+        console.error("Checkout error", json);
+        // TODO: показать пользователю сообщение об ошибке
+        return;
+      }
+
+      // по желанию — чистим локальную корзину
+      clearCart();
+
+      // отправляем человека в Shopify checkout
+      router.push(json.checkoutUrl);
+    } catch (error) {
+      console.error("Checkout request failed", error);
+    }
+  };
 
   return (
     <div className="">
@@ -212,7 +248,7 @@ export default function ShoppingCardOverviews({
                     {shippingCost.toFixed(2)} €
                   </dd>
                 </div>
-                <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+                {/* <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                   <dt className="flex text-base text-gray-400">
                     <span>{taxEstimate}</span>
                     <a
@@ -229,7 +265,7 @@ export default function ShoppingCardOverviews({
                   <dd className="text-base font-medium text-gray-400">
                     {taxAmount.toFixed(2)} €
                   </dd>
-                </div>
+                </div> */}
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                   <dt className="text-base font-medium text-yellow-400">
                     {total}
@@ -242,7 +278,8 @@ export default function ShoppingCardOverviews({
 
               <div className="mt-6">
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleCheckout}
                   className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 sm:w-auto lg:w-full duration-300"
                 >
                   {checkout}

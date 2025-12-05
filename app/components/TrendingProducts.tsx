@@ -5,6 +5,7 @@ import { WineOff } from "lucide-react";
 import Link from "next/link";
 import type { FlattenedProduct } from "@/app/data/mappers";
 import type { Locale } from "@/app/lib/locale";
+import AddToCartButton from "./ui/AddToCartButton";
 
 const classNames = (...xs: Array<string | false | null | undefined>) =>
   xs.filter(Boolean).join(" ");
@@ -127,13 +128,18 @@ export default function TrendingProducts({
 
                 {/* кнопка прижата к низу карточки */}
                 <div className="mt-6">
-                  <Link
+                  <AddToCartButton
+                    product={product}
+                    addToCart={add}
+                    className="relative flex w-full items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
+                  />
+                  {/* <Link
                     href={href}
                     className="relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
                   >
                     {add}
                     <span className="sr-only">, {product.title}</span>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             );

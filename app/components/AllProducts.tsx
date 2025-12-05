@@ -4,6 +4,7 @@ import Link from "next/link";
 import { WineOff } from "lucide-react";
 import type { FlattenedProduct } from "../data/mappers";
 import type { Locale } from "@/app/[lang]/messages";
+import AddToCartButton from "./ui/AddToCartButton";
 
 const classNames = (...xs: Array<string | false | null | undefined>) =>
   xs.filter(Boolean).join(" ");
@@ -135,13 +136,18 @@ export default function AllProducts({
                 <p className="mt-1 text-sm text-gray-500">0 {reviews}</p>
               </div>
               <div className="mt-6">
-                <Link
+                <AddToCartButton
+                  product={p}
+                  addToCart={add}
+                  className="relative flex w-full items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
+                />
+                {/* <Link
                   href={href}
                   className="relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
                 >
                   {add}
                   <span className="sr-only">, {p.title}</span>
-                </Link>
+                </Link> */}
               </div>
             </div>
           );
