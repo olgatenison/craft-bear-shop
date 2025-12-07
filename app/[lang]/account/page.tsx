@@ -4,6 +4,8 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { getMessages, Locale } from "../messages";
 import AccountContent from "../../components/AccountContent";
 import LoginRegisterForm from "../../components/LoginRegisterForm";
+import { auth } from "@clerk/nextjs/server";
+import { getOrCreateShopifyCustomer } from "@/app/lib/shopify/getOrCreateShopifyCustomer";
 
 export type AccountPageMessages = {
   title: string;
@@ -24,8 +26,24 @@ export default async function AccountPage({
   params: Promise<{ lang: Locale }>;
 }) {
   const { lang } = await params;
-
   const messages = await getMessages(lang);
+
+  // ✅ Додаємо await тут!
+  const { userId } = await auth();
+
+  let shopifyCustomerId: string | null = null;
+  let shopifyError: string | null = null;
+
+  if (userId) {
+    try {
+      console.log("🔷 Account page: Getting Shopify customer...");
+      shopifyCustomerId = await getOrCreateShopifyCustomer();
+      console.log("🔷 Account page: Result:", shopifyCustomerId);
+    } catch (error) {
+      console.error("🔷 Account page: Error:", error);
+      shopifyError = error instanceof Error ? error.message : "Unknown error";
+    }
+  }
 
   return (
     <div className="mx-auto max-w-2xl py-8 px-4">
@@ -33,12 +51,14 @@ export default async function AccountPage({
         {messages.AccountPage?.title ?? "My account"}
       </h1>
 
-      {/* Если пользователь залогинен — показываем страницу аккаунта */}
       <SignedIn>
-        <AccountContent messages={messages.AccountPage} />
+        <AccountContent
+          messages={messages.AccountPage}
+          shopifyCustomerId={shopifyCustomerId}
+          shopifyError={shopifyError}
+        />
       </SignedIn>
 
-      {/* Если не залогинен — показываем нашу форму логина/регистрации */}
       <SignedOut>
         <LoginRegisterForm messages={messages.auth} />
       </SignedOut>

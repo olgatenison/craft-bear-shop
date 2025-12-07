@@ -1,5 +1,4 @@
 // app/components/AccountContent.tsx
-
 "use client";
 
 import { useUser, useClerk } from "@clerk/nextjs";
@@ -8,11 +7,17 @@ import type { Locale } from "@/app/lib/locale";
 import { useState } from "react";
 import type { AccountPageMessages } from "../[lang]/account/page";
 
+type AccountContentProps = {
+  messages: AccountPageMessages;
+  shopifyCustomerId: string | null;
+  shopifyError?: string | null;
+};
+
 export default function AccountContent({
   messages,
-}: {
-  messages: AccountPageMessages;
-}) {
+  shopifyCustomerId,
+  shopifyError,
+}: AccountContentProps) {
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
   const router = useRouter();
@@ -49,7 +54,7 @@ export default function AccountContent({
 
   return (
     <div className="space-y-6">
-      {/* Информация о пользователе */}
+      {/* Інформація про користувача */}
       <div className="bg-white/5 rounded-lg p-6 border border-white/10">
         <h2 className="text-xl font-semibold text-white mb-4">
           {messages.profileInformation}
@@ -81,15 +86,34 @@ export default function AccountContent({
         </div>
       </div>
 
-      {/* Заказы — позже подцепим Shopify */}
+      {/* Заказы */}
       <div className="bg-white/5 rounded-lg p-6 border border-white/10">
         <h2 className="text-xl font-semibold text-white mb-4">
           {messages.recentOrders}
         </h2>
         <p className="text-gray-400">{messages.recentOrdersDescription}</p>
+
+        {/* Debug info */}
+        <div className="mt-4 p-4 bg-black/30 rounded border border-yellow-500/30">
+          <p className="text-sm font-mono text-gray-300 mb-2">🔍 Debug Info:</p>
+          <p className="text-sm text-gray-400">
+            Shopify customer ID:{" "}
+            <span className="font-mono text-white">
+              {shopifyCustomerId ?? "null"}
+            </span>
+          </p>
+          {shopifyError && (
+            <p className="text-sm text-red-400 mt-2">
+              ❌ Error: {shopifyError}
+            </p>
+          )}
+          <p className="text-xs text-gray-500 mt-2">
+            Перевірте консоль браузера та server logs для деталей
+          </p>
+        </div>
       </div>
 
-      {/* Действия */}
+      {/* Дії */}
       <div className="flex flex-col sm:flex-row gap-4">
         <button
           onClick={() => router.push(`/${effectiveLang}/orders`)}
