@@ -14,7 +14,7 @@
 //   const load = loaders[locale] ?? loaders.en; // фолбек
 //   return load();
 // };
-
+// app\[lang]\messages.ts
 import "server-only";
 
 const loaders = {

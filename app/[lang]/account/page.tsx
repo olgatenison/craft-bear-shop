@@ -10,14 +10,35 @@ import { getOrCreateShopifyCustomer } from "@/app/lib/shopify/getOrCreateShopify
 export type AccountPageMessages = {
   title: string;
   profileInformation: string;
+  profileIntro: string;
   email: string;
   name: string;
+  lastName: string;
+  phone: string;
+  phonePlaceholder: string;
+  birthday: string;
+  gender: string;
   accountCreated: string;
   recentOrders: string;
   recentOrdersDescription: string;
   viewAllOrders: string;
   signingOut: string;
   signOut: string;
+  profileSaveButton: string;
+  profileSaving: string;
+  profileSaveUnknownError: string;
+  phoneErrorInvalid: string;
+  phoneErrorTooShort: string;
+  phoneErrorTooLong: string;
+  sidebarGreeting: string;
+  tabProfile: string;
+  tabOrders: string;
+  tabReviews: string;
+  tabAddresses: string;
+  genderLabelNotSet: string;
+  genderLabelFemale: string;
+  genderLabelMale: string;
+  genderLabelOther: string;
 };
 
 export default async function AccountPage({
@@ -28,7 +49,6 @@ export default async function AccountPage({
   const { lang } = await params;
   const messages = await getMessages(lang);
 
-  // ✅ Додаємо await тут!
   const { userId } = await auth();
 
   let shopifyCustomerId: string | null = null;
@@ -46,8 +66,8 @@ export default async function AccountPage({
   }
 
   return (
-    <div className="mx-auto max-w-2xl py-8 px-4">
-      <h1 className="mb-4 text-2xl font-semibold">
+    <section className="relative mx-auto my-10 max-w-7xl overflow-hidden rounded-b-3xl">
+      <h1 className="mb-4 hidden text-2xl font-semibold">
         {messages.AccountPage?.title ?? "My account"}
       </h1>
 
@@ -59,9 +79,11 @@ export default async function AccountPage({
         />
       </SignedIn>
 
-      <SignedOut>
-        <LoginRegisterForm messages={messages.auth} />
-      </SignedOut>
-    </div>
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        <SignedOut>
+          <LoginRegisterForm messages={messages.auth} />
+        </SignedOut>
+      </div>
+    </section>
   );
 }

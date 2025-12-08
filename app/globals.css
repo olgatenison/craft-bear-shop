@@ -29,3 +29,6 @@ button {
   --glass-bg: color-mix(in oklab, var(--bg) 80%, transparent);
   --glass-border: color-mix(in oklab, var(--glass-bg) 70%, white);
 }
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
