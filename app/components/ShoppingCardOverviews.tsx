@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 import {
   QuestionMarkCircleIcon,
@@ -46,6 +47,7 @@ export default function ShoppingCardOverviews({
   lang,
 }: ShoppingCardOverviewsProps) {
   const router = useRouter();
+  const { isSignedIn } = useUser();
   const { items, removeFromCart, updateQuantity, totalPrice, clearCart } =
     useCart();
 
@@ -57,7 +59,22 @@ export default function ShoppingCardOverviews({
 
   const handleCheckout = async () => {
     if (!items.length) return;
-    console.log("CART ITEMS BEFORE CHECKOUT:", items);
+
+    // если юзер не залогинен — летим на /{lang}/account
+    if (!isSignedIn) {
+      // куда вернуться после логина (страница корзины)
+      const redirectBackToCart = `/${lang}/cart`;
+
+      // страница аккаунта/логина, передаём redirect_url
+      const accountUrl = `/${lang}/account?redirect_url=${encodeURIComponent(
+        redirectBackToCart
+      )}`;
+
+      router.push(accountUrl);
+      return;
+    }
+
+    // уже залогинен — создаём checkout в Shopify
     try {
       const res = await fetch("/api/shopify/checkout", {
         method: "POST",
@@ -74,14 +91,10 @@ export default function ShoppingCardOverviews({
       const json = await res.json();
       if (!res.ok || !json.checkoutUrl) {
         console.error("Checkout error", json);
-        // TODO: показать пользователю сообщение об ошибке
         return;
       }
 
-      // по желанию — чистим локальную корзину
       clearCart();
-
-      // отправляем человека в Shopify checkout
       router.push(json.checkoutUrl);
     } catch (error) {
       console.error("Checkout request failed", error);
@@ -292,89 +305,3 @@ export default function ShoppingCardOverviews({
     </div>
   );
 }
-
-// const relatedProducts = [
-//   {
-//     id: 1,
-//     name: "Billfold Wallet",
-//     href: "#",
-//     imageSrc:
-//       "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-related-product-01.jpg",
-//     imageAlt: "Front of Billfold Wallet in natural leather.",
-//     price: "$118",
-//     color: "Natural",
-//   },
-//   {
-//     id: 2,
-//     name: "Machined Pen and Pencil Set",
-//     href: "#",
-//     imageSrc:
-//       "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-related-product-02.jpg",
-//     imageAlt:
-//       "Black machined pen and pencil with hexagonal shaft and small white logo.",
-//     price: "$70",
-//     color: "Black",
-//   },
-//   {
-//     id: 3,
-//     name: "Mini Sketchbook Set",
-//     href: "#",
-//     imageSrc:
-//       "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-related-product-03.jpg",
-//     imageAlt:
-//       "Three mini sketchbooks with tan and charcoal typography poster covers.",
-//     price: "$28",
-//     color: "Tan and Charcoal",
-//   },
-//   {
-//     id: 4,
-//     name: "Organize Set",
-//     href: "#",
-//     imageSrc:
-//       "https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-01-related-product-04.jpg",
-//     imageAlt:
-//       "Grooved walnut desk organizer base with five modular white plastic organizer trays.",
-//     price: "$149",
-//     color: "Walnut",
-//   },
-// ];
-
-//    Related products
-//         <section aria-labelledby="related-heading" className="mt-24">
-//           <h2
-//             id="related-heading"
-//             className="text-lg font-medium text-gray-900"
-//           >
-//             You may also like&hellip;
-//           </h2>
-
-//           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-//             {relatedProducts.map((relatedProduct) => (
-//               <div key={relatedProduct.id} className="group relative">
-//                 <Image
-//                   width={640}
-//                   height={640}
-//                   alt={relatedProduct.imageAlt}
-//                   src={relatedProduct.imageSrc}
-//                   className="aspect-square w-full rounded-md object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
-//                 />
-//                 <div className="mt-4 flex justify-between">
-//                   <div>
-//                     <h3 className="text-sm text-gray-700">
-//                       <a href={relatedProduct.href}>
-//                         <span aria-hidden="true" className="absolute inset-0" />
-//                         {relatedProduct.name}
-//                       </a>
-//                     </h3>
-//                     <p className="mt-1 text-sm text-gray-500">
-//                       {relatedProduct.color}
-//                     </p>
-//                   </div>
-//                   <p className="text-sm font-medium text-gray-900">
-//                     {relatedProduct.price}
-//                   </p>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </section>
