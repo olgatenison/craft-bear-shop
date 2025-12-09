@@ -3,11 +3,12 @@
 
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Locale } from "@/app/lib/locale";
 import { AccountSidebar } from "../components/ui/AccountSidebar";
 import OrdersList, {
   type AccountOrdersMessages,
+  type OrderForUi,
 } from "@/app/components/ui/OrdersList";
 
 type AccountPageMessages = {
@@ -34,6 +35,7 @@ export default function AccountOrdersContent({
   const params = useParams();
 
   const [loadingLogout, setLoadingLogout] = useState(false);
+  const [orders, setOrders] = useState<OrderForUi[] | null>(null);
 
   const langFromParams = params?.lang;
   const lang = (
@@ -52,6 +54,46 @@ export default function AccountOrdersContent({
       label: accountMessages.tabAddresses,
     },
   ];
+
+  // в AccountOrdersContent.tsx, внутри useEffect
+  useEffect(() => {
+    if (!user) return;
+
+    let cancelled = false;
+
+    const loadOrders = async () => {
+      try {
+        const res = await fetch("/api/account/orders", { cache: "no-store" });
+
+        if (res.status === 401) {
+          // не авторизован → просто показываем пустой список, без ошибок
+          if (!cancelled) setOrders([]);
+          return;
+        }
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          console.warn("Failed to load orders", data); // 👈 warn вместо error
+          if (!cancelled) setOrders([]);
+          return;
+        }
+
+        if (!cancelled) {
+          setOrders(data.orders ?? []);
+        }
+      } catch (e) {
+        console.warn("Orders load error", e); // 👈 тоже warn
+        if (!cancelled) setOrders([]);
+      }
+    };
+
+    loadOrders();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
   const handleSignOut = async () => {
     setLoadingLogout(true);
@@ -90,7 +132,11 @@ export default function AccountOrdersContent({
           loading={loadingLogout}
         />
 
-        <OrdersList messages={ordersMessages} lang={effectiveLang} />
+        <OrdersList
+          messages={ordersMessages}
+          lang={effectiveLang}
+          orders={orders ?? []}
+        />
       </div>
     </section>
   );

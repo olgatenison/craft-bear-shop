@@ -22,92 +22,40 @@ export type AccountOrdersMessages = {
   statusHeader: string;
   infoHeader: string;
   viewProduct: string;
-
   emptyTitle: string;
   emptyDescription: string;
   emptyCta: string;
 };
 
-// пока мок, потом подменим на реальные заказы из API
-const orders = [
-  {
-    number: "WU88191111",
-    date: "January 22, 2021",
-    datetime: "2021-01-22",
-    total: "$238.00",
-    products: [
-      {
-        id: 1,
-        name: "Machined Pen and Pencil Set",
-        href: "#",
-        price: "$70.00",
-        status: "Delivered Jan 25, 2021",
-        imageSrc:
-          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-02-product-01.jpg",
-        imageAlt:
-          "Detail of mechanical pencil tip with machined black steel shaft and chrome lead tip.",
-      },
-      {
-        id: 2,
-        name: "Earthen Mug",
-        href: "#",
-        price: "$28.00",
-        status: "Delivered Jan 25, 2021",
-        imageSrc:
-          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-02-product-02.jpg",
-        imageAlt:
-          "Porcelain clay mug with squared handle, gray textured body, and natural clay rim and bottom.",
-      },
-      {
-        id: 3,
-        name: "Leatherbound Daily Journal Set",
-        href: "#",
-        price: "$140.00",
-        status: "Delivered Jan 25, 2021",
-        imageSrc:
-          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-02-product-03.jpg",
-        imageAlt:
-          "Natural leather cover journal with brass ring binding, an embossed logo on bottom right of the cover, and 3 included paper refills.",
-      },
-    ],
-  },
-  {
-    number: "WU88191009",
-    date: "January 5, 2021",
-    datetime: "2021-01-05",
-    total: "$115.00",
-    products: [
-      {
-        id: 1,
-        name: "Carry Clutch",
-        href: "#",
-        price: "$80.00",
-        status: "Delivered Jan 7, 2021",
-        imageSrc:
-          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-02-product-04.jpg",
-        imageAlt:
-          "Folding zipper clutch with white fabric body, synthetic black leather accent strip, and black loop zipper pull.",
-      },
-      {
-        id: 2,
-        name: "Nomad Tumbler",
-        href: "#",
-        price: "$35.00",
-        status: "Delivered Jan 7, 2021",
-        imageSrc:
-          "https://tailwindcss.com/plus-assets/img/ecommerce-images/order-history-page-02-product-05.jpg",
-        imageAlt: "Black insulated bottle with flared screw lid and flat top.",
-      },
-    ],
-  },
-];
+export type OrderProduct = {
+  id: string;
+  name: string;
+  href: string;
+  price: string;
+  status: string;
+  imageSrc: string;
+  imageAlt: string;
+};
+
+export type OrderForUi = {
+  number: string;
+  date: string;
+  datetime: string;
+  total: string;
+  products: OrderProduct[];
+};
 
 type OrdersListProps = {
   messages: AccountOrdersMessages;
   lang: Locale;
+  orders: OrderForUi[];
 };
 
-export default function OrdersList({ messages, lang }: OrdersListProps) {
+export default function OrdersList({
+  messages,
+  lang,
+  orders,
+}: OrdersListProps) {
   const [openOrderNumber, setOpenOrderNumber] = useState<string | null>(null);
 
   const toggleOrder = (number: string) => {
@@ -236,13 +184,15 @@ export default function OrdersList({ messages, lang }: OrdersListProps) {
                             <tr key={product.id}>
                               <td className="py-6 pr-8">
                                 <div className="flex items-center">
-                                  <Image
-                                    width={64}
-                                    height={64}
-                                    alt={product.imageAlt}
-                                    src={product.imageSrc}
-                                    className="mr-6 size-16 rounded object-cover"
-                                  />
+                                  <div className="mr-6 relative size-16 rounded-lg bg-stone-600 overflow-hidden">
+                                    <Image
+                                      src={product.imageSrc}
+                                      alt={product.imageAlt}
+                                      fill
+                                      sizes="64px"
+                                      className="object-contain p-3"
+                                    />
+                                  </div>
                                   <div>
                                     <div className="font-medium text-white">
                                       {product.name}
