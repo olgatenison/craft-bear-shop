@@ -170,6 +170,26 @@
     "saving": "Tallennetaan...",
     "saveUnknownError": "Osoitteen tallennus epäonnistui. Yritä uudelleen."
   },
+  "AccountOrders": {
+    "title": "Tilaushistoria",
+    "intro": "Tarkastele viimeisimpien tilausten tilaa, hallitse palautuksia ja lataa laskuja.",
+    "recentOrdersSrOnly": "Viimeisimmät tilaukset",
+    "orderPlacedOnSrOnly": "Tilaus tehty",
+    "datePlaced": "Tilauspäivä",
+    "orderNumber": "Tilausnumero",
+    "totalAmount": "Loppusumma",
+    "hideDetails": "Piilota tiedot",
+    "viewDetails": "Näytä tiedot",
+    "productsSrOnly": "Tuotteet",
+    "productHeader": "Tuote",
+    "priceHeader": "Hinta",
+    "statusHeader": "Tila",
+    "infoHeader": "Lisätiedot",
+    "viewProduct": "Näytä tuote",
+    "emptyTitle": "Sinulla ei ole vielä yhtään tilausta",
+    "emptyDescription": "Kun teet ensimmäisen tilauksesi, se näkyy täällä.",
+    "emptyCta": "Siirry kauppaan"
+  },
   "auth": {
     "signIn": "Kirjaudu sisään",
     "signUp": "Luo tili",

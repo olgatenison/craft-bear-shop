@@ -172,6 +172,26 @@
     "saving": "Saving...",
     "saveUnknownError": "We couldn't save your address. Please try again."
   },
+  "AccountOrders": {
+    "title": "Order history",
+    "intro": "Check the status of recent orders, manage returns, and download invoices.",
+    "recentOrdersSrOnly": "Recent orders",
+    "orderPlacedOnSrOnly": "Order placed on",
+    "datePlaced": "Date placed",
+    "orderNumber": "Order number",
+    "totalAmount": "Total amount",
+    "hideDetails": "Hide details",
+    "viewDetails": "View details",
+    "productsSrOnly": "Products",
+    "productHeader": "Product",
+    "priceHeader": "Price",
+    "statusHeader": "Status",
+    "infoHeader": "Info",
+    "viewProduct": "View product",
+    "emptyTitle": "You don't have any orders yet",
+    "emptyDescription": "Once you place your first order, your orders will appear here.",
+    "emptyCta": "Go to shop"
+  },
   "auth": {
     "signIn": "Sign in",
     "signUp": "Sign up",

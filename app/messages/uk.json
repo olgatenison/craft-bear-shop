@@ -170,6 +170,26 @@
     "saving": "Зберігаємо...",
     "saveUnknownError": "Не вдалося зберегти адресу. Спробуйте ще раз."
   },
+  "AccountOrders": {
+    "title": "Історія замовлень",
+    "intro": "Переглядайте статус останніх замовлень, керуйте поверненнями та завантажуйте рахунки.",
+    "recentOrdersSrOnly": "Останні замовлення",
+    "orderPlacedOnSrOnly": "Замовлення від",
+    "datePlaced": "Дата замовлення",
+    "orderNumber": "Номер замовлення",
+    "totalAmount": "Сума до сплати",
+    "hideDetails": "Приховати деталі",
+    "viewDetails": "Показати деталі",
+    "productsSrOnly": "Товари",
+    "productHeader": "Товар",
+    "priceHeader": "Ціна",
+    "statusHeader": "Статус",
+    "infoHeader": "Інформація",
+    "viewProduct": "Переглянути товар",
+    "emptyTitle": "У вас ще немає жодного замовлення",
+    "emptyDescription": "Коли ви зробите перше замовлення, воно з’явиться тут.",
+    "emptyCta": "Перейти до магазину"
+  },
   "auth": {
     "signIn": "Увійти",
     "signUp": "Зареєструватися",

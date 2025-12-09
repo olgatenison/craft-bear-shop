@@ -1,4 +1,5 @@
 // app/components/TrendingProducts.tsx
+
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { WineOff } from "lucide-react";

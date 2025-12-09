@@ -170,6 +170,26 @@
     "saving": "Salvestame...",
     "saveUnknownError": "Aadressi salvestamine ebaõnnestus. Proovi uuesti."
   },
+  "AccountOrders": {
+    "title": "Tellimuste ajalugu",
+    "intro": "Vaata viimaste tellimuste staatust, halda tagastusi ja laadi arveid alla.",
+    "recentOrdersSrOnly": "Viimased tellimused",
+    "orderPlacedOnSrOnly": "Tellimus tehtud",
+    "datePlaced": "Tellimuse kuupäev",
+    "orderNumber": "Tellimuse number",
+    "totalAmount": "Kogusumma",
+    "hideDetails": "Peida üksikasjad",
+    "viewDetails": "Näita üksikasju",
+    "productsSrOnly": "Tooted",
+    "productHeader": "Toode",
+    "priceHeader": "Hind",
+    "statusHeader": "Staatus",
+    "infoHeader": "Info",
+    "viewProduct": "Vaata toodet",
+    "emptyTitle": "Sul ei ole veel ühtegi tellimust",
+    "emptyDescription": "Kui teed esimese ostu, kuvatakse sinu tellimused siin.",
+    "emptyCta": "Mine poodi"
+  },
   "auth": {
     "signIn": "Logi sisse",
     "signUp": "Loo konto",
