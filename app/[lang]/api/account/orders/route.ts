@@ -239,3 +239,5 @@ export async function GET() {
 // Тексты статуса
 // Shopify даёт fulfillmentStatus типа FULFILLED, PARTIALLY_FULFILLED и т.п.
 // Можем потом сделать маппер → нормальные фразы на каждом языке.
+
+// И пагинация?

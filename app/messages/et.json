@@ -68,7 +68,23 @@
     "CTATitle": "Jaga oma mõtteid",
     "CTASubtitle": "Kui oled seda toodet kasutanud, jaga oma kogemust teiste ostjatega",
     "button": "Kirjuta arvustus",
+    "loginToReview": "Logi sisse, et jätta arvustus",
     "recentReviews": "Hiljutised arvustused"
+  },
+  "LeaveReviewModal": {
+    "title": "Jäta arvustus",
+    "loading": "Laadimine...",
+    "mustLogin": "Arvustuse jätmiseks pead sisse logima.",
+    "noEmail": "Kasutaja e-posti ei õnnestunud saada.",
+    "fillRequired": "Palun täida hinne ja arvustuse tekst.",
+    "success": "Aitäh arvustuse eest! See ilmub pärast modereerimist.",
+    "ratingLabel": "Hinne",
+    "nameLabel": "Nimi",
+    "emailLabel": "E-post",
+    "reviewLabel": "Sinu arvustus *",
+    "submitLabel": "Saada arvustus",
+    "submittingLabel": "Saadame...",
+    "cancelLabel": "Tühista"
   },
   "HeaderSearch": {
     "label": "Otsi tooteid",

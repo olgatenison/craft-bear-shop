@@ -250,7 +250,7 @@ export default function AccountContent({ messages }: AccountContentProps) {
               </div>
 
               <div>
-                <dt className="text-sm tracking-wide text-gray-400">
+                <dt className="text-base tracking-wide text-gray-400">
                   {messages.email}
                 </dt>
                 <dd className="mt-1 border-b border-gray-400/50 pb-1 text-base text-white">

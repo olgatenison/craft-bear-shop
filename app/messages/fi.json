@@ -68,7 +68,23 @@
     "CTATitle": "Jaa mielipiteesi",
     "CTASubtitle": "Jos olet käyttänyt tätä tuotetta, jaa kokemuksesi muiden asiakkaiden kanssa",
     "button": "Kirjoita arvostelu",
+    "loginToReview": "Kirjaudu sisään jättääksesi arvostelun",
     "recentReviews": "Viimeisimmät arviot"
+  },
+  "LeaveReviewModal": {
+    "title": "Jätä arvostelu",
+    "loading": "Ladataan...",
+    "mustLogin": "Sinun täytyy kirjautua sisään jättääksesi arvostelun.",
+    "noEmail": "Sähköpostiosoitettasi ei voitu hakea.",
+    "fillRequired": "Täytä arvosana ja arvostelun teksti.",
+    "success": "Kiitos arvostelustasi! Se näkyy sivulla moderoinnin jälkeen.",
+    "ratingLabel": "Arvosana",
+    "nameLabel": "Nimi",
+    "emailLabel": "Sähköposti",
+    "reviewLabel": "Arvostelusi *",
+    "submitLabel": "Lähetä arvostelu",
+    "submittingLabel": "Lähetetään...",
+    "cancelLabel": "Peruuta"
   },
   "HeaderSearch": {
     "label": "Hae tuotteita",

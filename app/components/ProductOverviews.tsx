@@ -83,7 +83,7 @@ export default function ProductOverviews({
   return (
     <div>
       <div className="pb-16 pt-6 sm:pb-24">
-        <div className="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div className="mx-auto mt-8 max-w-2xl lg:max-w-7xl ">
           <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
             {/* title and price */}
             <div className="lg:col-span-5 lg:col-start-8">

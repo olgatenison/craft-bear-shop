@@ -69,7 +69,23 @@
     "CTATitle": "Share your thoughts",
     "CTASubtitle": "If you’ve used this product, share your thoughts with other customers",
     "button": "Write a review",
+    "loginToReview": "Sign in to leave a review",
     "recentReviews": "Recent reviews"
+  },
+  "LeaveReviewModal": {
+    "title": "Leave a review",
+    "loading": "Loading...",
+    "mustLogin": "You need to sign in to leave a review.",
+    "noEmail": "We couldn't get your email address.",
+    "fillRequired": "Please fill in the rating and review text.",
+    "success": "Thank you for your review! It will appear after moderation.",
+    "ratingLabel": "Rating",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "reviewLabel": "Your review *",
+    "submitLabel": "Submit review",
+    "submittingLabel": "Sending...",
+    "cancelLabel": "Cancel"
   },
 
   "HeaderSearch": {
