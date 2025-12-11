@@ -25,6 +25,7 @@ FlattenedProduct и flattenMetafields в мапперс
 Плюсы: Быстро, безопасно, PCI compliance из коробки
 Минусы: Редирект на Shopify на этапе оплаты
 
+📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦
 npm install @supabase/supabase-js
 Шаг 2: Настройка Supabase
 Зайдите на supabase.com и создайте проект
@@ -73,3 +74,11 @@ service_role key (SUPABASE_SERVICE_KEY) - используется только 
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_KEY=your-service-role-key
+
+app\[lang]\api\reviews\route.ts
+app\[lang]\product\[handle]\page.tsx
+app\lib\supabase.ts
+app\lib\getReviews.ts
+app\components\CustomerReviews.tsx
+app\components\LeaveReviewModal.tsx
+📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦
