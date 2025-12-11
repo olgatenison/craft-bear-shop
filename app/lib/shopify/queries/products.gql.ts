@@ -295,3 +295,113 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
     }
   }
 `;
+
+export const PRODUCT_BY_ID = /* GraphQL */ `
+  query ProductById($id: ID!, $language: LanguageCode, $country: CountryCode)
+  @inContext(language: $language, country: $country) {
+    product(id: $id) {
+      id
+      title
+      handle
+      descriptionHtml
+      featuredImage {
+        url
+        altText
+      }
+      images(first: 10) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
+      }
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      variants(first: 20) {
+        edges {
+          node {
+            id
+            title
+            price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
+              amount
+              currencyCode
+            }
+            availableForSale
+            quantityAvailable
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+      collections(first: 20) {
+        edges {
+          node {
+            handle
+            title
+          }
+        }
+      }
+      metafields(
+        identifiers: [
+          { namespace: "specs", key: "abv" }
+          { namespace: "specs", key: "ibu" }
+          { namespace: "specs", key: "fg" }
+          { namespace: "specs", key: "pack_size_l" }
+          { namespace: "specs", key: "country" }
+          { namespace: "specs", key: "brand" }
+          { namespace: "specs", key: "ingredients" }
+          { namespace: "specs", key: "allergens" }
+          { namespace: "specs", key: "pairing" }
+          { namespace: "shopify", key: "beer-style" }
+          { namespace: "shopify", key: "package-type" }
+          { namespace: "marketing", key: "trending" }
+        ]
+      ) {
+        namespace
+        key
+        type
+        value
+        references(first: 10) {
+          edges {
+            node {
+              ... on Metaobject {
+                id
+                handle
+                type
+                fields {
+                  key
+                  value
+                  type
+                  references(first: 5) {
+                    edges {
+                      node {
+                        ... on Metaobject {
+                          handle
+                          fields {
+                            key
+                            value
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

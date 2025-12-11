@@ -1,3 +1,4 @@
+// app\components\AccountReviewContent.tsx
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -15,6 +16,7 @@ type SidebarUser = {
 
 type AccountSidebarProps = {
   user: SidebarUser;
+
   navItems: NavItem[];
   baseAccountPath: string;
   effectiveLang: Locale;

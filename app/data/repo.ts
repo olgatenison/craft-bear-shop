@@ -5,6 +5,7 @@ import {
   PRODUCTS_ALL_WITH_METAFIELDS,
   PRODUCTS_BY_COLLECTION,
   PRODUCT_BY_HANDLE,
+  PRODUCT_BY_ID,
 } from "../lib/shopify/queries/products.gql";
 import { PAGE_BY_HANDLE } from "../lib/shopify/queries/pages.gql";
 
@@ -136,4 +137,26 @@ export async function fetchPageByHandle(
   );
 
   return data.page;
+}
+
+/** ---------- Один продукт по Shopify numeric ID ---------- */
+export async function fetchProductByShopifyNumericIdFlattened(
+  numericId: string,
+  locale: Locale = "en"
+): Promise<FlattenedProduct | null> {
+  if (!numericId) return null;
+
+  // Shopify global ID вида gid://shopify/Product/10211423584603
+  const globalId = `gid://shopify/Product/${numericId}`;
+
+  const data = await shopifyFetchWithLocale<ProductByHandleResponse>(
+    PRODUCT_BY_ID,
+    { id: globalId },
+    locale,
+    60
+  );
+
+  if (!data.product) return null;
+
+  return flattenMetafields(data.product);
 }

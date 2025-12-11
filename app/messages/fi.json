@@ -206,6 +206,12 @@
     "emptyDescription": "Kun teet ensimmäisen tilauksesi, se näkyy täällä.",
     "emptyCta": "Siirry kauppaan"
   },
+  "AccountReview": {
+    "title": "Ваші відгуки",
+    "empty": "У вас ще немає відгуків.",
+    "viewProduct": "Переглянути товар",
+    "editReview": "Змінити відгук"
+  },
   "auth": {
     "signIn": "Kirjaudu sisään",
     "signUp": "Luo tili",

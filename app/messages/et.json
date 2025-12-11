@@ -206,6 +206,12 @@
     "emptyDescription": "Kui teed esimese ostu, kuvatakse sinu tellimused siin.",
     "emptyCta": "Mine poodi"
   },
+  "AccountReview": {
+    "title": "Ваші відгуки",
+    "empty": "У вас ще немає відгуків.",
+    "viewProduct": "Переглянути товар",
+    "editReview": "Змінити відгук"
+  },
   "auth": {
     "signIn": "Logi sisse",
     "signUp": "Loo konto",

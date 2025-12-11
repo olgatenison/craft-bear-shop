@@ -40,4 +40,6 @@ export type Review = {
   comment: string;
   status: "pending" | "approved" | "rejected";
   created_at: string;
+  product_handle: string | null;
+  product_title: string | null;
 };
