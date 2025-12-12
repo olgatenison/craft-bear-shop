@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import type { Locale } from "@/app/lib/locale";
 import { AccountSidebar } from "../components/ui/AccountSidebar";
 import ReviewList from "./ui/ReviewList";
+import type { LeaveReviewModalText } from "./LeaveReviewModal";
 
 type AccountPageMessages = {
   signingOut: string;
@@ -29,11 +30,13 @@ type ReviewMessages = {
 type AccountReviewContentProps = {
   accountMessages: AccountPageMessages;
   reviewMessages: ReviewMessages;
+  reviewModalTexts: LeaveReviewModalText;
 };
 
 export default function AccountReviewContent({
   accountMessages,
   reviewMessages,
+  reviewModalTexts,
 }: AccountReviewContentProps) {
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
@@ -68,32 +71,11 @@ export default function AccountReviewContent({
     }
   };
 
-  // 🔹 Пока Clerk ещё грузится — просто показываем заглушку
-  if (!isLoaded) {
-    return (
-      <section className="relative mx-auto my-10 max-w-7xl rounded-b-3xl">
-        <p className="text-sm text-gray-400 px-4">Loading account...</p>
-      </section>
-    );
-  }
-
-  // 🔹 Если по какой-то причине юзера нет — аккуратное сообщение
-  if (!user) {
-    return (
-      <section className="relative mx-auto my-10 max-w-7xl rounded-b-3xl px-4">
-        <p className="text-sm text-gray-400">
-          You need to be signed in to view your reviews.
-        </p>
-      </section>
-    );
-  }
-
-  // 🔹 Здесь мы уже точно знаем, что user НЕ null
   return (
     <section className="relative mx-auto my-10 max-w-7xl rounded-b-3xl">
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16">
         <AccountSidebar
-          user={user} // тут точно не null
+          user={user ?? undefined}
           navItems={navItems}
           baseAccountPath={baseAccountPath}
           effectiveLang={effectiveLang}
@@ -101,10 +83,14 @@ export default function AccountReviewContent({
           signingOutLabel={accountMessages.signingOut}
           signOutLabel={accountMessages.signOut}
           greetingLabel={accountMessages.sidebarGreeting}
-          loading={loadingLogout}
+          loading={loadingLogout || !isLoaded}
         />
 
-        <ReviewList messages={reviewMessages} lang={effectiveLang} />
+        <ReviewList
+          messages={reviewMessages}
+          lang={effectiveLang}
+          modalTexts={reviewModalTexts}
+        />
       </div>
     </section>
   );

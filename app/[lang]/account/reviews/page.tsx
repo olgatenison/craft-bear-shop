@@ -15,11 +15,13 @@ export default async function Page({
 
   const accountMessages = messages.AccountPage;
   const reviewMessages = messages.AccountReview;
+  const reviewModalTexts = messages.LeaveReviewModal;
 
   return (
     <AccountReviewContent
       accountMessages={accountMessages}
       reviewMessages={reviewMessages}
+      reviewModalTexts={reviewModalTexts}
     />
   );
 }

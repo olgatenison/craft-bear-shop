@@ -4,8 +4,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Locale } from "@/app/lib/locale";
-import type { Review } from "@/app/lib/supabase";
+// import type { Review } from "@/app/lib/supabase";
 import { StarIcon } from "@heroicons/react/20/solid";
+import EditReviewModal, {
+  EditableReview,
+} from "@/app/components/EditReviewModal";
+import type { LeaveReviewModalText } from "@/app/components/LeaveReviewModal";
 
 type ReviewMessages = {
   title: string;
@@ -17,12 +21,21 @@ type ReviewMessages = {
 type ReviewListProps = {
   messages: ReviewMessages;
   lang: Locale;
+  modalTexts: LeaveReviewModalText;
 };
 
-export default function ReviewList({ messages, lang }: ReviewListProps) {
-  const [reviews, setReviews] = useState<Review[]>([]);
+export default function ReviewList({
+  messages,
+  lang,
+  modalTexts,
+}: ReviewListProps) {
+  const [reviews, setReviews] = useState<EditableReview[]>([]); // 👈 лучше сразу EditableReview[]
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingReview, setEditingReview] = useState<EditableReview | null>(
+    null
+  );
+  const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -35,7 +48,7 @@ export default function ReviewList({ messages, lang }: ReviewListProps) {
         }
 
         const data = await res.json();
-        setReviews(data.reviews ?? []);
+        setReviews((data.reviews ?? []) as EditableReview[]); // 👈
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unexpected error";
         setError(message);
@@ -46,6 +59,11 @@ export default function ReviewList({ messages, lang }: ReviewListProps) {
 
     void fetchReviews();
   }, [lang]);
+
+  const openEdit = (review: EditableReview) => {
+    setEditingReview(review);
+    setEditOpen(true);
+  };
 
   return (
     <main className="mt-10 space-y-6 lg:col-span-8 lg:mt-0">
@@ -63,7 +81,7 @@ export default function ReviewList({ messages, lang }: ReviewListProps) {
         )}
 
         {!loading && !error && reviews.length > 0 && (
-          <ul className="">
+          <ul>
             {reviews.map((review) => (
               <li key={review.id} className="py-6">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-stretch sm:justify-between">
@@ -94,14 +112,13 @@ export default function ReviewList({ messages, lang }: ReviewListProps) {
                       <span className="sr-only">{review.rating} out of 5</span>
                     </div>
 
-                    <p className="mt-5 max-w-xl text-base text-gray-300">
+                    <p className="mt-5 max-w-xl text-base/7 text-gray-300">
                       {review.comment}
                     </p>
                   </div>
 
                   {/* правая колонка */}
                   <div className="mt-4 flex flex-col justify-between text-sm sm:mt-0 sm:items-end">
-                    {/* верхний блок: ID + edit */}
                     <div className="flex flex-col items-end gap-2">
                       <span className="text-xs text-gray-500">
                         product ID: {review.shopify_product_id}
@@ -110,17 +127,16 @@ export default function ReviewList({ messages, lang }: ReviewListProps) {
                       <button
                         type="button"
                         className="text-sm font-medium text-yellow-400 hover:underline"
-                        disabled
+                        onClick={() => openEdit(review)}
                       >
                         {messages.editReview}
                       </button>
                     </div>
 
-                    {/* нижний блок: кнопка к продукту */}
                     {review.product_handle && (
                       <Link
                         href={`/${lang}/product/${review.product_handle}`}
-                        className="mt-4 inline-flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
+                        className="mt-4 inline-flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-5 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
                       >
                         {messages.viewProduct}
                       </Link>
@@ -131,6 +147,18 @@ export default function ReviewList({ messages, lang }: ReviewListProps) {
             ))}
           </ul>
         )}
+
+        <EditReviewModal
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          review={editingReview}
+          texts={modalTexts} // 👈 вот тут вместо reviewModalTexts
+          onUpdated={(updated) =>
+            setReviews((prev) =>
+              prev.map((r) => (r.id === updated.id ? { ...r, ...updated } : r))
+            )
+          }
+        />
       </div>
     </main>
   );
