@@ -22,6 +22,8 @@ type ProductOverviewsProps = {
   tastedBestWith: string;
   allergens: string;
   ingredients: string;
+  ratingAverage: number;
+  reviewCount: number;
 };
 
 function classNames(...classes: (string | boolean | undefined)[]) {
@@ -46,6 +48,8 @@ export default function ProductOverviews({
   tastedBestWith,
   allergens,
   ingredients,
+  ratingAverage,
+  reviewCount,
 }: ProductOverviewsProps) {
   const price = product.priceRange.minVariantPrice.amount;
   const packSize = product.specs?.pack_size_l;
@@ -58,7 +62,7 @@ export default function ProductOverviews({
   const productAllergens = product.specs?.allergens;
   const productIngredients = product.specs?.ingredients;
   const productPairing = product.specs?.pairing;
-  console.log(productStyle);
+
   const images =
     product.images?.edges.map((edge, index) => ({
       id: index + 1,
@@ -66,9 +70,9 @@ export default function ProductOverviews({
       imageAlt: edge.node.altText || product.title,
       primary: index === 0,
     })) || [];
-  console.log(price);
-  const rating = product.rating ?? 0;
-  const reviewCount = product.reviewCount ?? 0;
+
+  // ⭐ Берём средний рейтинг из Supabase (прокинутый сверху)
+  const rating = ratingAverage ?? 0;
 
   // ✅ Парсим pairing (предполагаем что это строка через запятую или список)
   const pairingList = productPairing
@@ -78,8 +82,6 @@ export default function ProductOverviews({
         .filter(Boolean)
     : [];
 
-  // console.log(product);
-
   return (
     <div>
       <div className="pb-16 pt-6 sm:pb-24">
@@ -87,7 +89,6 @@ export default function ProductOverviews({
           <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
             {/* title and price */}
             <div className="lg:col-span-5 lg:col-start-8">
-              {/* ... весь предыдущий код без изменений ... */}
               <div className="flex justify-between items-baseline gap-10">
                 <h1 className="text-3xl tracking-tight font-semibold text-yellow-400 max-w-md">
                   {product.title}
@@ -203,14 +204,17 @@ export default function ProductOverviews({
                       ))}
                     </div>
                     <p className="text-sm text-gray-500">
-                      {rating}
+                      {rating.toFixed(1)}
                       <span className="sr-only">{outOf5Stars}</span>
                     </p>
                   </div>
 
-                  <span className="text-sm font-medium text-gray-400 hover:text-yellow-500 transition-colors">
+                  <a
+                    href="#product-reviews"
+                    className="text-sm font-medium text-gray-400 hover:text-yellow-500 transition-colors"
+                  >
                     {reviewCount > 0 ? viewAllReviews : leaveAReview}
-                  </span>
+                  </a>
                 </button>
               </div>
             </div>
@@ -247,14 +251,8 @@ export default function ProductOverviews({
               </div>
             </div>
 
-            {/* button and right side under*/}
+            {/* button and right side under */}
             <div className="mt-16 lg:col-span-5">
-              {/* <button
-                  type="submit"
-                  className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-semibold text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 sm:w-auto lg:w-full duration-300"
-                >
-                  {addToCart}
-                </button> */}
               <AddToCartButton product={product} addToCart={addToCart} />
 
               {/* Product Description */}
@@ -273,7 +271,7 @@ export default function ProductOverviews({
                 </div>
               )}
 
-              {/* ✅ Tasted best with - раскомментируйте и используйте pairing */}
+              {/* Tasted best with */}
               {pairingList.length > 0 && (
                 <div className="mt-8 border-t border-gray-200 pt-8">
                   <h2 className="mx-auto mt-6 max-w-lg text-pretty text-lg text-white font-semibold">

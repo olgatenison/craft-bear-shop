@@ -4,6 +4,7 @@ import ShopContent from "@/app/components/ShopContent";
 import Breadcrumbs from "@/app/components/ui/Breadcrumbs";
 import type { Locale } from "../../lib/locale";
 import { getMessages } from "../messages";
+import { getReviews } from "@/app/lib/getReviews"; // 👈 добавили
 
 export default async function ShopPage({
   params,
@@ -15,6 +16,21 @@ export default async function ShopPage({
 
   const allProducts = await fetchAllProductsFlattened(lang);
 
+  // 👇 сюда подмешиваем средний рейтинг и количество отзывов
+  const productsWithRating = await Promise.all(
+    allProducts.map(async (product) => {
+      // Shopify numeric id
+      const productNumericId = product.id.split("/").pop()!;
+      const reviews = await getReviews(productNumericId);
+
+      return {
+        ...product,
+        rating: reviews.average, // будет использовано в AllProducts
+        reviewCount: reviews.totalCount,
+      };
+    })
+  );
+
   return (
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <Breadcrumbs
@@ -25,8 +41,9 @@ export default async function ShopPage({
           categories: t.AllProducts.categories,
         }}
       />
+
       <ShopContent
-        products={allProducts}
+        products={productsWithRating} // 👈 передаём уже обогащённые продукты
         translations={t.AllProducts}
         lang={lang}
       />

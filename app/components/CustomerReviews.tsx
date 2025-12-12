@@ -75,7 +75,7 @@ export default function CustomerReviews({
 
   return (
     <div>
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8 lg:px-8 lg:py-32">
+      <div className="border-t border-gray-400 pt-12 mx-auto max-w-2xl   lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-8  ">
         {/* left */}
         <div className="lg:col-span-4">
           <h2 className="text-2xl font-bold tracking-tight text-white">
@@ -162,7 +162,7 @@ export default function CustomerReviews({
             <SignedOut>
               <button
                 onClick={handleSignInClick}
-                className="mt-10 relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
+                className="mt-10 relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 w-full"
               >
                 {loginToReview}
               </button>
@@ -172,7 +172,7 @@ export default function CustomerReviews({
             <SignedIn>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="mt-10 relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
+                className="mt-10 relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 w-full"
               >
                 {button}
               </button>
@@ -189,8 +189,7 @@ export default function CustomerReviews({
                 <div key={review.id} className="py-12">
                   <div className="flex items-center">
                     <div>
-                      <h4 className="font-bold text-white">{review.author}</h4>
-                      <div className="mt-1 flex items-center">
+                      <div className=" flex items-center">
                         {[0, 1, 2, 3, 4].map((r) => (
                           <StarIcon
                             key={r}
@@ -207,9 +206,12 @@ export default function CustomerReviews({
                       <p className="sr-only">{review.rating} out of 5 stars</p>
                     </div>
                   </div>
-                  <div className="mt-4 space-y-6 text-base italic text-gray-300">
+                  <div className="mt-4 space-y-6 text-base/7  text-gray-300">
                     {review.content}
-                  </div>
+                  </div>{" "}
+                  <h4 className="mt-3 font-bold text-white w-full text-right pr-6">
+                    {review.author}
+                  </h4>
                 </div>
               ))}
             </div>

@@ -7,6 +7,7 @@ import Link from "next/link";
 import type { FlattenedProduct } from "@/app/data/mappers";
 import type { Locale } from "@/app/lib/locale";
 import AddToCartButton from "./ui/AddToCartButton";
+import { getReviews } from "@/app/lib/getReviews"; // 👈 наши отзывы
 
 const classNames = (...xs: Array<string | false | null | undefined>) =>
   xs.filter(Boolean).join(" ");
@@ -21,7 +22,7 @@ type TrendingProductsProps = {
   lang: Locale;
 };
 
-export default function TrendingProducts({
+export default async function TrendingProducts({
   products,
   title,
   stars,
@@ -33,9 +34,22 @@ export default function TrendingProducts({
   // если вдруг пока нет ни одного товара с флажком trending — просто ничего не показываем
   if (!products.length) return null;
 
+  // 👇 заранее подтягиваем наши рейтинги из Supabase
+  const reviewsArray = await Promise.all(
+    products.map(async (product) => {
+      const numericId = product.id.split("/").pop()!; // Shopify numeric id
+      const data = await getReviews(numericId);
+      return { productId: product.id, data };
+    })
+  );
+
+  const reviewsMap = new Map(
+    reviewsArray.map((item) => [item.productId, item.data])
+  );
+
   return (
     <div>
-      <div className="mx-auto max-w-2xl px-4 pt-6 pb-26 sm:px-6 lg:max-w-7xl lg:px-8 ">
+      <div className="mx-auto max-w-2xl px-4 pt-6 pb-26 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="text-2xl tracking-tight text-white">{title}</h2>
 
         <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 items-stretch">
@@ -52,8 +66,10 @@ export default function TrendingProducts({
                   }`
                 : "";
 
-            const rating = product.rating ?? 0;
-            const reviewCount = product.reviewCount ?? 0;
+            // ⭐ рейтинги из нашей Supabase-таблицы
+            const reviewStats = reviewsMap.get(product.id);
+            const rating = reviewStats?.average ?? 0;
+            const reviewCount = reviewStats?.totalCount ?? 0;
 
             const href = `/${lang}/product/${product.handle}`;
 
@@ -96,7 +112,9 @@ export default function TrendingProducts({
                           />
                         </Link>
                       </h3>
-                      {abv !== undefined && <p>{abv} %</p>}
+                      {abv !== undefined && (
+                        <p className="mt-1 text-sm text-gray-300">{abv} %</p>
+                      )}
                     </div>
                     {price && (
                       <p className="text-lg font-semibold text-white">
@@ -105,6 +123,7 @@ export default function TrendingProducts({
                     )}
                   </div>
 
+                  {/* ⭐ наши звезды + количество отзывов */}
                   <div className="mt-3 flex flex-col">
                     <span className="sr-only">
                       {rating} {stars}
@@ -134,13 +153,6 @@ export default function TrendingProducts({
                     addToCart={add}
                     className="relative flex w-full items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
                   />
-                  {/* <Link
-                    href={href}
-                    className="relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
-                  >
-                    {add}
-                    <span className="sr-only">, {product.title}</span>
-                  </Link> */}
                 </div>
               </div>
             );

@@ -32,3 +32,6 @@ button {
 input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
 }
+html {
+  scroll-behavior: smooth;
+}

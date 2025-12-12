@@ -1,9 +1,10 @@
+// app/components/AllProducts.tsx
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { WineOff } from "lucide-react";
 import type { FlattenedProduct } from "../data/mappers";
-import type { Locale } from "@/app/[lang]/messages";
+import type { Locale } from "@/app/lib/locale";
 import AddToCartButton from "./ui/AddToCartButton";
 
 const classNames = (...xs: Array<string | false | null | undefined>) =>
@@ -13,15 +14,15 @@ type CategoryKey = "beer" | "cider" | "snacks";
 
 type AllProductsProps = {
   title: string;
-  stars: string; // локализация "out of 5 stars"
-  reviews: string; // локализация "reviews"
-  add: string; // кнопка "Add"
-  alcohol: string; // бейдж "безалкогольное"
-  rating?: string; // опционально, если понадобится
+  stars: string; // "out of 5 stars"
+  reviews: string; // "reviews"
+  add: string;
+  alcohol: string;
+  rating?: string;
 
   lang: Locale;
   products: FlattenedProduct[];
-  category?: CategoryKey; // ← активная категория для построения ссылок
+  category?: CategoryKey;
 };
 
 export default function AllProducts({
@@ -43,8 +44,8 @@ export default function AllProducts({
           const img = p.featuredImage;
           const price = p.priceRange?.minVariantPrice;
 
-          // ABV (крепость) и объём
-          const abvRaw = p.specs?.abv; // "4.7" | "0" | undefined
+          // ABV и объём
+          const abvRaw = p.specs?.abv;
           const abvNum =
             abvRaw !== undefined && abvRaw !== "" ? Number(abvRaw) : null;
           const hasAbv = abvNum !== null && !Number.isNaN(abvNum);
@@ -58,16 +59,17 @@ export default function AllProducts({
           if (packText) metaParts.push(packText);
           const meta = metaParts.join(" • ");
 
+          // ⭐ Рейтинг и кол-во отзывов из Shopify / наших данных продукта
           const productRating = p.rating ?? 0;
+          const productReviewCount = p.reviewCount ?? 0;
 
-          // ссылка на товар с сохранением текущей категории
           const href = `/${lang}/product/${p.handle}${
             category ? `?category=${category}` : ""
           }`;
 
           return (
             <div key={p.id} className="group flex flex-col h-full">
-              {/* верхняя часть карточки (растягивается) */}
+              {/* Верхняя часть карточки */}
               <div className="relative flex-1 flex flex-col">
                 <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-stone-600 transition-colors duration-300 group-hover:bg-white">
                   {img?.url && (
@@ -111,12 +113,16 @@ export default function AllProducts({
                   </div>
 
                   <p className="text-lg font-semibold text-white">
-                    {price ? `${price.amount} ${price.currencyCode}` : "—"}
+                    {price
+                      ? `${Number(price.amount).toFixed(2)} ${
+                          price.currencyCode
+                        }`
+                      : "—"}
                   </p>
                 </div>
               </div>
 
-              {/* кнопка прижата к низу карточки */}
+              {/* ⭐ рейтинг + кол-во отзывов */}
               <div className="mt-3 flex flex-col">
                 <span className="sr-only">
                   {productRating} {stars}
@@ -127,27 +133,24 @@ export default function AllProducts({
                       key={i}
                       aria-hidden="true"
                       className={classNames(
-                        productRating > i ? "text-white" : "text-gray-500",
+                        productRating > i ? "text-yellow-400" : "text-gray-500",
                         "size-3 shrink-0"
                       )}
                     />
                   ))}
                 </div>
-                <p className="mt-1 text-sm text-gray-500">0 {reviews}</p>
+                <p className="mt-1 text-sm text-gray-500">
+                  {productReviewCount} {reviews}
+                </p>
               </div>
+
+              {/* Кнопка Add to cart */}
               <div className="mt-6">
                 <AddToCartButton
                   product={p}
                   addToCart={add}
                   className="relative flex w-full items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
                 />
-                {/* <Link
-                  href={href}
-                  className="relative flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
-                >
-                  {add}
-                  <span className="sr-only">, {p.title}</span>
-                </Link> */}
               </div>
             </div>
           );

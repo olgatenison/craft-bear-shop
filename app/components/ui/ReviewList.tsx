@@ -63,22 +63,23 @@ export default function ReviewList({ messages, lang }: ReviewListProps) {
         )}
 
         {!loading && !error && reviews.length > 0 && (
-          <ul className="divide-y divide-gray-800 rounded-xl border border-gray-800 bg-black/30">
+          <ul className="">
             {reviews.map((review) => (
-              <li key={review.id} className="p-4 sm:p-6">
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <li key={review.id} className="py-6">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-stretch sm:justify-between">
+                  {/* левая часть */}
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-white">
+                      <span className="text-lg font-medium text-white">
                         {review.product_title ||
                           `Product ${review.shopify_product_id}`}
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-base text-gray-500">
                         {new Date(review.created_at).toLocaleDateString()}
                       </span>
                     </div>
 
-                    <div className="mt-2 flex items-center gap-1">
+                    <div className="mt-3 flex items-center gap-1">
                       {Array.from({ length: 5 }, (_, i) => (
                         <StarIcon
                           key={i}
@@ -93,32 +94,37 @@ export default function ReviewList({ messages, lang }: ReviewListProps) {
                       <span className="sr-only">{review.rating} out of 5</span>
                     </div>
 
-                    <p className="mt-3 text-sm text-gray-300">
+                    <p className="mt-5 max-w-xl text-base text-gray-300">
                       {review.comment}
                     </p>
                   </div>
 
-                  <div className="mt-4 flex flex-col items-start gap-2 text-sm sm:mt-0 sm:items-end">
-                    <span className="text-xs text-gray-500">
-                      product ID: {review.shopify_product_id}
-                    </span>
+                  {/* правая колонка */}
+                  <div className="mt-4 flex flex-col justify-between text-sm sm:mt-0 sm:items-end">
+                    {/* верхний блок: ID + edit */}
+                    <div className="flex flex-col items-end gap-2">
+                      <span className="text-xs text-gray-500">
+                        product ID: {review.shopify_product_id}
+                      </span>
 
+                      <button
+                        type="button"
+                        className="text-sm font-medium text-yellow-400 hover:underline"
+                        disabled
+                      >
+                        {messages.editReview}
+                      </button>
+                    </div>
+
+                    {/* нижний блок: кнопка к продукту */}
                     {review.product_handle && (
                       <Link
                         href={`/${lang}/product/${review.product_handle}`}
-                        className="text-sm font-medium text-yellow-400 hover:underline"
+                        className="mt-4 inline-flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
                       >
                         {messages.viewProduct}
                       </Link>
                     )}
-
-                    <button
-                      type="button"
-                      className="text-xs text-gray-400 hover:text-gray-200"
-                      disabled
-                    >
-                      {messages.editReview}
-                    </button>
                   </div>
                 </div>
               </li>
