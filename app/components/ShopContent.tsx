@@ -8,7 +8,14 @@ import AllProducts from "./AllProducts";
 import type { FlattenedProduct } from "@/app/data/mappers";
 import type { Locale } from "@/app/[lang]/messages";
 
-type CategoryKey = "all" | "beer" | "cider" | "snacks";
+type TabId =
+  | "all"
+  | "beer"
+  | "draft-beer"
+  | "cider"
+  | "non-alcoholic"
+  | "snacks"
+  | "gifts-sets";
 
 interface ShopContentProps {
   products: FlattenedProduct[];
@@ -20,12 +27,49 @@ interface ShopContentProps {
     alcohol: string;
     noProducts: string;
     noProductsDescription: string;
-    categories: Record<CategoryKey, string>;
+
+    // ✅ это и есть твой "ShopTabs"
+    tabs: {
+      all: string;
+      beer: string;
+      draftBeer?: string;
+      cider: string;
+      snacks: string;
+      nonAlcoholic?: string;
+      giftsSets?: string;
+    };
   };
   lang: Locale;
 }
 
-const CATEGORIES: CategoryKey[] = ["all", "beer", "cider", "snacks"];
+const TABS: TabId[] = [
+  "all",
+  "beer",
+  "draft-beer",
+  "cider",
+  "non-alcoholic",
+  "snacks",
+  "gifts-sets",
+];
+
+function getTabTitle(tab: TabId, t: ShopContentProps["translations"]["tabs"]) {
+  switch (tab) {
+    case "all":
+      return t.all;
+    case "beer":
+      return t.beer;
+    case "draft-beer":
+      return t.draftBeer ?? "Draft beer";
+    case "cider":
+      return t.cider;
+    case "non-alcoholic":
+      return t.nonAlcoholic ?? "Non-alcoholic";
+    case "snacks":
+      return t.snacks;
+    case "gifts-sets":
+      return t.giftsSets ?? "Gifts & Sets";
+  }
+}
 
 export default function ShopContent({
   products,
@@ -36,26 +80,20 @@ export default function ShopContent({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // читаем таб из URL
   const tabFromUrl = (searchParams.get("category") ?? "all") as string;
-  const initialTab: CategoryKey = CATEGORIES.includes(tabFromUrl as CategoryKey)
-    ? (tabFromUrl as CategoryKey)
+  const initialTab: TabId = TABS.includes(tabFromUrl as TabId)
+    ? (tabFromUrl as TabId)
     : "all";
 
-  const [activeTab, setActiveTab] = useState<CategoryKey>(initialTab);
+  const [activeTab, setActiveTab] = useState<TabId>(initialTab);
 
-  // обёртка, чтобы менять и состояние, и URL
-  const handleTabChange = (tab: CategoryKey) => {
+  const handleTabChange = (tab: TabId) => {
     setActiveTab(tab);
 
-    // searchParams — ReadonlyURLSearchParams, поэтому создаём новый
     const params = new URLSearchParams(searchParams.toString());
 
-    if (tab === "all") {
-      params.delete("category");
-    } else {
-      params.set("category", tab);
-    }
+    if (tab === "all") params.delete("category");
+    else params.set("category", tab);
 
     const qs = params.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
@@ -66,21 +104,20 @@ export default function ShopContent({
     return products.filter((p) => p.collections?.includes(activeTab));
   }, [products, activeTab]);
 
-  const categoryTitle =
-    translations.categories[activeTab] ?? translations.categories.all;
+  const categoryTitle = getTabTitle(activeTab, translations.tabs);
 
-  // категория для карточек (без "all")
+  // оставляем как было: AllProducts сейчас ждёт только beer/cider/snacks
   const currentCategory =
-    activeTab !== "all"
-      ? (activeTab as "beer" | "cider" | "snacks")
+    activeTab === "beer" || activeTab === "cider" || activeTab === "snacks"
+      ? activeTab
       : undefined;
 
   return (
     <>
       <Tabs
         activeTab={activeTab}
-        onTabChange={(tab) => handleTabChange(tab as CategoryKey)}
-        labels={translations.categories}
+        onTabChange={(tab) => handleTabChange(tab as TabId)}
+        labels={translations.tabs} // ✅ ВОТ ТУТ
       />
 
       {filteredProducts.length === 0 ? (

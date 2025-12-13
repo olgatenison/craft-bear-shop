@@ -113,6 +113,15 @@
     "pageNotFound": "Page not found",
     "goHome": "Go to homepage"
   },
+  "ShopTabs": {
+    "all": "All products",
+    "beer": "Beer",
+    "draftBeer": "Draft beer",
+    "cider": "Cider",
+    "snacks": "Snacks",
+    "nonAlcoholic": "Non-alcoholic",
+    "giftsSets": "Gifts & Sets"
+  },
   "Footer": {
     "about": " About Us",
     "terms": " Terms & Conditions",

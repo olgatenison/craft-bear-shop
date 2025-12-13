@@ -111,6 +111,15 @@
     "pageNotFound": "Lehte ei leitud",
     "goHome": "Mine avalehele"
   },
+  "ShopTabs": {
+    "all": "Kõik tooted",
+    "beer": "Õlu",
+    "draftBeer": "Kraaniõlu",
+    "cider": "Siider",
+    "snacks": "Snäkid",
+    "nonAlcoholic": "Alkoholivaba",
+    "giftsSets": "Kingitused & komplektid"
+  },
   "Footer": {
     "about": "Meist",
     "terms": "Tingimused ja reeglid",

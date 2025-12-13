@@ -4,7 +4,7 @@ import ShopContent from "@/app/components/ShopContent";
 import Breadcrumbs from "@/app/components/ui/Breadcrumbs";
 import type { Locale } from "../../lib/locale";
 import { getMessages } from "../messages";
-import { getReviews } from "@/app/lib/getReviews"; // 👈 добавили
+import { getReviews } from "@/app/lib/getReviews";
 
 export default async function ShopPage({
   params,
@@ -16,16 +16,15 @@ export default async function ShopPage({
 
   const allProducts = await fetchAllProductsFlattened(lang);
 
-  // 👇 сюда подмешиваем средний рейтинг и количество отзывов
+  // Подмешиваем средний рейтинг и количество отзывов
   const productsWithRating = await Promise.all(
     allProducts.map(async (product) => {
-      // Shopify numeric id
       const productNumericId = product.id.split("/").pop()!;
       const reviews = await getReviews(productNumericId);
 
       return {
         ...product,
-        rating: reviews.average, // будет использовано в AllProducts
+        rating: reviews.average,
         reviewCount: reviews.totalCount,
       };
     })
@@ -38,13 +37,30 @@ export default async function ShopPage({
         labels={{
           home: t.common.home,
           shop: t.common.shop,
-          categories: t.AllProducts.categories,
+          categories: {
+            all: t.ShopTabs.all,
+            beer: t.ShopTabs.beer,
+            "draft-beer": t.ShopTabs.draftBeer,
+            cider: t.ShopTabs.cider,
+            "non-alcoholic": t.ShopTabs.nonAlcoholic,
+            snacks: t.ShopTabs.snacks,
+            "gifts-sets": t.ShopTabs.giftsSets,
+          },
         }}
       />
 
       <ShopContent
-        products={productsWithRating} // 👈 передаём уже обогащённые продукты
-        translations={t.AllProducts}
+        products={productsWithRating}
+        translations={{
+          title: t.AllProducts.title,
+          stars: t.AllProducts.stars,
+          reviews: t.AllProducts.reviews,
+          add: t.AllProducts.add,
+          alcohol: t.AllProducts.alcohol,
+          noProducts: t.AllProducts.noProducts,
+          noProductsDescription: t.AllProducts.noProductsDescription,
+          tabs: t.ShopTabs,
+        }}
         lang={lang}
       />
     </main>

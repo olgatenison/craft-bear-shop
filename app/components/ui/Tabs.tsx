@@ -7,6 +7,7 @@ interface TabsProps {
   labels?: {
     all: string;
     beer: string;
+    draftBeer?: string; // ✅ додали
     cider: string;
     snacks: string;
     nonAlcoholic?: string;
@@ -20,6 +21,7 @@ export default function Tabs({
   labels = {
     all: "All Products",
     beer: "Beer",
+    draftBeer: "Draft beer", // ✅ дефолт
     cider: "Cider",
     snacks: "Snacks",
     nonAlcoholic: "Non-alcoholic",
@@ -29,6 +31,7 @@ export default function Tabs({
   const tabs = [
     { id: "all", label: labels.all },
     { id: "beer", label: labels.beer },
+    { id: "draft-beer", label: labels.draftBeer ?? "Draft beer" }, // ✅ новий таб
     { id: "cider", label: labels.cider },
     { id: "non-alcoholic", label: labels.nonAlcoholic ?? "Non-alcoholic" },
     { id: "snacks", label: labels.snacks },

@@ -8,20 +8,38 @@ import Breadcrumbs from "@/app/components/ui/Breadcrumbs";
 import CustomerReviews from "@/app/components/CustomerReviews";
 import { getReviews } from "@/app/lib/getReviews";
 
-// Функция для определения категории из коллекций
+type CategoryKey =
+  | "beer"
+  | "draft-beer"
+  | "cider"
+  | "non-alcoholic"
+  | "snacks"
+  | "gifts-sets";
+
+const VALID_CATEGORIES: CategoryKey[] = [
+  "draft-beer",
+  "non-alcoholic",
+  "gifts-sets",
+  "cider",
+  "snacks",
+  "beer",
+];
+
+/**
+ * Возвращает первую валидную категорию из коллекций продукта
+ * Приоритет: draft-beer > non-alcoholic > gifts-sets > cider > snacks > beer
+ */
 function getCategoryFromProduct(
   collections: string[] | undefined
 ): string | undefined {
   if (!collections || collections.length === 0) return undefined;
 
-  const lowerCollections = collections.map((c) => c.toLowerCase());
-
-  if (lowerCollections.some((c) => c.includes("beer") || c.includes("пиво")))
-    return "beer";
-  if (lowerCollections.some((c) => c.includes("cider") || c.includes("сидр")))
-    return "cider";
-  if (lowerCollections.some((c) => c.includes("snack") || c.includes("снек")))
-    return "snacks";
+  // Ищем точное совпадение с приоритетом
+  for (const validCategory of VALID_CATEGORIES) {
+    if (collections.includes(validCategory)) {
+      return validCategory;
+    }
+  }
 
   return undefined;
 }
@@ -52,7 +70,15 @@ export default async function ProductPage({
         labels={{
           home: t.common.home,
           shop: t.common.shop,
-          categories: t.AllProducts.categories,
+          categories: {
+            all: t.ShopTabs.all,
+            beer: t.ShopTabs.beer,
+            "draft-beer": t.ShopTabs.draftBeer,
+            cider: t.ShopTabs.cider,
+            "non-alcoholic": t.ShopTabs.nonAlcoholic,
+            snacks: t.ShopTabs.snacks,
+            "gifts-sets": t.ShopTabs.giftsSets,
+          },
         }}
         productCategory={productCategory}
         currentLabel={product.title}
