@@ -77,7 +77,7 @@
     "mustLogin": "Sinun täytyy kirjautua sisään jättääksesi arvostelun.",
     "noEmail": "Sähköpostiosoitettasi ei voitu hakea.",
     "fillRequired": "Täytä arvosana ja arvostelun teksti.",
-    "success": "Kiitos arvostelustasi! Se näkyy sivulla moderoinnin jälkeen.",
+    "success": "Kiitos arvostelustasi! Se näkyy pian.",
     "ratingLabel": "Arvosana",
     "nameLabel": "Nimi",
     "emailLabel": "Sähköposti",
@@ -207,10 +207,13 @@
     "emptyCta": "Siirry kauppaan"
   },
   "AccountReview": {
-    "title": "Ваші відгуки",
-    "empty": "У вас ще немає відгуків.",
-    "viewProduct": "Переглянути товар",
-    "editReview": "Змінити відгук"
+    "title": "Omat arvostelut",
+    "empty": "Et ole vielä jättänyt yhtään arvostelua.",
+    "viewProduct": "Näytä tuote",
+    "editReview": "Muokkaa",
+    "deleteReview": "Poista",
+    "deleteConfirm": "Haluatko varmasti poistaa tämän arvostelun? Toimintoa ei voi perua.",
+    "deleting": "Poistetaan..."
   },
   "auth": {
     "signIn": "Kirjaudu sisään",

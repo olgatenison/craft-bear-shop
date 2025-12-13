@@ -5,6 +5,7 @@ import { useState, useEffect, FormEvent } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { useUser } from "@clerk/nextjs";
 import type { LeaveReviewModalText } from "./LeaveReviewModal";
+import type { Review } from "@/app/lib/supabase";
 
 function classNames(...classes: Array<string | null | undefined | false>) {
   return classes.filter(Boolean).join(" ");

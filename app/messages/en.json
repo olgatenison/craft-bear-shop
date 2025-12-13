@@ -78,7 +78,7 @@
     "mustLogin": "You need to sign in to leave a review.",
     "noEmail": "We couldn't get your email address.",
     "fillRequired": "Please fill in the rating and review text.",
-    "success": "Thank you for your review! It will appear after moderation.",
+    "success": "Thank you for your review! It will appear shortly.",
     "ratingLabel": "Rating",
     "nameLabel": "Name",
     "emailLabel": "Email",
@@ -209,10 +209,13 @@
     "emptyCta": "Go to shop"
   },
   "AccountReview": {
-    "title": "Ваші відгуки",
-    "empty": "У вас ще немає відгуків.",
-    "viewProduct": "Переглянути товар",
-    "editReview": "Змінити відгук"
+    "title": "My Reviews",
+    "empty": "You haven't left any reviews yet",
+    "viewProduct": "View Product",
+    "editReview": "Edit",
+    "deleteReview": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this review? This action cannot be undone.",
+    "deleting": "Deleting..."
   },
   "auth": {
     "signIn": "Sign in",

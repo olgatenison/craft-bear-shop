@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
-
+import type { UserResource } from "@clerk/types";
 import type { Locale } from "@/app/lib/locale";
 import { AccountSidebar } from "../components/ui/AccountSidebar";
 import ReviewList from "./ui/ReviewList";
@@ -25,6 +25,9 @@ type ReviewMessages = {
   empty: string;
   viewProduct: string;
   editReview: string;
+  deleteReview: string;
+  deleteConfirm: string;
+  deleting: string;
 };
 
 type AccountReviewContentProps = {
@@ -75,7 +78,7 @@ export default function AccountReviewContent({
     <section className="relative mx-auto my-10 max-w-7xl rounded-b-3xl">
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16">
         <AccountSidebar
-          user={user ?? undefined}
+          user={user as UserResource}
           navItems={navItems}
           baseAccountPath={baseAccountPath}
           effectiveLang={effectiveLang}

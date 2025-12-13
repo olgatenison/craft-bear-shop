@@ -77,7 +77,7 @@
     "mustLogin": "Arvustuse jätmiseks pead sisse logima.",
     "noEmail": "Kasutaja e-posti ei õnnestunud saada.",
     "fillRequired": "Palun täida hinne ja arvustuse tekst.",
-    "success": "Aitäh arvustuse eest! See ilmub pärast modereerimist.",
+    "success": "Aitäh arvustuse eest! See ilmub peagi.",
     "ratingLabel": "Hinne",
     "nameLabel": "Nimi",
     "emailLabel": "E-post",
@@ -207,10 +207,13 @@
     "emptyCta": "Mine poodi"
   },
   "AccountReview": {
-    "title": "Ваші відгуки",
-    "empty": "У вас ще немає відгуків.",
-    "viewProduct": "Переглянути товар",
-    "editReview": "Змінити відгук"
+    "title": "Minu arvustused",
+    "empty": "Te ei ole veel ühtegi arvustust jätnud.",
+    "viewProduct": "Vaata toodet",
+    "editReview": "Muuda",
+    "deleteReview": "Kustuta",
+    "deleteConfirm": "Kas olete kindel, et soovite selle arvustuse kustutada? Seda toimingut ei saa tagasi võtta.",
+    "deleting": "Kustutamine..."
   },
   "auth": {
     "signIn": "Logi sisse",
