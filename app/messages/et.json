@@ -276,5 +276,21 @@
     "empty": "Sinu ostukorv on tühi",
     "emptyDescription": "Lisa tooteid, et alustada!",
     "CTAAdd": "Kõik tooted"
+  },
+  "Contact": {
+    "title": "Teeme koostööd",
+    "subtitle": "Meil on hea meel sinust kuulda! Kui sul on küsimusi meie toodete kohta, vajad abi tellimusega või soovid jagada tagasisidet, siis meie tiim aitab hea meelega.",
+    "firstname": "Eesnimi",
+    "lastname": "Perekonnanimi",
+    "emailLabel": "E-post",
+    "company": "Ettevõte",
+    "phone": "Telefon",
+    "optional": "Valikuline",
+    "message": "Kuidas saame aidata?",
+    "messageLimit": "Maksimaalselt 500 märki",
+    "submit": "Saada sõnum",
+    "submitting": "Saatmine...",
+    "success": "Aitäh ühenduse võtmast! Oleme sinu sõnumi kätte saanud ja vastame esimesel võimalusel.",
+    "error": "Ups! Midagi läks sõnumi saatmisel valesti. Palun proovi hiljem uuesti."
   }
 }

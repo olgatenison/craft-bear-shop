@@ -1,49 +1,3 @@
-// import Image from "next/image";
-// type HeroProps = {
-//   title: string;
-//   subtitle: string;
-//   ctaLabel: string;
-//   ctaHref?: string;
-//   imageUrl?: string; // можешь заменить данными с бэка
-// };
-
-// export default function Hero({
-//   title,
-//   subtitle,
-//   ctaLabel,
-//   ctaHref = "/en/shop",
-//   imageUrl = "/category/olga2813_beer_macro_ad_photo_9b6d9918-4d2e-4a3b-8a71-7d7051d002be.png",
-// }: HeroProps) {
-//   return (
-//     <section className="relative overflow-hidden max-w-7xl mx-auto rounded-3xl ">
-//       <div className="absolute inset-0">
-//         <Image
-//           src={imageUrl}
-//           alt=""
-//           className="h-full w-full object-cover"
-//           width={640}
-//           height={480}
-//         />
-//         <div className="absolute inset-0 bg-black/35" />
-//       </div>
-
-//       <div className="relative mx-auto max-w-7xl px-6 py-28 sm:py-36 text-center">
-//         <div className="max-w-xl mx-auto">
-//           <h1 className="text-6xl font-semibold leading-tight text-white  ">
-//             {title}
-//           </h1>
-//           <p className="mt-4 text-xl text-white/90">{subtitle}</p>
-//           <a
-//             href={ctaHref}
-//             className="mt-10 inline-block rounded-xl bg-white px-6 py-3 text-sm font-medium text-gray-900 shadow w-md"
-//           >
-//             {ctaLabel}
-//           </a>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
 "use client";
 import Image from "next/image";
 import { useState } from "react";
@@ -53,8 +7,8 @@ type HeroProps = {
   subtitle: string;
   ctaLabel: string;
   ctaHref?: string;
-  imageUrl?: string; // постер/фолбэк
-  videoUrl?: string; // видео-фон из /public
+  imageUrl?: string;
+  videoUrl?: string;
 };
 
 export default function Hero({

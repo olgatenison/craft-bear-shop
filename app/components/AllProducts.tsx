@@ -94,9 +94,9 @@ export default function AllProducts({
                   )}
                 </div>
 
-                <div className="mt-4 flex items-start justify-between">
+                <div className="mt-6 flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-medium text-yellow-400">
+                    <h3 className="text-lg font-medium text-yellow-400 pb-6">
                       <Link
                         href={href}
                         className="focus:outline-none focus:ring-2 focus:ring-white/30 rounded"
@@ -112,7 +112,7 @@ export default function AllProducts({
                     {meta && <p className="text-sm text-gray-300">{meta}</p>}
                   </div>
 
-                  <p className="text-lg font-semibold text-white">
+                  <p className="text-lg font-semibold text-white text-right">
                     {price
                       ? `${Number(price.amount).toFixed(2)} ${
                           price.currencyCode

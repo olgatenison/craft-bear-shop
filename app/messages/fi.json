@@ -275,5 +275,21 @@
     "empty": "Ostoskorisi on tyhjä",
     "emptyDescription": "Lisää tuotteita aloittaaksesi!",
     "CTAAdd": "Kaikki tuotteet"
+  },
+  "Contact": {
+    "title": "Tehdään yhteistyötä",
+    "subtitle": "Haluaisimme kuulla sinusta! Olipa sinulla kysyttävää tuotteistamme, tarvitset apua tilauksesi kanssa tai haluat jakaa palautetta, tiimimme auttaa mielellään.",
+    "firstname": "Etunimi",
+    "lastname": "Sukunimi",
+    "emailLabel": "Sähköposti",
+    "company": "Yritys",
+    "phone": "Puhelin",
+    "optional": "Valinnainen",
+    "message": "Miten voimme auttaa?",
+    "messageLimit": "Enintään 500 merkkiä",
+    "submit": "Lähetä viesti",
+    "submitting": "Lähetetään...",
+    "success": "Kiitos yhteydenotosta! Olemme vastaanottaneet viestisi ja palaamme asiaan mahdollisimman pian.",
+    "error": "Hups! Viestin lähetys epäonnistui. Yritä myöhemmin uudelleen."
   }
 }
