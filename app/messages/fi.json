@@ -108,6 +108,7 @@
   "common": {
     "home": "Etusivu",
     "shop": "Kauppa",
+    "contact": "Kontaktit",
     "pageNotFound": "Sivua ei löytynyt",
     "goHome": "Palaa etusivulle"
   },

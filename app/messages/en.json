@@ -110,6 +110,7 @@
   "common": {
     "home": "Home",
     "shop": "Shop",
+    "contact": "Contact",
     "pageNotFound": "Page not found",
     "goHome": "Go to homepage"
   },

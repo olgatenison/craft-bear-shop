@@ -1,3 +1,4 @@
+// app/components/ui/ShoppingCart.tsx
 "use client";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -11,10 +12,9 @@ type ShoppingCartMsgs = {
   itemsInCart: string;
 };
 
-type Messages = {
-  [lang: string]: {
-    ShoppingCart: ShoppingCartMsgs;
-  };
+// Обновляем тип Messages чтобы он был более гибким
+type Messages = Record<string, unknown> & {
+  ShoppingCart?: ShoppingCartMsgs;
 };
 
 const FALLBACK: ShoppingCartMsgs = {
@@ -25,20 +25,17 @@ const FALLBACK: ShoppingCartMsgs = {
 };
 
 export default function ShoppingCart({
-  lang = "en",
   href = "/cart",
   messages,
 }: {
   lang?: Locale | string;
   href?: string;
-  messages: Messages;
+  messages?: Messages;
 }) {
   const { itemCount } = useCart();
 
-  const dict =
-    messages?.[lang as string]?.ShoppingCart ??
-    messages?.en?.ShoppingCart ??
-    FALLBACK;
+  // Получаем переводы из messages.ShoppingCart
+  const dict = messages?.ShoppingCart ?? FALLBACK;
 
   const label =
     itemCount > 0
@@ -69,5 +66,3 @@ export default function ShoppingCart({
     </Link>
   );
 }
-// Пример:
-// <ShoppingCart lang="uk" href="/cart" messages={messages} />

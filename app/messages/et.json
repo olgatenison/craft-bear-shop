@@ -108,6 +108,7 @@
   "common": {
     "home": "Avaleht",
     "shop": "Pood",
+    "contact": "Kontaktid",
     "pageNotFound": "Lehte ei leitud",
     "goHome": "Mine avalehele"
   },

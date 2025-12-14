@@ -197,7 +197,7 @@ export default function ContactContent({ lang, messages }: Props) {
             <h2 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
               {t.title}
             </h2>
-            <p className="mt-2 text-lg/8 text-gray-400">{t.subtitle}</p>
+            <p className="mt-4 text-base/8 text-gray-400">{t.subtitle}</p>
 
             <form onSubmit={handleSubmit} className="mt-16">
               <div className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
