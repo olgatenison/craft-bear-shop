@@ -116,6 +116,7 @@
     "all": "Kõik tooted",
     "beer": "Õlu",
     "draftBeer": "Kraaniõlu",
+    "questions": "Küsimused",
     "cider": "Siider",
     "snacks": "Snäkid",
     "nonAlcoholic": "Alkoholivaba",
@@ -294,5 +295,9 @@
     "submitting": "Saatmine...",
     "success": "Aitäh ühenduse võtmast! Oleme sinu sõnumi kätte saanud ja vastame esimesel võimalusel.",
     "error": "Ups! Midagi läks sõnumi saatmisel valesti. Palun proovi hiljem uuesti."
+  },
+  "Questions": {
+    "title": "Korduma kippuvad küsimused",
+    "empty": "Küsimusi ei ole veel lisatud"
   }
 }

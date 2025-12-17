@@ -125,6 +125,7 @@
     "about": "Tietoa meistä",
     "terms": "Käyttöehdot",
     "delivery": "Toimitustiedot",
+    "questions": "Usein kysytyt kysymykset",
     "refunds": "Palautukset",
     "contact": "Yhteystiedot",
     "cookiesPolicy": "Evästekäytäntö",
@@ -293,5 +294,9 @@
     "submitting": "Lähetetään...",
     "success": "Kiitos yhteydenotosta! Olemme vastaanottaneet viestisi ja palaamme asiaan mahdollisimman pian.",
     "error": "Hups! Viestin lähetys epäonnistui. Yritä myöhemmin uudelleen."
+  },
+  "Questions": {
+    "title": "Usein kysytyt kysymykset",
+    "empty": "Kysymyksiä ei ole vielä lisätty"
   }
 }

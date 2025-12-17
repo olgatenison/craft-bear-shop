@@ -6,6 +6,7 @@ type FooterMessages = {
   about: string;
   terms: string;
   delivery: string;
+  questions: string;
   refunds: string;
   contact: string;
   cookiesPolicy: string;
@@ -25,6 +26,7 @@ export default function LinksList({ lang, footerMessages }: LinksListProps) {
     { href: `/${lang}/privacy-policy`, label: t.privacyPolicy },
     { href: `/${lang}/terms`, label: t.terms },
     { href: `/${lang}/delivery`, label: t.delivery },
+    { href: `/${lang}/questions`, label: t.questions },
     { href: `/${lang}/refunds`, label: t.refunds },
     { href: `/${lang}/contact`, label: t.contact },
     { href: `/${lang}/cookies-policy`, label: t.cookiesPolicy },

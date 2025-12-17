@@ -49,9 +49,7 @@ export default function BannerSection({
             >
               {title}
             </h2>
-            <p className="mt-1 text-sm text-gray-200 pt-6 max-w-80">
-              {subtitle}
-            </p>
+            <p className="mt-4 text-base/8 text-gray-400">{subtitle}</p>
           </div>
 
           <Link
