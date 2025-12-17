@@ -276,7 +276,8 @@
     "checkout": "Mine kassasse",
     "empty": "Sinu ostukorv on tühi",
     "emptyDescription": "Lisa tooteid, et alustada!",
-    "CTAAdd": "Kõik tooted"
+    "CTAAdd": "Kõik tooted",
+    "continueShopping": "Jätka ostlemist"
   },
   "Contact": {
     "title": "Teeme koostööd",

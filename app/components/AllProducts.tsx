@@ -10,12 +10,30 @@ import AddToCartButton from "./ui/AddToCartButton";
 const classNames = (...xs: Array<string | false | null | undefined>) =>
   xs.filter(Boolean).join(" ");
 
+// --- types for variants (no any) ---
+type VariantSelectedOption = { name: string; value: string };
+
+type VariantNode = {
+  id: string;
+  title: string;
+  price?: { amount: string; currencyCode: string };
+  selectedOptions: VariantSelectedOption[];
+};
+
+type VariantEdge = { node: VariantNode };
+type VariantConnection = { edges: VariantEdge[] };
+
+type ProductWithVariants = FlattenedProduct & {
+  // variants може бути відсутнім, або GraphQL connection
+  variants?: VariantConnection;
+};
+
 type CategoryKey = "beer" | "cider" | "snacks";
 
 type AllProductsProps = {
   title: string;
-  stars: string; // "out of 5 stars"
-  reviews: string; // "reviews"
+  stars: string;
+  reviews: string;
   add: string;
   alcohol: string;
   rating?: string;
@@ -44,22 +62,49 @@ export default function AllProducts({
           const img = p.featuredImage;
           const price = p.priceRange?.minVariantPrice;
 
-          // ABV и объём
+          // ABV
           const abvRaw = p.specs?.abv;
           const abvNum =
             abvRaw !== undefined && abvRaw !== "" ? Number(abvRaw) : null;
           const hasAbv = abvNum !== null && !Number.isNaN(abvNum);
           const isAlcoholFree = hasAbv && abvNum === 0;
 
-          let packText: string | null = null;
-          if (p.specs?.pack_size_l) packText = `${p.specs.pack_size_l} L`;
+          // pack size (штучне)
+          const packText = p.specs?.pack_size_l
+            ? `${p.specs.pack_size_l} L`
+            : null;
 
+          // ✅ дістаємо variants без any
+          const pv = p as unknown as ProductWithVariants;
+          const variants: VariantNode[] =
+            pv.variants?.edges?.map((e) => e.node) ?? [];
+
+          // volume values (для розливного)
+          const volumeValues = variants
+            .map(
+              (v) =>
+                v.selectedOptions.find((o) => o.name.toLowerCase() === "volume")
+                  ?.value
+            )
+            .filter((val): val is string => Boolean(val))
+            .map((x) => Number(String(x).replace(",", ".")))
+            .filter((n) => !Number.isNaN(n));
+
+          const minVolume = volumeValues.length
+            ? Math.min(...volumeValues)
+            : null;
+
+          // “за …” біля ціни: pack_size_l або min volume
+          const unitForPrice =
+            packText ?? (minVolume ? `${minVolume} L` : null);
+
+          // meta під назвою (ABV • Pack) — як у тебе
           const metaParts: string[] = [];
           if (hasAbv) metaParts.push(`${abvNum} %`);
           if (packText) metaParts.push(packText);
           const meta = metaParts.join(" • ");
 
-          // ⭐ Рейтинг и кол-во отзывов из Shopify / наших данных продукта
+          // рейтинг
           const productRating = p.rating ?? 0;
           const productReviewCount = p.reviewCount ?? 0;
 
@@ -69,7 +114,6 @@ export default function AllProducts({
 
           return (
             <div key={p.id} className="group flex flex-col h-full">
-              {/* Верхняя часть карточки */}
               <div className="relative flex-1 flex flex-col">
                 <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-stone-600 transition-colors duration-300 group-hover:bg-white">
                   {img?.url && (
@@ -96,7 +140,7 @@ export default function AllProducts({
 
                 <div className="mt-6 flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-medium text-yellow-400 pb-6">
+                    <h3 className="text-lg font-medium text-yellow-400 pb-6 pr-6">
                       <Link
                         href={href}
                         className="focus:outline-none focus:ring-2 focus:ring-white/30 rounded"
@@ -109,20 +153,36 @@ export default function AllProducts({
                       </Link>
                     </h3>
 
-                    {meta && <p className="text-sm text-gray-300">{meta}</p>}
+                    {meta && <p className="text-xs text-gray-300">{meta}</p>}
                   </div>
 
-                  <p className="text-lg font-semibold text-white text-right">
-                    {price
-                      ? `${Number(price.amount).toFixed(2)} ${
-                          price.currencyCode
-                        }`
-                      : "—"}
+                  {/* Ціна: число велике, EUR + “за …” дрібніше */}
+                  <p className="text-right leading-tight">
+                    {price ? (
+                      <>
+                        <span className="text-lg font-semibold text-white">
+                          {Number(price.amount).toFixed(2)}
+                        </span>
+                        <span className="block text-xs font-medium text-gray-300">
+                          {price.currencyCode}
+                        </span>
+
+                        {unitForPrice && (
+                          <span className="block text-xs text-gray-400">
+                            за {unitForPrice}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-lg font-semibold text-white">
+                        —
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
 
-              {/* ⭐ рейтинг + кол-во отзывов */}
+              {/* Рейтинг + отзывы */}
               <div className="mt-3 flex flex-col">
                 <span className="sr-only">
                   {productRating} {stars}
@@ -144,7 +204,7 @@ export default function AllProducts({
                 </p>
               </div>
 
-              {/* Кнопка Add to cart */}
+              {/* Add to cart */}
               <div className="mt-6">
                 <AddToCartButton
                   product={p}

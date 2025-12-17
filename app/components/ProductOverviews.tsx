@@ -1,7 +1,7 @@
 // components/ProductOverviews.tsx
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/20/solid";
-import { FlattenedProduct } from "../data/mappers";
+import type { FlattenedProduct } from "../data/mappers";
 import AddToCartButton from "./ui/AddToCartButton";
 
 type ProductOverviewsProps = {
@@ -26,8 +26,53 @@ type ProductOverviewsProps = {
   reviewCount: number;
 };
 
-function classNames(...classes: (string | boolean | undefined)[]) {
+function classNames(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
+}
+
+type VariantSelectedOption = { name: string; value: string };
+
+type VariantNode = {
+  id: string;
+  title?: string;
+  price?: { amount: string; currencyCode: string };
+  selectedOptions?: VariantSelectedOption[];
+  availableForSale?: boolean;
+  quantityAvailable?: number | null;
+};
+
+type VariantEdge = { node: VariantNode };
+type VariantConnection = { edges: VariantEdge[] };
+
+type ProductWithVariants = FlattenedProduct & {
+  variants?: VariantConnection | VariantNode[];
+};
+
+function isVariantConnection(v: unknown): v is VariantConnection {
+  return (
+    typeof v === "object" &&
+    v !== null &&
+    "edges" in v &&
+    Array.isArray((v as { edges?: unknown }).edges)
+  );
+}
+
+function getVariantNodes(product: ProductWithVariants): VariantNode[] {
+  const v = product.variants;
+  if (!v) return [];
+
+  // variants как массив
+  if (Array.isArray(v)) return v;
+
+  // variants как GraphQL connection
+  if (isVariantConnection(v)) {
+    return v.edges.map((e) => ({
+      ...e.node,
+      quantityAvailable: e.node.quantityAvailable ?? undefined,
+    }));
+  }
+
+  return [];
 }
 
 export default function ProductOverviews({
@@ -52,6 +97,7 @@ export default function ProductOverviews({
   reviewCount,
 }: ProductOverviewsProps) {
   const price = product.priceRange.minVariantPrice.amount;
+
   const packSize = product.specs?.pack_size_l;
   const productAbv = product.specs?.abv;
   const productIbu = product.specs?.ibu;
@@ -63,6 +109,19 @@ export default function ProductOverviews({
   const productIngredients = product.specs?.ingredients;
   const productPairing = product.specs?.pairing;
 
+  const rawVariants = getVariantNodes(product as ProductWithVariants);
+
+  const getVolumeVariant = (value: "0.5" | "1") =>
+    rawVariants.find((v) =>
+      (v.selectedOptions ?? []).some(
+        (o) => o.name.toLowerCase() === "volume" && o.value === value
+      )
+    );
+
+  const vHalf = getVolumeVariant("0.5");
+  const vLiter = getVolumeVariant("1");
+  const isDraft = Boolean(vHalf?.price?.amount && vLiter?.price?.amount);
+
   const images =
     product.images?.edges.map((edge, index) => ({
       id: index + 1,
@@ -71,10 +130,8 @@ export default function ProductOverviews({
       primary: index === 0,
     })) || [];
 
-  // ⭐ Берём средний рейтинг из Supabase (прокинутый сверху)
   const rating = ratingAverage ?? 0;
 
-  // ✅ Парсим pairing (предполагаем что это строка через запятую или список)
   const pairingList = productPairing
     ? productPairing
         .split(",")
@@ -82,30 +139,58 @@ export default function ProductOverviews({
         .filter(Boolean)
     : [];
 
+  // ✅ продукты для кнопок разливного без any
+  const productHalf: FlattenedProduct | null =
+    isDraft && vHalf ? { ...product, variantId: vHalf.id } : null;
+
+  const productLiter: FlattenedProduct | null =
+    isDraft && vLiter ? { ...product, variantId: vLiter.id } : null;
+
   return (
     <div>
       <div className="pb-16 pt-6 sm:pb-24">
-        <div className="mx-auto mt-8 max-w-2xl lg:max-w-7xl ">
+        <div className="mx-auto mt-8 max-w-2xl lg:max-w-7xl">
           <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
             {/* title and price */}
             <div className="lg:col-span-5 lg:col-start-8">
               <div className="flex justify-between items-baseline gap-10">
                 <h1 className="text-3xl tracking-tight font-semibold text-yellow-400 max-w-md">
                   {product.title}
-                  {packSize && (
-                    <span className="ml-3 text-white text-xl">
-                      {packSize} L
-                    </span>
+
+                  {isDraft ? (
+                    <span className="ml-3 text-white text-xl">0.5 / 1 L</span>
+                  ) : (
+                    packSize && (
+                      <span className="ml-3 text-white text-xl">
+                        {packSize} L
+                      </span>
+                    )
                   )}
                 </h1>
 
                 <div className="flex flex-col items-end text-right">
-                  <span className="text-2xl font-medium text-white whitespace-nowrap">
-                    {parseFloat(price).toFixed(2)} €
-                  </span>
-                  <span className="text-base text-gray-300 whitespace-nowrap">
-                    {perUnit}
-                  </span>
+                  {isDraft && vHalf?.price?.amount && vLiter?.price?.amount ? (
+                    <>
+                      <span className="text-2xl font-medium text-white whitespace-nowrap">
+                        {Number(vHalf.price.amount).toFixed(2)} €
+                        <span className="ml-2 text-base text-gray-300">
+                          / 0.5 L
+                        </span>
+                      </span>
+                      <span className="text-base text-gray-300 whitespace-nowrap">
+                        {Number(vLiter.price.amount).toFixed(2)} € / 1 L
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-2xl font-medium text-white whitespace-nowrap">
+                        {parseFloat(price).toFixed(2)} €
+                      </span>
+                      <span className="text-base text-gray-300 whitespace-nowrap">
+                        {perUnit}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -253,7 +338,20 @@ export default function ProductOverviews({
 
             {/* button and right side under */}
             <div className="mt-16 lg:col-span-5">
-              <AddToCartButton product={product} addToCart={addToCart} />
+              {isDraft && productHalf && productLiter ? (
+                <div className="flex gap-3">
+                  <AddToCartButton
+                    product={productHalf}
+                    addToCart={`${addToCart} 0.5 L`}
+                  />
+                  <AddToCartButton
+                    product={productLiter}
+                    addToCart={`${addToCart} 1 L`}
+                  />
+                </div>
+              ) : (
+                <AddToCartButton product={product} addToCart={addToCart} />
+              )}
 
               {/* Product Description */}
               {product.descriptionHtml && (
@@ -283,7 +381,7 @@ export default function ProductOverviews({
                       className="list-disc space-y-1 pl-5 text-sm text-gray-300 marker:text-gray-300"
                     >
                       {pairingList.map((item, index) => (
-                        <li key={index} className="pl-2 text-base ">
+                        <li key={index} className="pl-2 text-base">
                           {item}
                         </li>
                       ))}

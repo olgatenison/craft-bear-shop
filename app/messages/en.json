@@ -277,7 +277,8 @@
     "checkout": "Checkout",
     "empty": "Your cart is empty",
     "emptyDescription": "Add some products to get started!",
-    "CTAAdd": "All Products"
+    "CTAAdd": "All Products",
+    "continueShopping": "Continue shopping"
   },
   "Contact": {
     "title": "Let's work together",

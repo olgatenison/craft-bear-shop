@@ -28,6 +28,7 @@ export default async function CartPage({
         empty={t.ShoppingCardOverviews.empty}
         emptyDescription={t.ShoppingCardOverviews.emptyDescription}
         CTAAdd={t.ShoppingCardOverviews.CTAAdd}
+        continueShopping={t.ShoppingCardOverviews.continueShopping}
       />
     </>
   );

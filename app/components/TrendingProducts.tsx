@@ -7,7 +7,24 @@ import Link from "next/link";
 import type { FlattenedProduct } from "@/app/data/mappers";
 import type { Locale } from "@/app/lib/locale";
 import AddToCartButton from "./ui/AddToCartButton";
-import { getReviews } from "@/app/lib/getReviews"; // 👈 наши отзывы
+import { getReviews } from "@/app/lib/getReviews";
+
+// --- types for variants (no any) ---
+type VariantSelectedOption = { name: string; value: string };
+
+type VariantNode = {
+  id: string;
+  title: string;
+  price?: { amount: string; currencyCode: string };
+  selectedOptions: VariantSelectedOption[];
+};
+
+type VariantEdge = { node: VariantNode };
+type VariantConnection = { edges: VariantEdge[] };
+
+type ProductWithVariants = FlattenedProduct & {
+  variants?: VariantConnection;
+};
 
 const classNames = (...xs: Array<string | false | null | undefined>) =>
   xs.filter(Boolean).join(" ");
@@ -31,13 +48,11 @@ export default async function TrendingProducts({
   alcohol,
   lang,
 }: TrendingProductsProps) {
-  // если вдруг пока нет ни одного товара с флажком trending — просто ничего не показываем
   if (!products.length) return null;
 
-  // 👇 заранее подтягиваем наши рейтинги из Supabase
   const reviewsArray = await Promise.all(
     products.map(async (product) => {
-      const numericId = product.id.split("/").pop()!; // Shopify numeric id
+      const numericId = product.id.split("/").pop()!;
       const data = await getReviews(numericId);
       return { productId: product.id, data };
     })
@@ -59,14 +74,36 @@ export default async function TrendingProducts({
               : undefined;
 
             const priceObj = product.priceRange?.minVariantPrice;
-            const price =
-              priceObj != null
-                ? `${Number(priceObj.amount).toFixed(2)} ${
-                    priceObj.currencyCode
-                  }`
-                : "";
 
-            // ⭐ рейтинги из нашей Supabase-таблицы
+            // ✅ pack size (штучне)
+            const packText = product.specs?.pack_size_l
+              ? `${product.specs.pack_size_l} L`
+              : null;
+
+            // ✅ якщо pack_size_l немає — пробуємо визначити “за 0.5 L” через variants.volume
+            const pv = product as unknown as ProductWithVariants;
+            const variants: VariantNode[] =
+              pv.variants?.edges?.map((e) => e.node) ?? [];
+
+            const volumeValues = variants
+              .map(
+                (v) =>
+                  v.selectedOptions.find(
+                    (o) => o.name.toLowerCase() === "volume"
+                  )?.value
+              )
+              .filter((val): val is string => Boolean(val))
+              .map((x) => Number(String(x).replace(",", ".")))
+              .filter((n) => !Number.isNaN(n));
+
+            const minVolume = volumeValues.length
+              ? Math.min(...volumeValues)
+              : null;
+
+            const unitForPrice =
+              packText ?? (minVolume ? `${minVolume} L` : null);
+
+            // ⭐ рейтинги (Supabase)
             const reviewStats = reviewsMap.get(product.id);
             const rating = reviewStats?.average ?? 0;
             const reviewCount = reviewStats?.totalCount ?? 0;
@@ -75,7 +112,6 @@ export default async function TrendingProducts({
 
             return (
               <div key={product.id} className="group flex flex-col h-full">
-                {/* верхняя часть карточки (растягивается) */}
                 <div className="relative flex-1 flex flex-col">
                   <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-stone-700 transition-colors duration-300 group-hover:bg-white">
                     <Image
@@ -92,7 +128,7 @@ export default async function TrendingProducts({
                     {abv !== undefined && abv === 0 && (
                       <span
                         className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/95 px-2 py-1 text-[10px] font-semibold uppercase text-white shadow-lg ring-1 ring-black/10"
-                        aria-label="Alcohol-free"
+                        aria-label={alcohol}
                       >
                         <WineOff className="h-3.5 w-3.5" aria-hidden="true" />
                         {alcohol}
@@ -112,18 +148,37 @@ export default async function TrendingProducts({
                           />
                         </Link>
                       </h3>
+
+                      {/* ABV */}
                       {abv !== undefined && (
                         <p className="mt-1 text-sm text-gray-300">{abv} %</p>
                       )}
+
+                      {/* pack size (для штучного) */}
+                      {packText && (
+                        <p className="mt-1 text-xs text-gray-400">{packText}</p>
+                      )}
                     </div>
-                    {price && (
-                      <p className="text-lg font-semibold text-white">
-                        {price}
+
+                    {/* ✅ Ціна: число велике, EUR + “за …” дрібніше */}
+                    {priceObj && (
+                      <p className="text-right leading-tight">
+                        <span className="text-lg font-semibold text-white">
+                          {Number(priceObj.amount).toFixed(2)}
+                        </span>
+                        <span className="block text-xs font-medium text-gray-300">
+                          {priceObj.currencyCode}
+                        </span>
+                        {unitForPrice && (
+                          <span className="block text-xs text-gray-400">
+                            за {unitForPrice}
+                          </span>
+                        )}
                       </p>
                     )}
                   </div>
 
-                  {/* ⭐ наши звезды + количество отзывов */}
+                  {/* ⭐ звезды + отзывы */}
                   <div className="mt-3 flex flex-col">
                     <span className="sr-only">
                       {rating} {stars}
@@ -146,7 +201,6 @@ export default async function TrendingProducts({
                   </div>
                 </div>
 
-                {/* кнопка прижата к низу карточки */}
                 <div className="mt-6">
                   <AddToCartButton
                     product={product}

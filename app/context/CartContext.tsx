@@ -18,6 +18,9 @@ type CartItem = {
   country?: string;
   size?: string;
   abv?: string;
+
+  handle: string;
+  category?: string;
 };
 
 type CartContextType = {
