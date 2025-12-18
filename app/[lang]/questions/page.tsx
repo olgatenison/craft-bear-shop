@@ -1,19 +1,4 @@
-// // app/[lang]/contact/page.tsx
-// import type { Locale } from "@/app/lib/locale";
-// import FAQ from "@/app/components/ui/FAQ";
-// import { getMessages } from "@/app/[lang]/messages";
-
-// export default async function QuestionsPage({
-//   params,
-// }: {
-//   params: Promise<{ lang: Locale }>;
-// }) {
-//   const { lang } = await params;
-//   const messages = await getMessages(lang);
-
-//   return <FAQ />;
-// }
-
+// app\[lang]\questions\page.tsx
 import type { Locale } from "@/app/lib/locale";
 import FAQ from "@/app/components/ui/FAQ";
 import { getMessages } from "@/app/[lang]/messages";

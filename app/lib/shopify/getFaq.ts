@@ -1,3 +1,4 @@
+// app\lib\shopify\getFaq.ts
 import type { Locale } from "@/app/lib/locale";
 import { shopifyFetchWithLocale } from "./client";
 
