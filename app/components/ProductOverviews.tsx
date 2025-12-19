@@ -148,7 +148,7 @@ export default function ProductOverviews({
 
   return (
     <div>
-      <div className="pb-16 pt-6 sm:pb-24">
+      <div className="">
         <div className="mx-auto mt-8 max-w-2xl lg:max-w-7xl">
           <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
             {/* title and price */}
@@ -306,7 +306,7 @@ export default function ProductOverviews({
 
             {/* Image gallery */}
             <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:-mt-6">
-              <div className="group grid grid-cols-1 lg:grid-cols-2 lg:gap-8 p-6">
+              <div className="group grid grid-cols-1 lg:grid-cols-2 lg:gap-8 p-6 pl-0">
                 {images.length > 0 ? (
                   images.map((image) => (
                     <div
@@ -322,7 +322,7 @@ export default function ProductOverviews({
                         alt={image.imageAlt}
                         src={image.imageSrc}
                         fill
-                        sizes="(min-width:1024px) 50vw, 100vw"
+                        sizes="(min-width:1024px) 40vw, 100vw"
                         className="object-contain object-center"
                         priority={image.primary}
                       />

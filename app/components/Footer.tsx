@@ -81,7 +81,7 @@ export default async function Footer({ lang }: FooterProps) {
 
   return (
     <footer>
-      <div className="mx-auto max-w-7xl px-6 py-12 border-t border-gray-400 md:flex md:items-center md:justify-between lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 py-12 border-t border-gray-400 md:flex md:items-center md:justify-between ">
         {/* Линки правовых страниц */}
         <LinksList lang={lang} footerMessages={t} />
 

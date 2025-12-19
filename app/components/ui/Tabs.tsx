@@ -39,7 +39,7 @@ export default function Tabs({
   ];
 
   return (
-    <div className="mb-8">
+    <div className="mb-4">
       <div className="flex gap-4 border-b border-gray-700">
         {tabs.map((tab) => (
           <button

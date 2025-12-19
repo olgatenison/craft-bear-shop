@@ -54,7 +54,7 @@ export default function AllProducts({
   category,
 }: AllProductsProps) {
   return (
-    <div className="mx-auto max-w-2xl px-4 pt-6 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div className="mx-auto max-w-2xl  lg:max-w-7xl mt-10">
       <h2 className="text-2xl tracking-tight text-white">{title}</h2>
 
       <div className="mt-8 grid grid-cols-1 gap-y-16 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">

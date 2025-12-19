@@ -192,7 +192,7 @@ export default function ContactContent({ lang, messages }: Props) {
         />
       </div>
       <div className="pt-12 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2">
-        <div className="px-6 lg:px-8">
+        <div className="px-6">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
             <h2 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
               {t.title}

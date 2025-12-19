@@ -31,7 +31,7 @@ export default async function ShopPage({
   );
 
   return (
-    <main className="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-7xl px-6 pb-16 pt-10 ">
       <Breadcrumbs
         lang={lang}
         labels={{
