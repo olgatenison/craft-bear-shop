@@ -12,11 +12,17 @@
     "title": "Osta kategooria kaupa",
     "browseAll": "Sirvi kõiki kategooriaid",
 
-    "names": { "beer": "Õlu", "cider": "Siider", "snacks": "Snäkid" },
+    "names": {
+      "beer": "Õlu",
+      "cider": "Siider",
+      "snacks": "Snäkid",
+      "draft": "Kraaniõlu"
+    },
     "alts": {
       "beer": "Valik käsitööõllesid riiulil.",
       "cider": "Valik pudelisiidreid.",
-      "snacks": "Maitsvad snäkid puidust aluse kõrval."
+      "snacks": "Maitsvad snäkid puidust aluse kõrval.",
+      "draft": "Valik kraaniõllesid kynsissä."
     }
   },
   "TrendingProducts": {

@@ -12,11 +12,17 @@
     "title": "Osta kategorioittain",
     "browseAll": "Selaa kaikkia kategorioita",
 
-    "names": { "beer": "Olut", "cider": "Siideri", "snacks": "snacksit" },
+    "names": {
+      "beer": "Olut",
+      "cider": "Siideri",
+      "snacks": "snacksit",
+      "draft": "Hanaolut"
+    },
     "alts": {
       "beer": "Valikoima pienpanimo-oluita hyllyllä.",
       "cider": "Valikoima pullotettuja siidereitä.",
-      "snacks": "Herkullisia snacksit puisen tarjottimen vieressä."
+      "snacks": "Herkullisia snacksit puisen tarjottimen vieressä.",
+      "draft": "Valikoima hanaoluita kynsissä."
     }
   },
   "TrendingProducts": {

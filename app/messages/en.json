@@ -12,11 +12,17 @@
     "title": "Shop by Category",
     "browseAll": "Browse all categories",
 
-    "names": { "beer": "Beer", "cider": "Cider", "snacks": "Snacks" },
+    "names": {
+      "beer": "Beer",
+      "cider": "Cider",
+      "snacks": "Snacks",
+      "draft": "Draft beer"
+    },
     "alts": {
       "beer": "Assorted craft beers on a shelf.",
       "cider": "Selection of bottled ciders.",
-      "snacks": "Tasty snacks next to a wooden tray."
+      "snacks": "Tasty snacks next to a wooden tray.",
+      "draft": "Light draft beer in a glass."
     }
   },
   "TrendingProducts": {

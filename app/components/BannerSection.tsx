@@ -42,19 +42,16 @@ export default function BannerSection({
 
         {/* карточка с текстом/кнопкой */}
         <div className="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black/60 p-10 backdrop-blur-sm sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-lg lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg">
-          <div>
-            <h2
-              id="banner-heading"
-              className="text-3xl font-bold text-white pt-20"
-            >
+          <div className="flex flex-col gap-6">
+            <h2 id="banner-heading" className="text-3xl font-bold text-white ">
               {title}
             </h2>
-            <p className="mt-4 text-base/8 text-gray-400">{subtitle}</p>
+            <p className=" text-base/7 text-gray-400">{subtitle}</p>
           </div>
 
           <Link
             href={ctaHref}
-            className="mt-6 inline-flex shrink-0 items-center justify-center rounded-md border border-white/25 px-4 py-3 text-base font-medium text-white hover:bg-white/10 sm:ml-8 sm:mt-0 lg:ml-0 lg:w-full"
+            className="inline-flex shrink-0 items-center justify-center rounded-md border border-white/25 px-4 py-3 text-base font-medium text-white hover:bg-white/10 sm:ml-8 sm:mt-0 lg:ml-0 lg:w-full"
           >
             {ctaLabel}
           </Link>
