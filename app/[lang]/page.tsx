@@ -67,7 +67,7 @@ export default async function Home({
         subtitle={t.LogoSection.subtitle}
       />
 
-      <BrandSection />
+      <BrandSection lang={lang} />
     </main>
   );
 }
