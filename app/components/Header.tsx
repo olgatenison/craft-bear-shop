@@ -41,7 +41,7 @@ export default async function Header({ lang }: { lang: Locale }) {
           <LanguageSwitcher current={lang} />
           <HeaderSearch lang={lang} />
           <ProfileButton lang={lang} />
-          <span aria-hidden="true" className="mx-4 h-6 w-px bg-gray-400" />
+          <span aria-hidden="true" className="mx-4 h-4 w-px bg-gray-400" />
           <ShoppingCart lang={lang} messages={messages} />
         </div>
       </div>

@@ -128,17 +128,31 @@
     "giftsSets": "Подарунки та набори"
   },
   "Footer": {
-    "about": "Про нас",
-    "terms": "Правила та умови",
-    "delivery": "Інформація про доставку",
-    "questions": "Поширені питання",
-    "refunds": "Повернення",
-    "contact": "Контакти",
-    "cookiesPolicy": "Політика файлів cookie",
-    "privacyPolicy": "Політика конфіденційності",
-    "followUs": "Слідкуйте за нами",
-    "copyright": "© 2025 Craft Bear Shop. Усі права захищено.",
-    "prodused": "Створено Dvi"
+    "catalog": {
+      "title": "Каталог",
+      "bottledBeer": "Пиво в пляшках",
+      "draftBeer": "Пиво на крані",
+      "cider": "Сидр",
+      "nonAlcoholic": "Безалкогольне",
+      "snacks": "Закуски",
+      "gifts": "Подарунки та набори"
+    },
+    "customers": {
+      "title": "Покупцям",
+      "faq": "Часті запитання",
+      "shippingPayment": "Доставка та оплата",
+      "returns": "Повернення товару",
+      "cookiePolicy": "Політика cookies",
+      "publicOffer": "Публічна оферта"
+    },
+    "company": {
+      "title": "Компанія",
+      "partnership": "Співпраця",
+      "contacts": "Контакти"
+    },
+    "followUs": "Підписуйтеся на нас",
+    "copyright": "© 2025 Craft Bear Store",
+    "prodused": "Produced by Dvi"
   },
   "CookieBanner": {
     "text": "Ми використовуємо файли cookie, щоб покращити роботу сайту, аналізувати трафік та персоналізувати контент. Ви можете прийняти або відхилити необов’язкові cookie.",

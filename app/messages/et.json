@@ -129,17 +129,31 @@
     "giftsSets": "Kingitused & komplektid"
   },
   "Footer": {
-    "about": "Meist",
-    "terms": "Tingimused ja reeglid",
-    "delivery": "Tarneinfo",
-    "refunds": "Tagastused",
-    "questions": "Korduma kippuvad küsimused",
-    "contact": "Kontakt",
-    "cookiesPolicy": "Küpsiste poliitika",
-    "privacyPolicy": "Privaatsuspoliitika",
+    "catalog": {
+      "title": "Kataloog",
+      "bottledBeer": "Pudelõlu",
+      "draftBeer": "Vaadiõlu",
+      "cider": "Siider",
+      "nonAlcoholic": "Alkoholivaba",
+      "snacks": "Suupisted",
+      "gifts": "Kingitused ja komplektid"
+    },
+    "customers": {
+      "title": "Klientidele",
+      "faq": "Korduma kippuvad küsimused",
+      "shippingPayment": "Tarne ja maksmine",
+      "returns": "Tagastamine",
+      "cookiePolicy": "Küpsiste poliitika",
+      "publicOffer": "Avalik pakkumus"
+    },
+    "company": {
+      "title": "Ettevõte",
+      "partnership": "Koostöö",
+      "contacts": "Kontaktid"
+    },
     "followUs": "Jälgi meid",
-    "copyright": "© 2025 Craft Bear Shop. Kõik õigused kaitstud.",
-    "prodused": "Loodud Dvi poolt"
+    "copyright": "© 2025 Craft Bear Store",
+    "prodused": "Produced by Dvi"
   },
   "CookieBanner": {
     "text": "Kasutame küpsiseid, et parandada lehe kasutuskogemust, analüüsida liiklust ja isikupärastada sisu. Võid nõustuda mitteoluliste küpsistega või need tagasi lükata.",
