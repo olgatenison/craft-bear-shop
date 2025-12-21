@@ -140,7 +140,7 @@ export default function AllProducts({
 
                 <div className="mt-6 flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-medium text-yellow-400 pb-6 pr-6">
+                    <h3 className="text-lg font-medium text-yellow-400 pb-6 pr-6 text-balance">
                       <Link
                         href={href}
                         className="focus:outline-none focus:ring-2 focus:ring-white/30 rounded"

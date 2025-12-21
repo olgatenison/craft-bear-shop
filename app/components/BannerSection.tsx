@@ -43,7 +43,10 @@ export default function BannerSection({
         {/* карточка с текстом/кнопкой */}
         <div className="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black/60 p-10 backdrop-blur-sm sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-lg lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg">
           <div className="flex flex-col gap-6">
-            <h2 id="banner-heading" className="text-3xl font-bold text-white ">
+            <h2
+              id="banner-heading"
+              className="text-3xl font-bold text-white text-balance"
+            >
               {title}
             </h2>
             <p className=" text-base/7 text-gray-400">{subtitle}</p>

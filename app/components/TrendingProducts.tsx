@@ -139,8 +139,8 @@ export default async function TrendingProducts({
 
                   <div className="mt-4 flex items-start justify-between">
                     <div>
-                      <h3 className="text-base font-medium text-white pr-6">
-                        <Link href={href} className="focus:outline-none">
+                      <h3 className="text-base font-medium text-white pr-6 text-balance">
+                        <Link href={href} className="focus:outline-none ">
                           {product.title}
                           <span
                             className="absolute inset-0 rounded-lg"

@@ -154,7 +154,7 @@ export default function ProductOverviews({
             {/* title and price */}
             <div className="lg:col-span-5 lg:col-start-8">
               <div className="flex justify-between items-baseline gap-10">
-                <h1 className="text-3xl tracking-tight font-semibold text-yellow-400 max-w-md">
+                <h1 className="text-3xl tracking-tight font-semibold text-yellow-400 max-w-md text-balance">
                   {product.title}
 
                   {isDraft ? (

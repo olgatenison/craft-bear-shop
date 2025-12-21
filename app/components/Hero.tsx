@@ -55,12 +55,14 @@ export default function Hero({
         <div className="absolute inset-0 bg-black/35" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-42 pb-30  ">
+      <div className="relative mx-auto max-w-7xl px-6 pt-32 pb-30  ">
         <div className=" pl-20">
           {" "}
-          <p className="mt-6 text-xl text-white/90 max-w-sm">{subtitle}</p>
+          <p className="mt-6 text-xl text-white/90 max-w-sm text-balance">
+            {subtitle}
+          </p>
           <h1
-            className="max-w-3xl mx-autorelative font-extrabold uppercase leading-none
+            className="max-w-3xl mx-autorelative font-extrabold uppercase leading-none text-balance
                text-transparent transform translate-all duration-300 group-hover:text-yellow-500  text-5xl sm:text-6xl lg:text-7xl/22 
                [-webkit-text-stroke:2px_white] 
                [paint-order:stroke_fill] pt-8"
@@ -70,7 +72,7 @@ export default function Hero({
           <a
             href={ctaHref}
             className="
-            mt-16 inline-block rounded-sm
+            mt-12 inline-block rounded-sm
             bg-stone-950/40 px-6 py-3 text-sm font-medium uppercase text-white
             border-2 border-white
             hover:bg-white hover:text-gray-900
