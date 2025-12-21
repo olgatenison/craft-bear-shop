@@ -141,12 +141,13 @@
       "title": "Asiakkaille",
       "faq": "Usein kysytyt kysymykset",
       "shippingPayment": "Toimitus ja maksaminen",
-      "returns": "Palautukset",
+
       "cookiePolicy": "Evästekäytäntö",
       "publicOffer": "Julkinen tarjous"
     },
     "company": {
       "title": "Yritys",
+      "aboutUs": "Meistä",
       "partnership": "Yhteistyö",
       "contacts": "Yhteystiedot"
     },

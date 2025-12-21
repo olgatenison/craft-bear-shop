@@ -142,12 +142,13 @@
       "title": "Покупателям",
       "faq": "Часто задаваемые вопросы",
       "shippingPayment": "Доставка и оплата",
-      "returns": "Возврат товара",
+
       "cookiePolicy": "Политика cookies",
       "publicOffer": "Публичная оферта"
     },
     "company": {
       "title": "Компания",
+      "aboutUs": "О нас",
       "partnership": "Сотрудничество",
       "contacts": "Контакты"
     },

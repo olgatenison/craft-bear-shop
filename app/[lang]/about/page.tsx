@@ -10,7 +10,7 @@ export default async function CookiesPolicyPage({
   params: Promise<{ lang: Locale }>;
 }) {
   const { lang } = await params;
-  const page = await fetchPageByHandle("cookies-policy", lang);
+  const page = await fetchPageByHandle("about-us", lang);
 
   if (!page) {
     notFound();

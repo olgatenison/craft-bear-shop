@@ -28,7 +28,7 @@ export default function LanguageSwitcher({ current }: { current?: Locale }) {
 
   return (
     <Popover className="relative">
-      <PopoverButton className="inline-flex items-center gap-x-1 text-base font-semibold text-gray-400 hover:text-yellow-500">
+      <PopoverButton className="inline-flex items-center gap-x-1 text-base font-normal text-gray-400 hover:text-yellow-500">
         <span>{LOCALE_LABEL[active]}</span>
         <ChevronDownIcon aria-hidden="true" className="size-5" />
       </PopoverButton>
@@ -47,7 +47,7 @@ export default function LanguageSwitcher({ current }: { current?: Locale }) {
         dark:from-stone-950/75 dark:to-stone-950/80
        "
       >
-        <div className="w-56 shrink rounded-xl  p-4 text-sm/6 font-semibold text-gray-200 shadow-lg  outline-1 outline-gray-900/5">
+        <div className="w-56 shrink rounded-xl  p-4 text-sm/6 font-normal text-gray-200 shadow-lg  outline-1 outline-gray-900/5">
           {LOCALES.map((loc) => {
             const href = buildHref(loc, pathname, search);
             const isActive = loc === active;

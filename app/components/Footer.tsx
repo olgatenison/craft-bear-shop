@@ -9,7 +9,7 @@ type FooterProps = { lang: Locale };
 const social = [
   {
     name: "Facebook",
-    href: "#", // <- вставишь реальную ссылку
+    href: "https://www.facebook.com/profile.php?id=61585569357219",
     icon: (props: SVGProps<SVGSVGElement>) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path
@@ -22,7 +22,7 @@ const social = [
   },
   {
     name: "Instagram",
-    href: "#",
+    href: "https://www.instagram.com/craftbear.store",
     icon: (props: SVGProps<SVGSVGElement>) => (
       <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
         <path
@@ -35,7 +35,7 @@ const social = [
   },
   {
     name: "TikTok",
-    href: "#",
+    href: "https://www.tiktok.com/@craftbybear",
     icon: (props: SVGProps<SVGSVGElement>) => (
       <svg
         viewBox="0 0 24 24"
@@ -53,7 +53,8 @@ export default async function Footer({ lang }: FooterProps) {
   const messages = await getMessages(lang);
   const t = messages.Footer;
 
-  // href’ы живут тут (не переводятся)
+  // используем query параметры вместо динамических сегментов
+
   const nav = {
     catalog: [
       { key: "bottledBeer", href: `/${lang}/shop?category=beer` },
@@ -61,23 +62,24 @@ export default async function Footer({ lang }: FooterProps) {
       { key: "cider", href: `/${lang}/shop?category=cider` },
       { key: "nonAlcoholic", href: `/${lang}/shop?category=non-alcoholic` },
       { key: "snacks", href: `/${lang}/shop?category=snacks` },
-      { key: "gifts", href: `/${lang}/shop?category=gifts` },
+      { key: "gifts", href: `/${lang}/shop?category=gifts-sets` },
     ],
     customers: [
       { key: "faq", href: `/${lang}/questions` },
-      { key: "shippingPayment", href: `/${lang}/shipping` },
-      { key: "returns", href: `/${lang}/returns` },
+      { key: "shippingPayment", href: `/${lang}/delivery` },
+
       { key: "cookiePolicy", href: `/${lang}/cookie-policy` },
       { key: "publicOffer", href: `/${lang}/public-offer` },
     ],
     company: [
-      { key: "partnership", href: `/${lang}/contact?topic=partnership` },
+      { key: "aboutUs", href: `/${lang}/about` },
+      { key: "partnership", href: `/${lang}/partnership` },
       { key: "contacts", href: `/${lang}/contact` },
     ],
   } as const;
 
   return (
-    <footer className="mt-12">
+    <footer className="mt-6">
       <div className="mx-auto max-w-7xl px-6 py-5 border-t border-gray-400 flex items-center justify-between text-sm text-gray-400">
         <div className="flex gap-12">
           {/* Каталог */}
@@ -158,7 +160,7 @@ export default async function Footer({ lang }: FooterProps) {
           <p className="text-sm text-gray-400">{t.copyright}</p>
           <a
             key="prodused"
-            href="#"
+            href="https://dvi.digital/"
             className="text-gray-200 hover:text-yellow-500 transition-colors text-sm"
             target="_blank"
             rel="noreferrer"

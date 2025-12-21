@@ -25,7 +25,7 @@ export default function FAQ({
 }) {
   return (
     <div>
-      <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 py-18  lg:px-8">
         <div className="mx-auto max-w-4xl">
           <h2 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
             {title}

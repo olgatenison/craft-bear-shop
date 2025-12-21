@@ -144,12 +144,13 @@
       "title": "Customers",
       "faq": "Frequently asked questions",
       "shippingPayment": "Shipping & payment",
-      "returns": "Returns",
+
       "cookiePolicy": "Cookie policy",
       "publicOffer": "Public offer"
     },
     "company": {
       "title": "Company",
+      "aboutUs": "About us",
       "partnership": "Partnership",
       "contacts": "Contacts"
     },

@@ -141,12 +141,13 @@
       "title": "Покупцям",
       "faq": "Часті запитання",
       "shippingPayment": "Доставка та оплата",
-      "returns": "Повернення товару",
+
       "cookiePolicy": "Політика cookies",
       "publicOffer": "Публічна оферта"
     },
     "company": {
       "title": "Компанія",
+      "aboutUs": "Про нас",
       "partnership": "Співпраця",
       "contacts": "Контакти"
     },

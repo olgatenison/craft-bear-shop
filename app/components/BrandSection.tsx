@@ -1,10 +1,11 @@
 // app/components/BrandSection.tsx
+
 import Image from "next/image";
 import type { Locale } from "@/app/lib/locale";
 import { getBrandLogos } from "@/app/lib/shopify/brandLogos";
 
-// const text =
-//   "Нам доверяют команды по всему миру — от стартапов до лидеров рынка.";
+// comes from shopify/metaobjects/brand_logos
+// has name,order, img svg - white on transparent bg 430*250
 
 export default async function BrandSection({ lang }: { lang: Locale }) {
   const items = await getBrandLogos(lang);
@@ -21,16 +22,12 @@ export default async function BrandSection({ lang }: { lang: Locale }) {
               src={partner.logo}
               width={520}
               height={160}
-              className="max-h-32 w-auto object-contain" // ⬅️ сильно выше
+              className="max-h-24 w-auto object-contain"
               sizes="(max-width: 640px) 280px, 520px"
               priority={idx < 2}
             />
           ))}
         </div>
-
-        {/* <h2 className="mt-16 text-center text-base/7 font-light text-gray-600">
-          {text}
-        </h2> */}
       </div>
     </section>
   );

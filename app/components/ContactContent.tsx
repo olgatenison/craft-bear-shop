@@ -182,7 +182,7 @@ export default function ContactContent({ lang, messages }: Props) {
 
   return (
     <div className="relative overflow-hidden max-w-7xl mx-auto mt-2 mb-24">
-      <div className="lg:absolute lg:inset-0 lg:left-1/2">
+      <div className="lg:absolute lg:inset-0 lg:left-1/2 lg:pl-4">
         <Image
           width="640"
           height="850"

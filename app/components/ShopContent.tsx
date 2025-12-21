@@ -1,7 +1,7 @@
 // app/components/ShopContent.tsx
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Tabs from "./ui/Tabs";
 import AllProducts from "./AllProducts";
@@ -28,7 +28,6 @@ interface ShopContentProps {
     noProducts: string;
     noProductsDescription: string;
 
-    // ✅ это и есть твой "ShopTabs"
     tabs: {
       all: string;
       beer: string;
@@ -40,6 +39,7 @@ interface ShopContentProps {
     };
   };
   lang: Locale;
+  initialCategory?: string;
 }
 
 const TABS: TabId[] = [
@@ -75,21 +75,20 @@ export default function ShopContent({
   products,
   translations,
   lang,
+  initialCategory,
 }: ShopContentProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const tabFromUrl = (searchParams.get("category") ?? "all") as string;
-  const initialTab: TabId = TABS.includes(tabFromUrl as TabId)
-    ? (tabFromUrl as TabId)
+  // ✅ Вычисляем activeTab напрямую из searchParams (без useState)
+  const categoryParam =
+    searchParams.get("category") ?? initialCategory ?? "all";
+  const activeTab: TabId = TABS.includes(categoryParam as TabId)
+    ? (categoryParam as TabId)
     : "all";
 
-  const [activeTab, setActiveTab] = useState<TabId>(initialTab);
-
   const handleTabChange = (tab: TabId) => {
-    setActiveTab(tab);
-
     const params = new URLSearchParams(searchParams.toString());
 
     if (tab === "all") params.delete("category");
@@ -106,7 +105,6 @@ export default function ShopContent({
 
   const categoryTitle = getTabTitle(activeTab, translations.tabs);
 
-  // оставляем как было: AllProducts сейчас ждёт только beer/cider/snacks
   const currentCategory =
     activeTab === "beer" || activeTab === "cider" || activeTab === "snacks"
       ? activeTab
@@ -117,7 +115,7 @@ export default function ShopContent({
       <Tabs
         activeTab={activeTab}
         onTabChange={(tab) => handleTabChange(tab as TabId)}
-        labels={translations.tabs} // ✅ ВОТ ТУТ
+        labels={translations.tabs}
       />
 
       {filteredProducts.length === 0 ? (
