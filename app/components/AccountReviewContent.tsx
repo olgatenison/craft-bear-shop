@@ -4,7 +4,6 @@
 import { useState } from "react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
-import type { UserResource } from "@clerk/types";
 import type { Locale } from "@/app/lib/locale";
 import { AccountSidebar } from "../components/ui/AccountSidebar";
 import ReviewList from "./ui/ReviewList";
@@ -28,6 +27,11 @@ type ReviewMessages = {
   deleteReview: string;
   deleteConfirm: string;
   deleting: string;
+  page: string; // ✅ добавлено
+  of: string; // ✅ добавлено
+  showing: string; // ✅ добавлено
+  prev: string; // ✅ добавлено
+  next: string; // ✅ добавлено
 };
 
 type AccountReviewContentProps = {
@@ -74,11 +78,21 @@ export default function AccountReviewContent({
     }
   };
 
+  if (!isLoaded || !user) {
+    return (
+      <section className="relative mx-auto my-10 max-w-7xl rounded-b-3xl">
+        <div className="flex items-center justify-center py-12">
+          <p className="text-gray-400">Loading...</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="relative mx-auto my-10 max-w-7xl rounded-b-3xl">
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16">
         <AccountSidebar
-          user={user as UserResource}
+          user={user}
           navItems={navItems}
           baseAccountPath={baseAccountPath}
           effectiveLang={effectiveLang}
@@ -86,7 +100,7 @@ export default function AccountReviewContent({
           signingOutLabel={accountMessages.signingOut}
           signOutLabel={accountMessages.signOut}
           greetingLabel={accountMessages.sidebarGreeting}
-          loading={loadingLogout || !isLoaded}
+          loading={loadingLogout}
         />
 
         <ReviewList

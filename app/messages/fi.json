@@ -245,7 +245,12 @@
     "editReview": "Muokkaa",
     "deleteReview": "Poista",
     "deleteConfirm": "Haluatko varmasti poistaa tämän arvostelun? Toimintoa ei voi perua.",
-    "deleting": "Poistetaan..."
+    "deleting": "Poistetaan...",
+    "page": "Sivu",
+    "of": "/",
+    "showing": "Näytetään",
+    "prev": "Edellinen",
+    "next": "Seuraava"
   },
   "auth": {
     "signIn": "Kirjaudu sisään",

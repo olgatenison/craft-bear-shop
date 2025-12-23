@@ -246,7 +246,12 @@
     "editReview": "Muuda",
     "deleteReview": "Kustuta",
     "deleteConfirm": "Kas olete kindel, et soovite selle arvustuse kustutada? Seda toimingut ei saa tagasi võtta.",
-    "deleting": "Kustutamine..."
+    "deleting": "Kustutan...",
+    "page": "Lehekülg",
+    "of": "/",
+    "showing": "Kuvatakse",
+    "prev": "Eelmine",
+    "next": "Järgmine"
   },
   "auth": {
     "signIn": "Logi sisse",
