@@ -63,7 +63,10 @@
     "description": "Description",
     "tastedBestWith": "Tasted best with",
     "allergens": "Allergens",
-    "ingredients": "Ingredients"
+    "ingredients": "Ingredients",
+    "shelfLifeDays": "Shelf life",
+    "days": "days",
+    "volume": "Volume"
   },
 
   "CustomerReviews": {

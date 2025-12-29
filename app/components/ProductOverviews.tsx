@@ -24,6 +24,9 @@ type ProductOverviewsProps = {
   ingredients: string;
   ratingAverage: number;
   reviewCount: number;
+  shelf_life_days: string;
+  days: string;
+  volume: number;
 };
 
 function classNames(...classes: Array<string | false | undefined>) {
@@ -95,9 +98,11 @@ export default function ProductOverviews({
   ingredients,
   ratingAverage,
   reviewCount,
+  shelf_life_days,
+  days,
+  volume,
 }: ProductOverviewsProps) {
   const price = product.priceRange.minVariantPrice.amount;
-
   const packSize = product.specs?.pack_size_l;
   const productAbv = product.specs?.abv;
   const productIbu = product.specs?.ibu;
@@ -108,6 +113,8 @@ export default function ProductOverviews({
   const productAllergens = product.specs?.allergens;
   const productIngredients = product.specs?.ingredients;
   const productPairing = product.specs?.pairing;
+  const productShelfLifeDays = product.specs?.shelf_life_days;
+  const productVolume = product.specs?.volume;
 
   const rawVariants = getVariantNodes(product as ProductWithVariants);
 
@@ -165,6 +172,12 @@ export default function ProductOverviews({
                         {packSize} L
                       </span>
                     )
+                  )}
+
+                  {productVolume && (
+                    <span className="ml-3 text-white text-xl">
+                      {productVolume} g
+                    </span>
                   )}
                 </h1>
 
@@ -364,7 +377,7 @@ export default function ProductOverviews({
                     dangerouslySetInnerHTML={{
                       __html: product.descriptionHtml,
                     }}
-                    className="mx-auto mt-6 max-w-xl text-pretty text-base text-gray-300"
+                    className="mx-auto mt-6 max-w-xl  text-base text-gray-300 text-balance"
                   />
                 </div>
               )}
@@ -378,7 +391,7 @@ export default function ProductOverviews({
                   <div className="mt-4">
                     <ul
                       role="list"
-                      className="list-disc space-y-1 pl-5 text-sm text-gray-300 marker:text-gray-300"
+                      className="list-disc space-y-1 pl-5 text-sm text-gray-300 marker:text-gray-300 text-balance"
                     >
                       {pairingList.map((item, index) => (
                         <li key={index} className="pl-2 text-base">
@@ -388,6 +401,40 @@ export default function ProductOverviews({
                     </ul>
                   </div>
                 </div>
+              )}
+
+              {/* Volume */}
+              {productVolume && (
+                <div className="w-full flex items-baseline gap-2 mt-6">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {volume}:
+                  </span>
+                  <span className="text-base text-gray-300">
+                    {productVolume} g
+                  </span>
+                </div>
+              )}
+
+              {isDraft ? (
+                <div className="w-full flex items-baseline gap-2 mt-6">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {volume}:
+                  </span>
+
+                  <span className="text-base text-gray-300">0.5 / 1 L</span>
+                </div>
+              ) : (
+                packSize && (
+                  <div className="w-full flex items-baseline gap-2 mt-6">
+                    <span className="text-lg text-white font-semibold whitespace-nowrap">
+                      {volume}:
+                    </span>
+
+                    <span className="text-base text-gray-300">
+                      {packSize} L
+                    </span>
+                  </div>
+                )
               )}
 
               {/* Allergens */}
@@ -408,8 +455,20 @@ export default function ProductOverviews({
                   <span className="text-lg text-white font-semibold whitespace-nowrap">
                     {ingredients}:
                   </span>
-                  <span className="text-base text-gray-300">
+                  <span className="text-base text-gray-300 text-balance">
                     {productIngredients}
+                  </span>
+                </div>
+              )}
+
+              {/* сколько годен */}
+              {productShelfLifeDays && (
+                <div className="w-full flex items-baseline gap-2 mt-6">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {shelf_life_days}:
+                  </span>
+                  <span className="text-base text-gray-300">
+                    {productShelfLifeDays} {days}
                   </span>
                 </div>
               )}

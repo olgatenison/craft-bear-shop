@@ -63,7 +63,10 @@
     "description": "Опис",
     "tastedBestWith": "Найкраще смакує з",
     "allergens": "Алергени",
-    "ingredients": "Інгредієнти"
+    "ingredients": "Інгредієнти",
+    "shelfLifeDays": "Термін придатності",
+    "days": "днів",
+    "volume": "Обʼєм"
   },
   "CustomerReviews": {
     "title": "Відгуки покупців",

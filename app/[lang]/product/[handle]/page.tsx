@@ -62,6 +62,7 @@ export default async function ProductPage({
 
   const productNumericId = product.id.split("/").pop()!;
   const reviews = await getReviews(productNumericId);
+  console.log(product);
 
   return (
     <main className="mx-auto max-w-7xl px-6 pb-16 pt-10 ">
@@ -102,6 +103,9 @@ export default async function ProductPage({
         allergens={t.OneProduct.allergens}
         ingredients={t.OneProduct.ingredients}
         ratingAverage={reviews.average}
+        shelf_life_days={t.OneProduct.shelfLifeDays}
+        days={t.OneProduct.days}
+        volume={t.OneProduct.volume}
         reviewCount={reviews.totalCount}
       />
 

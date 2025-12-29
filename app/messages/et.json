@@ -63,7 +63,10 @@
     "description": "Kirjeldus",
     "tastedBestWith": "Sobib hästi koos",
     "allergens": "Allergeenid",
-    "ingredients": "Koostisosad"
+    "ingredients": "Koostisosad",
+    "shelfLifeDays": "Termini",
+    "days": "päeva",
+    "volume": "Maht"
   },
   "CustomerReviews": {
     "title": "Kliendiarvustused",

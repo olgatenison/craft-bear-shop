@@ -67,6 +67,7 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
               { namespace: "specs", key: "gtin" }
               { namespace: "specs", key: "ingredients" }
               { namespace: "specs", key: "pack_size_l" }
+              { namespace: "specs", key: "volume" }
               { namespace: "specs", key: "pack_type" }
               { namespace: "specs", key: "pairing" }
               { namespace: "specs", key: "shelf_life_days" }
@@ -156,13 +157,16 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
           { namespace: "specs", key: "ibu" }
           { namespace: "specs", key: "fg" }
           { namespace: "specs", key: "pack_size_l" }
+          { namespace: "specs", key: "volume" }
           { namespace: "specs", key: "country" }
           { namespace: "specs", key: "brand" }
           { namespace: "specs", key: "ingredients" }
           { namespace: "specs", key: "allergens" }
           { namespace: "specs", key: "pairing" }
+          { namespace: "specs", key: "shelf_life_days" }
           { namespace: "shopify", key: "beer-style" }
           { namespace: "shopify", key: "package-type" }
+          { namespace: "shopify", key: "allergen-information" }
           { namespace: "marketing", key: "trending" }
         ]
       ) {

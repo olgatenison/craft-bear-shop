@@ -63,7 +63,10 @@
     "description": "Описание",
     "tastedBestWith": "Лучше всего сочетается с",
     "allergens": "Аллергены",
-    "ingredients": "Ингредиенты"
+    "ingredients": "Ингредиенты",
+    "shelfLifeDays": "Срок годности",
+    "days": "дней",
+    "volume": "Объём"
   },
   "CustomerReviews": {
     "title": "Отзывы покупателей",

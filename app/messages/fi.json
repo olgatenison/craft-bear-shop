@@ -63,7 +63,10 @@
     "description": "Kuvaus",
     "tastedBestWith": "Parhaiten nautittuna",
     "allergens": "Allergeenit",
-    "ingredients": "Ainesosat"
+    "ingredients": "Ainesosat",
+    "shelfLifeDays": "Termini",
+    "days": "päivää",
+    "volume": "Tilavuus"
   },
   "CustomerReviews": {
     "title": "Asiakasarviot",
