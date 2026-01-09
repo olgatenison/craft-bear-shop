@@ -1,4 +1,4 @@
-// app/api/account/reviews/route.ts
+// app\[lang]\api\account\reviews\route.ts
 import { NextResponse } from "next/server";
 import { auth as clerkAuth } from "@clerk/nextjs/server";
 import { getSupabaseServerClient } from "@/app/lib/supabase";

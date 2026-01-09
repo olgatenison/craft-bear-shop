@@ -1,13 +1,13 @@
-// app/api/account/reviews/[id]/route.ts
-import { NextResponse } from "next/server";
+// app\[lang]\api\account\reviews\[id]\route.ts
+import { NextRequest, NextResponse } from "next/server";
 import { auth as clerkAuth } from "@clerk/nextjs/server";
 import { getSupabaseServerClient } from "@/app/lib/supabase";
 
 type RouteContext = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ lang: string; id: string }>;
 };
 
-export async function PUT(req: Request, context: RouteContext) {
+export async function PUT(req: NextRequest, context: RouteContext) {
   try {
     const { userId } = await clerkAuth();
 
@@ -17,10 +17,11 @@ export async function PUT(req: Request, context: RouteContext) {
     }
 
     // Await params в Next.js 15+
-    const { id: rawId } = await context.params;
+    const { lang, id: rawId } = await context.params;
 
     console.log("✅ PUT /api/account/reviews/[id] - Review ID:", rawId);
     console.log("✅ User ID:", userId);
+    console.log("✅ Lang:", lang);
 
     if (!rawId || rawId === "undefined") {
       console.log("❌ Missing review id");
@@ -98,7 +99,7 @@ export async function PUT(req: Request, context: RouteContext) {
   }
 }
 
-export async function DELETE(req: Request, context: RouteContext) {
+export async function DELETE(req: NextRequest, context: RouteContext) {
   try {
     const { userId } = await clerkAuth();
 
@@ -106,9 +107,10 @@ export async function DELETE(req: Request, context: RouteContext) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id: rawId } = await context.params;
+    const { lang, id: rawId } = await context.params;
 
     console.log("🗑️ DELETE /api/account/reviews/[id] - Review ID:", rawId);
+    console.log("✅ Lang:", lang);
 
     if (!rawId || rawId === "undefined") {
       return NextResponse.json({ error: "Missing review id" }, { status: 400 });

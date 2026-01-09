@@ -3,6 +3,44 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { clerkClient } from "@clerk/nextjs/server";
 
+// Типы для Shopify webhook
+interface ShopifyLineItem {
+  title: string;
+  quantity: number;
+  price: string;
+  product_id?: number;
+  properties?: Array<{ name: string; value: string }>;
+}
+
+interface ShopifyOrder {
+  id: number;
+  order_number: number;
+  email?: string;
+  total_price: string;
+  currency: string;
+  created_at: string;
+  financial_status: string;
+  fulfillment_status: string | null;
+  line_items: ShopifyLineItem[];
+}
+
+interface ClerkOrder {
+  shopifyOrderId: number;
+  orderNumber: number;
+  totalPrice: string;
+  currency: string;
+  createdAt: string;
+  financialStatus: string;
+  fulfillmentStatus: string | null;
+  items: Array<{
+    title: string;
+    quantity: number;
+    price: string;
+    productHandle: string | null;
+    image: string | null;
+  }>;
+}
+
 function verifyShopifyWebhook(body: string, hmac: string): boolean {
   const hash = crypto
     .createHmac("sha256", process.env.SHOPIFY_WEBHOOK_SECRET!)
@@ -21,7 +59,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const order = JSON.parse(body);
+    const order = JSON.parse(body) as ShopifyOrder;
 
     console.log("=== New Shopify Order ===");
     console.log("Order ID:", order.id);
@@ -48,11 +86,11 @@ export async function POST(req: NextRequest) {
     const user = users.data[0];
 
     // Получить существующие заказы
-    const existingOrders = (user.publicMetadata?.orders as any[]) || [];
+    const existingOrders = (user.publicMetadata?.orders as ClerkOrder[]) || [];
 
     // Проверить, не добавлен ли уже этот заказ
     const orderExists = existingOrders.some(
-      (o: any) => o.shopifyOrderId === order.id
+      (o: ClerkOrder) => o.shopifyOrderId === order.id
     );
 
     if (orderExists) {
@@ -61,7 +99,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Создать новый заказ
-    const newOrder = {
+    const newOrder: ClerkOrder = {
       shopifyOrderId: order.id,
       orderNumber: order.order_number,
       totalPrice: order.total_price,
@@ -69,13 +107,12 @@ export async function POST(req: NextRequest) {
       createdAt: order.created_at,
       financialStatus: order.financial_status,
       fulfillmentStatus: order.fulfillment_status,
-      items: order.line_items.map((item: any) => ({
+      items: order.line_items.map((item: ShopifyLineItem) => ({
         title: item.title,
         quantity: item.quantity,
         price: item.price,
         productHandle: item.product_id ? `${item.product_id}` : null,
-        image:
-          item.properties?.find((p: any) => p.name === "_image")?.value || null,
+        image: item.properties?.find((p) => p.name === "_image")?.value || null,
       })),
     };
 
@@ -100,16 +137,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// 2. Настройте webhook в Shopify Admin:
-
-// Зайдите в Settings → Notifications → Webhooks
-// Создайте webhook:
-
-// Event: Order creation
-// Format: JSON
-// URL: https://your-domain.com/api/shopify/webhooks/orders
-// Webhook API version: 2024-01
-
-// 3. Добавьте в .env:
-// bashSHOPIFY_WEBHOOK_SECRET=your_webhook_secret_from_shopify
