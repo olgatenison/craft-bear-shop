@@ -96,10 +96,16 @@
     "submittingLabel": "Sending...",
     "cancelLabel": "Cancel"
   },
-
   "HeaderSearch": {
     "label": "Search products",
-    "placeholder": "Search products…"
+    "placeholder": "Search…",
+    "closeSearch": "Close search",
+    "close": "Close",
+    "searching": "Searching…",
+    "typeHint": "Type at least 2 characters to search…",
+    "noResults": "No results found for",
+    "hotkeyOpen": "to open",
+    "hotkeyClose": "to close"
   },
   "ShoppingCart": {
     "ariaLabel": "Shopping cart",
@@ -120,8 +126,14 @@
     "home": "Home",
     "shop": "Shop",
     "contact": "Contact",
+    "account": "Account",
+    "cart": "Cart",
+    "menu": "Menu",
+    "search": "Search",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "pageNotFound": "Page not found",
-    "goHome": "Go to homepage"
+    "goHome": "Go back home"
   },
   "ShopTabs": {
     "all": "All products",

@@ -97,7 +97,14 @@
   },
   "HeaderSearch": {
     "label": "Otsi tooteid",
-    "placeholder": "Otsi tooteid…"
+    "placeholder": "Otsi…",
+    "closeSearch": "Sulge otsing",
+    "close": "Sulge",
+    "searching": "Otsin…",
+    "typeHint": "Sisesta otsinguks vähemalt 2 märki…",
+    "noResults": "Tulemusi ei leitud päringule",
+    "hotkeyOpen": "avamiseks",
+    "hotkeyClose": "sulgemiseks"
   },
   "ShoppingCart": {
     "ariaLabel": "Shopping cart",
@@ -117,9 +124,15 @@
   "common": {
     "home": "Avaleht",
     "shop": "Pood",
-    "contact": "Kontaktid",
+    "contact": "Kontakt",
+    "account": "Konto",
+    "cart": "Ostukorv",
+    "menu": "Menüü",
+    "search": "Otsing",
+    "openMenu": "Ava menüü",
+    "closeMenu": "Sulge menüü",
     "pageNotFound": "Lehte ei leitud",
-    "goHome": "Mine avalehele"
+    "goHome": "Tagasi avalehele"
   },
   "ShopTabs": {
     "all": "Kõik tooted",

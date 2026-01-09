@@ -37,7 +37,7 @@ export default function BannerCookieClient({
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 px-6 pb-6 z-50">
       <div
-        className="pointer-events-auto ml-auto rounded-2xl shadow-lg shadow-black/50 max-w-90 p-8
+        className="pointer-events-auto ml-auto rounded-2xl shadow-lg shadow-black/50 max-w-lg p-8
         ring-1 ring-white/15 dark:ring-stone/20
         bg-linear-to-b from-white/55 to-white/20
         dark:from-stone-950/75 dark:to-stone-950/80"

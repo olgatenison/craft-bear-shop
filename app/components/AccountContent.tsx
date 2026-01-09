@@ -163,7 +163,7 @@ export default function AccountContent({ messages }: AccountContentProps) {
 
   return (
     <div>
-      <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16">
+      <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16 ">
         {/* LEFT: сайдбар */}
         <AccountSidebar
           user={user}
@@ -179,7 +179,7 @@ export default function AccountContent({ messages }: AccountContentProps) {
 
         {/* RIGHT: основной контент */}
         <main className="mt-10 gap-12 space-y-6 lg:col-span-8 lg:mt-0">
-          <section className="p-6">
+          <section className="">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-semibold text-white">
@@ -327,58 +327,4 @@ export default function AccountContent({ messages }: AccountContentProps) {
       </div>
     </div>
   );
-}
-
-{
-  /* <aside className="lg:col-span-4 space-y-6">
-          {/* міні-профіль *
-          <div className="p-6">
-            <p className="pb-6 text-base text-gray-400">
-              {messages.sidebarGreeting}
-              {user.firstName ? "," : ""}
-            </p>
-            <p className="pb-6 truncate text-2xl font-semibold text-white">
-              {user.firstName || user.primaryEmailAddress?.emailAddress}
-            </p>
-            <p className="mt-1 truncate text-sm text-gray-500">
-              {user.primaryEmailAddress?.emailAddress}
-            </p>
-          </div>
-
-          <nav className="rounded-xl bg-white/5 border border-white/10 px-3 pt-2 pb-0 text-sm text-gray-200">
-            <div className="w-full border-b border-white/10 flex flex-col gap-6 py-3">
-              {navItems.map((item) => {
-                const isActive =
-                  pathname === item.href ||
-                  (item.href !== baseAccountPath &&
-                    pathname?.startsWith(item.href));
-
-                return (
-                  <button
-                    key={item.href}
-                    type="button"
-                    onClick={() => router.push(item.href)}
-                    className={classNames(
-                      "flex-1 pb-3 px-1 text-base transition-colors border-b-2 w-full text-left",
-                      isActive
-                        ? "text-yellow-400 border-yellow-400 font-semibold"
-                        : "text-gray-400 hover:text-white border-transparent"
-                    )}
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
-          </nav>
-
-   
-          <button
-            onClick={handleSignOut}
-            disabled={loading}
-            className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 sm:w-auto lg:w-full"
-          >
-            {loading ? messages.signingOut : messages.signOut}
-          </button>
-        </aside> */
 }

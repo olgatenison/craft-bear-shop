@@ -44,12 +44,12 @@ export function AccountSidebar({
   return (
     <aside className="lg:col-span-4 space-y-6">
       {/* Мини-профиль */}
-      <div className="p-6">
-        <p className="pb-6 text-base text-gray-400">
+      <div className="text-center">
+        <p className=" text-base text-gray-400">
           {greetingLabel}
           {user.firstName ? "," : ""}
         </p>
-        <p className="pb-6 truncate text-2xl font-semibold text-white">
+        <p className=" truncate text-2xl font-semibold text-white">
           {user.firstName || user.primaryEmailAddress?.emailAddress}
         </p>
         <p className="mt-1 truncate text-sm text-gray-500">
@@ -88,7 +88,7 @@ export function AccountSidebar({
       <button
         onClick={onSignOut}
         disabled={loading}
-        className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 sm:w-auto lg:w-full"
+        className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white  py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 sm:w-auto lg:w-full"
       >
         {loading ? signingOutLabel : signOutLabel}
       </button>

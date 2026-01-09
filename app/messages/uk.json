@@ -97,7 +97,14 @@
   },
   "HeaderSearch": {
     "label": "Пошук товарів",
-    "placeholder": "Пошук товарів…"
+    "placeholder": "Пошук…",
+    "closeSearch": "Закрити пошук",
+    "close": "Закрити",
+    "searching": "Шукаємо…",
+    "typeHint": "Введіть щонайменше 2 символи для пошуку…",
+    "noResults": "Нічого не знайдено за запитом",
+    "hotkeyOpen": "щоб відкрити",
+    "hotkeyClose": "щоб закрити"
   },
   "ShoppingCart": {
     "ariaLabel": "Shopping cart",
@@ -118,9 +125,16 @@
     "home": "Головна",
     "shop": "Магазин",
     "contact": "Контакти",
+    "account": "Акаунт",
+    "cart": "Кошик",
+    "menu": "Меню",
+    "search": "Пошук",
+    "openMenu": "Відкрити меню",
+    "closeMenu": "Закрити меню",
     "pageNotFound": "Сторінка не знайдена",
     "goHome": "Повернутися на головну"
   },
+
   "ShopTabs": {
     "all": "Усі товари",
     "beer": "Пиво",

@@ -96,8 +96,15 @@
     "cancelLabel": "Отменить"
   },
   "HeaderSearch": {
-    "label": "Поиск по товарам",
-    "placeholder": "Поиск по товарам…"
+    "label": "Поиск товаров",
+    "placeholder": "Поиск…",
+    "closeSearch": "Закрыть поиск",
+    "close": "Закрыть",
+    "searching": "Ищем…",
+    "typeHint": "Введите минимум 2 символа для поиска…",
+    "noResults": "Ничего не найдено по запросу",
+    "hotkeyOpen": "чтобы открыть",
+    "hotkeyClose": "чтобы закрыть"
   },
   "ShoppingCart": {
     "ariaLabel": "Shopping cart",
@@ -118,8 +125,14 @@
     "home": "Главная",
     "shop": "Магазин",
     "contact": "Контакты",
+    "account": "Аккаунт",
+    "cart": "Корзина",
+    "menu": "Меню",
+    "search": "Поиск",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню",
     "pageNotFound": "Страница не найдена",
-    "goHome": "Перейти на главную"
+    "goHome": "Вернуться на главную"
   },
   "ShopTabs": {
     "all": "Все товары",
