@@ -168,7 +168,7 @@ export default function ShoppingCardOverviews({
                                     {product.name}
                                   </Link>
                                   {product.size && (
-                                    <span className="ml-2 text-sm text-gray-300">
+                                    <span className="block text-sm text-gray-300">
                                       ({product.size})
                                     </span>
                                   )}

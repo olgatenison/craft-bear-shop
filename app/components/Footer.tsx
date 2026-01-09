@@ -160,7 +160,7 @@ export default async function Footer({ lang }: FooterProps) {
           <p className="text-sm text-gray-400">{t.copyright}</p>
           <a
             key="prodused"
-            href="https://dvi.digital/"
+            href="https://dvi.digital"
             className="text-gray-200 hover:text-yellow-500 transition-colors text-sm"
             target="_blank"
             rel="noreferrer"

@@ -26,7 +26,7 @@ type ProductOverviewsProps = {
   reviewCount: number;
   shelf_life_days: string;
   days: string;
-  volume: number;
+  volume: string;
 };
 
 function classNames(...classes: Array<string | false | undefined>) {

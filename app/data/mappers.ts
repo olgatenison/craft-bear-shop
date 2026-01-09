@@ -1,5 +1,5 @@
 // app/data/mappers.ts
-// app/data/mappers.ts
+
 import type { ProductNode, Metafield } from "./types";
 
 export type FlattenedProduct = Omit<
@@ -7,7 +7,7 @@ export type FlattenedProduct = Omit<
   "metafields" | "collections" | "translations"
 > & {
   collections: string[];
-  variantId: string; // 👈 GID варианта (gid://shopify/ProductVariant/...)
+  variantId: string;
   specs?: Partial<{
     abv: string;
     allergens: string;
@@ -21,6 +21,7 @@ export type FlattenedProduct = Omit<
     shelf_life_days: string;
     ibu: string;
     fg: string;
+    volume: string;
   }>;
   shopify?: Partial<{
     "beer-style": string;
@@ -138,6 +139,7 @@ export function getProductSpecs(product: FlattenedProduct): Array<{
       ibu: "IBU",
       fg: "FG",
       pack_size_l: "Volume",
+      volume: "Weight (g)",
       country: "Country",
       brand: "Brand",
       allergens: "Allergens",
