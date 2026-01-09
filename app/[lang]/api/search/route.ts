@@ -47,7 +47,7 @@ interface ShopifyProduct {
   handle: string;
   vendor?: string;
   productType?: string;
-  tags?: string[];
+  tags?: string[]; // ✅ важно: string[]
   featuredImage?: { url: string; altText?: string | null } | null;
   priceRange?: {
     minVariantPrice?: { amount: string; currencyCode: string } | null;
@@ -71,7 +71,6 @@ async function shopifyFetch<T>(
   query: string,
   variables: Record<string, number | string | null>
 ): Promise<T> {
-  // Match your actual env variable names
   const domain = process.env.SHOPIFY_DOMAIN;
   const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
 
@@ -94,7 +93,6 @@ async function shopifyFetch<T>(
     headers: {
       "Content-Type": "application/json",
       "X-Shopify-Storefront-Access-Token": token,
-      // Don't specify Accept-Language to get all data
     },
     body: JSON.stringify({ query, variables }),
     cache: "no-store",
@@ -151,28 +149,23 @@ export async function GET(
       `🌍 Searching in language: ${shopifyLang} (from URL: ${params.lang})`
     );
 
-    // Detect if query is in Cyrillic - if yes, search in multiple languages
     const isCyrillic = /[а-яА-ЯіїєґІЇЄҐ]/.test(q);
     const hasUkrainianChars = /[іїєґІЇЄҐ]/.test(q);
 
     let languagesToSearch: string[] = [shopifyLang];
 
-    // If Cyrillic query, also search in other Cyrillic languages + English
     if (isCyrillic) {
-      if (hasUkrainianChars) {
-        languagesToSearch = ["UK", "RU", "EN"];
-      } else {
-        languagesToSearch = ["RU", "UK", "EN"];
-      }
+      languagesToSearch = hasUkrainianChars
+        ? ["UK", "RU", "EN"]
+        : ["RU", "UK", "EN"];
       console.log("🔤 Cyrillic detected, searching in:", languagesToSearch);
     } else if (shopifyLang === "FI" || shopifyLang === "ET") {
-      // For Finnish/Estonian, also search in English as fallback
       languagesToSearch = [shopifyLang, "EN"];
       console.log("🇫🇮🇪🇪 Finnish/Estonian, also searching in EN");
     }
 
     // Search across languages
-    const allProducts = new Map<string, any>();
+    const allProducts = new Map<string, { node: ShopifyProduct }>();
 
     for (const lang of languagesToSearch) {
       try {
@@ -185,7 +178,7 @@ export async function GET(
           `📦 Fetched ${data.products.edges.length} products for ${lang}`
         );
 
-        // Add products to map (deduplicate by ID)
+        // Deduplicate by product ID
         data.products.edges.forEach((edge) => {
           if (!allProducts.has(edge.node.id)) {
             allProducts.set(edge.node.id, edge);
@@ -199,15 +192,12 @@ export async function GET(
     const edges = Array.from(allProducts.values());
     console.log("📊 Total unique products fetched:", edges.length);
 
-    // Mapping for multi-language search (all your languages)
     const countryMap: Record<string, string[]> = {
-      // Ukraine
       ukraine: ["україна", "украина", "ukraine", "ukraina", "ukrainia"],
       україна: ["україна", "украина", "ukraine", "ukraina", "ukrainia"],
       украина: ["україна", "украина", "ukraine", "ukraina", "ukrainia"],
       ukraina: ["україна", "украина", "ukraine", "ukraina", "ukrainia"],
 
-      // Czech Republic
       czech: [
         "чехія",
         "чехия",
@@ -241,88 +231,73 @@ export async function GET(
         "tšekin tasavalta",
       ],
 
-      // Germany
       germany: ["німеччина", "германия", "germany", "saksa"],
       німеччина: ["німеччина", "германия", "germany", "saksa"],
       германия: ["німеччина", "германия", "germany", "saksa"],
       saksa: ["німеччина", "германия", "germany", "saksa"],
 
-      // Ireland
       ireland: ["ірландія", "ирландия", "ireland", "irlanti"],
       ірландія: ["ірландія", "ирландия", "ireland", "irlanti"],
-      ирландия: ["ірландія", "ирландия", "ireland", "irlanti"],
-      irlanti: ["ірландія", "ирландия", "ireland", "irlanti"],
+      ирландия: ["ірландія", "irландия", "ireland", "irlanti"],
+      irlanti: ["ірландія", "ирландia", "ireland", "irlanti"],
 
-      // Poland
       poland: ["польща", "польша", "poland", "puola"],
       польща: ["польща", "польша", "poland", "puola"],
       польша: ["польща", "польша", "poland", "puola"],
       puola: ["польща", "польша", "poland", "puola"],
 
-      // Belgium
       belgium: ["бельгія", "бельгия", "belgium", "belgia"],
       бельгія: ["бельгія", "бельгия", "belgium", "belgia"],
       бельгия: ["бельгія", "бельгия", "belgium", "belgia"],
       belgia: ["бельгія", "бельгия", "belgium", "belgia"],
 
-      // Beer styles - IPA
       ipa: ["іpa", "ипа", "ipa"],
       іpa: ["іpa", "ипа", "ipa"],
 
-      // Beer styles - Lager
       lager: ["лагер", "lager"],
       лагер: ["лагер", "lager"],
 
-      // Beer styles - Stout
       stout: ["стаут", "stout"],
       стаут: ["стаут", "stout"],
 
-      // Beer styles - Ale
       ale: ["ель", "ale", "olut"],
       ель: ["ель", "ale", "olut"],
       olut: ["ель", "ale", "olut"],
 
-      // Draft beer
       draft: ["розливне", "разливное", "draft", "hana", "tynnyri"],
       розливне: ["розливне", "разливное", "draft", "hana", "tynnyri"],
       разливное: ["розливне", "разливное", "draft", "hana", "tynnyri"],
       hana: ["розливне", "разливное", "draft", "hana", "tynnyri"],
     };
 
-    // Get all search variations
     const getSearchVariations = (query: string): string[] => {
       const lower = query.toLowerCase();
-      if (countryMap[lower]) {
-        return countryMap[lower];
-      }
-      return [lower];
+      return countryMap[lower] ?? [lower];
     };
 
     const searchVariations = getSearchVariations(q);
     console.log("🔍 Search variations:", searchVariations);
 
-    // Filter products by title, vendor (brand), productType, tags, metafields
+    // Filter products by title, vendor, productType, tags, metafields
     const filtered = edges.filter((e) => {
       const node = e.node;
 
       for (const searchLower of searchVariations) {
-        // Search in title
         if (node.title?.toLowerCase().includes(searchLower)) return true;
-
-        // Search in vendor (brand/manufacturer)
         if (node.vendor?.toLowerCase().includes(searchLower)) return true;
-
-        // Search in product type
         if (node.productType?.toLowerCase().includes(searchLower)) return true;
 
-        // Search in tags (country, style, etc.)
-        if (node.tags?.some((tag) => tag.toLowerCase().includes(searchLower)))
+        // ✅ FIX: tag is string (no implicit any)
+        if (
+          node.tags?.some((tag: string) =>
+            tag.toLowerCase().includes(searchLower)
+          )
+        ) {
           return true;
+        }
 
-        // Search in metafields (country, brand, beer-style, package-type)
         if (node.metafields && node.metafields.length > 0) {
           for (const meta of node.metafields) {
-            // Check if meta and meta.value exist before accessing
             if (meta && meta.value && typeof meta.value === "string") {
               if (meta.value.toLowerCase().includes(searchLower)) {
                 console.log(`✨ Found in metafield ${meta.key}:`, meta.value);
@@ -372,6 +347,7 @@ export async function GET(
     );
   }
 }
+
 // // app/[lang]/api/search/route.ts
 // import { NextRequest, NextResponse } from "next/server";
 
