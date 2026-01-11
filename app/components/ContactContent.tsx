@@ -187,7 +187,7 @@ export default function ContactContent({ lang, messages }: Props) {
           width="640"
           height="850"
           alt=""
-          src="/category/pouring-beer-into-mug.jpg"
+          src="/category/pouring-beer-into-mug.webp"
           className="h-64 w-full bg-gray-800 object-cover sm:h-80 lg:absolute lg:h-full"
         />
       </div>
@@ -376,7 +376,7 @@ export default function ContactContent({ lang, messages }: Props) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed sm:w-auto lg:w-full"
+                  className="inline-flex w-full items-center justify-center     rounded-md border border-gray-300 bg-white px-8 py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed sm:w-auto lg:w-full"
                 >
                   {isSubmitting ? t.submitting : t.submit}
                 </button>

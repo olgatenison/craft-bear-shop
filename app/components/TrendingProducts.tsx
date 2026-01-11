@@ -64,10 +64,12 @@ export default async function TrendingProducts({
 
   return (
     <div>
-      <div className="mx-auto max-w-2xl px-4 pt-6 pb-26 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="text-2xl tracking-tight text-white">{title}</h2>
+      <div className="mx-auto max-w-2xl px-6 py-12 md:py-16  lg:max-w-7xl ">
+        <h2 className="text-center md:text-left text-3xl font-bold md:font-normal md:text-3xl tracking-tight text-white">
+          {title}
+        </h2>
 
-        <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 items-stretch">
+        <div className="mt-12 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 items-stretch">
           {products.map((product) => {
             const abv = product.specs?.abv
               ? Number(product.specs.abv)
@@ -162,7 +164,7 @@ export default async function TrendingProducts({
 
                     {/* ✅ Ціна: число велике, EUR + “за …” дрібніше */}
                     {priceObj && (
-                      <p className="text-right leading-tight">
+                      <p className="text-right leading-tight w-30">
                         <span className="text-lg font-semibold text-white">
                           {Number(priceObj.amount).toFixed(2)}
                         </span>

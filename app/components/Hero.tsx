@@ -16,42 +16,48 @@ export default function Hero({
   subtitle,
   ctaLabel,
   ctaHref = "/en/shop",
-  imageUrl = "/category/olga2813_beer_macro_ad_photo_9b6d9918-4d2e-4a3b-8a71-7d7051d002be.png",
+  imageUrl = "/category/hero.webp",
   videoUrl = "/category/578e8b9f.mp4",
 }: HeroProps) {
   const [videoError, setVideoError] = useState(false);
 
   return (
-    <section className="relative overflow-hidden max-w-7xl mx-auto rounded-b-3xl mt-2 mb-12">
+    <section className="relative overflow-hidden max-w-7xl mx-auto  rounded-b-0 md:rounded-b-3xl mt-2 mb-12">
       <div className="absolute inset-0">
-        {/* Видео как фон, если есть и не упало */}
-        {videoUrl && !videoError ? (
+        {/* ВИДЕО только на lg+ и только если не упало */}
+        {videoUrl && !videoError && (
           <video
-            key={videoUrl} // сбрасывает проигрыватель при смене src
-            className="h-full w-full object-cover"
+            key={videoUrl}
+            className="hidden lg:block h-full w-full object-cover"
             autoPlay
             muted
             loop
             playsInline
             preload="metadata"
-            poster={imageUrl} // постер до старта
-            onError={() => setVideoError(true)} // если не загрузилось — покажем картинку
+            poster={imageUrl}
+            onError={() => setVideoError(true)}
             aria-hidden="true"
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
-        ) : (
-          <Image
-            src={imageUrl}
-            alt=""
-            className="h-full w-full object-cover"
-            width={640}
-            height={480}
-            priority
-          />
         )}
 
-        {/* тёмный оверлей для читаемости */}
+        {/* ФОТО на мобилке всегда + на lg если видео упало */}
+        <Image
+          src={imageUrl}
+          alt=""
+          width={640}
+          height={480}
+          priority
+          className={[
+            "h-full w-full object-cover",
+            // на мобилке показываем всегда
+            "block lg:hidden",
+            // на lg показываем только если видео не доступно
+            videoUrl && !videoError ? "lg:hidden" : "lg:block",
+          ].join(" ")}
+        />
+
         <div className="absolute inset-0 bg-black/35" />
       </div>
 

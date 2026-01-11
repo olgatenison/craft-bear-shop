@@ -157,7 +157,7 @@ export default function AllProducts({
                   </div>
 
                   {/* Ціна: число велике, EUR + “за …” дрібніше */}
-                  <p className="text-right leading-tight">
+                  <p className="text-right leading-tight w-30">
                     {price ? (
                       <>
                         <span className="text-lg font-semibold text-white">
@@ -205,11 +205,11 @@ export default function AllProducts({
               </div>
 
               {/* Add to cart */}
-              <div className="mt-6">
+              <div className="mt-6 w-full">
                 <AddToCartButton
                   product={p}
                   addToCart={add}
-                  className="relative flex w-full items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
+                  className="relative flex w-full sm:w-auto items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
                 />
               </div>
             </div>

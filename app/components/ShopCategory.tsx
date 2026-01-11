@@ -25,26 +25,26 @@ export default function ShopCategory({
     {
       key: "beer" as const,
       href: `/${lang}/shop?category=beer`,
-      img: "/category/tabs1.jpg",
+      img: "/category/tabs1.webp",
       alt: alts.beer,
       big: true,
     },
     {
       key: "cider" as const,
       href: `/${lang}/shop?category=cider`,
-      img: "/category/photo_2025-11-06_21-25-42.jpg",
+      img: "/category/photo_2025-11-06_21-25-42.webp",
       alt: alts.cider,
     },
     {
       key: "snacks" as const,
       href: `/${lang}/shop?category=snacks`,
-      img: "/category/photo_2025-11-02_14-55-04.jpg",
+      img: "/category/photo_2025-11-02_14-55-04.webp",
       alt: alts.snacks,
     },
     {
       key: "draft" as const,
       href: `/${lang}/shop?category=draft-beer`,
-      img: "/category/fresh-light-beer-mug.jpg",
+      img: "/category/fresh-light-beer-mug.webp",
       alt: alts.draft,
       wide: true,
     },
@@ -52,9 +52,11 @@ export default function ShopCategory({
 
   return (
     <div>
-      <div className="mx-auto max-w-7xl px-4 pt-16 pb-10 sm:px-6 sm:py-24 lg:px-8">
-        <div className="sm:flex sm:items-baseline sm:justify-between">
-          <h2 className="text-2xl tracking-tight text-white">{title}</h2>
+      <div className="mx-auto max-w-7xl  pt-10 pb-10 px-6 md:py-24 ">
+        <div className="md:flex md:items-baseline md:justify-between text-center">
+          <h2 className="text-3xl tracking-tight text-white mb-3 md:mb-0 md:font-normal font-bold">
+            {title}
+          </h2>
           <RowLink href={`/${lang}/shop`} label={browseAll} />
         </div>
 
@@ -88,7 +90,7 @@ export default function ShopCategory({
                   height={800}
                   alt={c.alt}
                   src={c.img}
-                  className="absolute inset-0 h-full w-full object-cover transition-all duration-300 group-hover:opacity-45"
+                  className="absolute inset-0 h-full w-full object-cover object-top sm:object-center transition-all duration-300 group-hover:opacity-45"
                   priority={isBig}
                 />
 
@@ -101,7 +103,7 @@ export default function ShopCategory({
                   <h3
                     className="relative font-extrabold uppercase leading-none
                       text-transparent transition-all duration-300 group-hover:text-yellow-500
-                      text-5xl sm:text-6xl lg:text-6xl
+                      text-4xl md:text-5xl lg:text-6xl
                       [-webkit-text-stroke:2px_white] [paint-order:stroke_fill]"
                   >
                     {names[c.key]}

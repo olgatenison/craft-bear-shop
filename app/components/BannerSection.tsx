@@ -25,7 +25,7 @@ export default function BannerSection({
       className="mx-auto max-w-2xl px-4 pb-16 sm:px-6  lg:max-w-7xl "
       aria-labelledby="banner-heading"
     >
-      <div className="relative overflow-hidden rounded-b-lg border-t border-gray-400">
+      <div className="relative overflow-hidden rounded-b-xl border-t border-gray-400">
         {/* контейнер под responsive-картинку */}
         <div className="relative  w-full lg:h-96 lg:aspect-auto">
           <Image

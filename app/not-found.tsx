@@ -41,7 +41,7 @@ export default function NotFound() {
     <main className="min-h-dvh">
       <div className="mx-auto max-w-7xl px-4 pb-16 pt-40 sm:px-6 lg:px-8 flex items-center justify-center flex-col">
         <Image
-          src="/category/404.png"
+          src="/category/404.webp"
           alt="404 illustration"
           width={320}
           height={320}

@@ -80,8 +80,8 @@ export default async function Footer({ lang }: FooterProps) {
 
   return (
     <footer className="mt-6">
-      <div className="mx-auto max-w-7xl px-6 py-5 border-t border-gray-400 flex items-center justify-between text-sm text-gray-400">
-        <div className="flex gap-12">
+      <div className="mx-auto max-w-7xl px-6 py-5 border-t border-gray-400 flex items-center md:justify-between text-sm text-gray-400  justify-center md:flex-row flex-col">
+        <div className="flex gap-12 md:flex-row flex-col text-center md:text-left">
           {/* Каталог */}
           <div>
             <h2 className="text-gray-200 pb-4">{t.catalog.title}</h2>
@@ -119,7 +119,7 @@ export default async function Footer({ lang }: FooterProps) {
 
         {/* Компания + соцсети */}
         <div className="flex flex-col justify-between h-full items-center gap-6">
-          <div className="text-center">
+          <div className="text-center md:mt-0 mt-10">
             <h2 className="text-gray-200 pb-4">{t.company.title}</h2>
             <ul className="space-y-1">
               {nav.company.map((item) => (
@@ -135,8 +135,8 @@ export default async function Footer({ lang }: FooterProps) {
             </ul>
           </div>
 
-          <div className="flex flex-col items-center gap-y-3">
-            <p className="text-sm text-gray-400">{t.followUs}</p>
+          <div className="flex flex-col items-center gap-y-3 md:mt-0 mt-6">
+            <p className="text-sm text-gray-200">{t.followUs}</p>
             <div className="flex justify-center gap-x-6">
               {social.map((item) => (
                 <a
