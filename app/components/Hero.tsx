@@ -56,7 +56,7 @@ export default function Hero({
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 pt-32 pb-30  ">
-        <div className=" pl-20">
+        <div className="pl-0 sm:pl-10 lg:pl-20">
           {" "}
           <p className="mt-6 text-xl text-white/90 max-w-sm text-balance">
             {subtitle}
@@ -77,7 +77,7 @@ export default function Hero({
             border-2 border-white
             hover:bg-white hover:text-gray-900
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80
-            transition-colors  w-sm transform translate-all duration-300
+            transition-colors w-full sm:w-sm transform translate-all duration-300
           "
           >
             {ctaLabel}

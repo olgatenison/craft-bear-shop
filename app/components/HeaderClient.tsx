@@ -67,7 +67,7 @@ export default function HeaderClient({
             width={220}
             height={220}
             priority
-            className="h-16 w-auto object-contain sm:h-20 lg:h-27 drop-shadow-md"
+            className="h-16  w-auto object-contain  lg:h-27 drop-shadow-md"
           />
         </Link>
 
