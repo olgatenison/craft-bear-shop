@@ -108,7 +108,7 @@ export default function AddToCartButton({
   }
 
   const defaultClasses =
-    "inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-sm font-semibold text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 sm:w-auto lg:w-full duration-300";
+    "inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-sm font-semibold text-gray-900 hover:bg-yellow-500 hover:border-yellow-600 w-full duration-300";
 
   return (
     <button

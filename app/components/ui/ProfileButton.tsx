@@ -15,9 +15,12 @@ export default function ProfileButton({
       <Link
         href={`/${lang}/account`}
         aria-label="Account"
-        className="p-2 text-gray-400 hover:text-yellow-500"
+        className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg
+                   text-gray-400 hover:text-yellow-500 hover:bg-white/5
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30
+                   focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
       >
-        <UserIcon aria-hidden="true" className="size-6" />
+        <UserIcon aria-hidden="true" className="h-6 w-6" />
         <span className="sr-only">Account</span>
       </Link>
     </div>

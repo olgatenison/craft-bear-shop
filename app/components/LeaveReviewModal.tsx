@@ -117,7 +117,7 @@ export default function LeaveReviewModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-20">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 lg:px-20">
       <div className="w-full max-w-lg rounded-2xl bg-neutral-900 p-6 shadow-xl">
         <div className="flex items-start justify-between gap-4">
           <h3 className="text-xl font-semibold text-white">{texts.title}</h3>
@@ -205,7 +205,7 @@ export default function LeaveReviewModal({
             {error && <p className="text-sm text-red-400">{error}</p>}
             {success && <p className="text-sm text-green-400">{success}</p>}
 
-            <div className="mt-4 flex justify-end gap-3">
+            <div className="mt-4 flex justify-end gap-3 sm:flex-row flex-col">
               <button
                 type="submit"
                 disabled={isSubmitting}

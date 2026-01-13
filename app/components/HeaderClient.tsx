@@ -28,7 +28,7 @@ export default function HeaderClient({
 
   return (
     <header className="relative">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 gap-6 border-b border-yellow-400 py-2">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 gap-6 border-b border-yellow-400 py-2 lg:h-22 h-16">
         {/* Left: burger (mobile) + desktop nav */}
         <div className="flex items-center gap-4">
           <button
@@ -87,7 +87,7 @@ export default function HeaderClient({
             </Suspense>
 
             <ProfileButton lang={lang} />
-            <span aria-hidden="true" className="mx-4 h-4 w-px bg-gray-400" />
+            {/* <span aria-hidden="true" className="mx-4 h-4 w-px bg-gray-400" /> */}
           </div>
 
           {/* Cart stays visible on mobile */}

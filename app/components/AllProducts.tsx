@@ -143,7 +143,8 @@ export default function AllProducts({
                     <h3 className="text-lg font-medium text-yellow-400 pb-6 pr-6 text-balance">
                       <Link
                         href={href}
-                        className="focus:outline-none focus:ring-2 focus:ring-white/30 rounded"
+                        className="relative inline-block max-w-full rounded
+             focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
                       >
                         {p.title}
                         <span

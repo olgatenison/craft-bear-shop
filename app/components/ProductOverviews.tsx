@@ -319,7 +319,7 @@ export default function ProductOverviews({
 
             {/* Image gallery */}
             <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:-mt-6">
-              <div className="group grid grid-cols-1 lg:grid-cols-2 lg:gap-8 p-6 pl-0">
+              <div className="group grid grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:p-6 lg:pl-0">
                 {images.length > 0 ? (
                   images.map((image) => (
                     <div
@@ -350,7 +350,7 @@ export default function ProductOverviews({
             </div>
 
             {/* button and right side under */}
-            <div className="mt-16 lg:col-span-5">
+            <div className="mt-5 lg:mt-10 lg:col-span-5">
               {isDraft && productHalf && productLiter ? (
                 <div className="flex gap-3">
                   <AddToCartButton
@@ -367,10 +367,10 @@ export default function ProductOverviews({
               )}
 
               {/* Product Description */}
-              {product.descriptionHtml && (
-                <div className="mt-10">
-                  <h2 className="mx-auto mt-6 max-w-lg text-lg text-white font-semibold">
-                    {description}
+              {/* {product.descriptionHtml && (
+                <div className="mt-8 border-t border-gray-200 pt-8">
+                  <h2 className="mx-auto mt-6 max-w-lg text-pretty text-lg text-white font-semibold">
+                    {description}:
                   </h2>
 
                   <div
@@ -378,6 +378,29 @@ export default function ProductOverviews({
                       __html: product.descriptionHtml,
                     }}
                     className="mx-auto mt-6 max-w-xl  text-base text-gray-300 text-balance"
+                  />
+                </div>
+              )} */}
+
+              {product.descriptionHtml && (
+                <div className="mt-8 border-t border-white/10 pt-8">
+                  <h2 className="text-lg font-semibold text-white ">
+                    {description}:
+                  </h2>
+
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: product.descriptionHtml,
+                    }}
+                    className="
+        mt-4 text-base text-gray-300 leading-7
+        [&_p]:mt-3 [&_p:first-child]:mt-0
+        [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5
+        [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:pl-5
+        [&_li]:mt-1
+        [&_a]:text-yellow-400 [&_a:hover]:text-yellow-300
+        [&_strong]:text-white
+      "
                   />
                 </div>
               )}
@@ -451,8 +474,8 @@ export default function ProductOverviews({
 
               {/* Ingredients */}
               {productIngredients && (
-                <div className="w-full flex items-baseline gap-2 mt-6">
-                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                <div className="w-full mt-6 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-2">
+                  <span className="text-lg text-white font-semibold">
                     {ingredients}:
                   </span>
                   <span className="text-base text-gray-300 text-balance">
