@@ -66,7 +66,7 @@ export default async function AccountPage({
   }
 
   return (
-    <section className="relative mx-auto my-10 max-w-7xl overflow-hidden rounded-b-3xl px-6">
+    <div className=" mx-auto my-10 max-w-7xl overflow-hidden px-6">
       <h1 className="mb-4 hidden text-2xl font-semibold">
         {messages.AccountPage?.title ?? "My account"}
       </h1>
@@ -84,6 +84,6 @@ export default async function AccountPage({
           <LoginRegisterForm messages={messages.auth} />
         </SignedOut>
       </div>
-    </section>
+    </div>
   );
 }

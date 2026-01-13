@@ -88,7 +88,7 @@ export function AccountSidebar({
       <button
         onClick={onSignOut}
         disabled={loading}
-        className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white  py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 sm:w-auto lg:w-full"
+        className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white  py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 sm:max-w-90 lg:w-full"
       >
         {loading ? signingOutLabel : signOutLabel}
       </button>

@@ -158,7 +158,7 @@ export default function ReviewList({
   return (
     <main className="mt-10 space-y-6 lg:col-span-8 lg:mt-0">
       <div>
-        <div className="mb-8 flex items-center justify-between gap-4">
+        <div className="mb-8 flex items-center justify-between gap-4 sm:flex-row flex-col">
           <h1 className="text-xl font-semibold text-white">{messages.title}</h1>
 
           {/* ✅ Pagination controls with translations */}
@@ -282,8 +282,8 @@ export default function ReviewList({
             </ul>
 
             {/* ✅ Bottom pagination with translations */}
-            <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
-              <span className="text-sm text-gray-400">
+            <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4 sm:flex-row flex-col">
+              <span className="sm:mb-0 mb-6 text-sm text-gray-400">
                 {total > 0
                   ? `${messages.showing} ${(page - 1) * limit + 1}-${
                       (page - 1) * limit + reviews.length

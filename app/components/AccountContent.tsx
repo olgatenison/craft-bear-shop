@@ -296,25 +296,28 @@ export default function AccountContent({ messages }: AccountContentProps) {
               </div>
 
               {/* низ формы */}
-              <div className="mt-12 flex w-full items-center justify-between sm:col-span-2">
-                <div>
+              <div className="mt-12 flex w-full items-center justify-between col-span-1 flex-col sm:col-span-2 sm:flex-row">
+                <div className="w-full sm:w-auto">
                   <button
                     type="submit"
                     disabled={savingProfile}
-                    className="mt-6 inline-flex shrink-0 items-center justify-center rounded-md border border-white/25 px-8 py-2 text-base font-semibold text-white hover:bg-white/10 disabled:opacity-60 sm:ml-8 sm:mt-0 lg:ml-0 lg:w-sm"
+                    className="mt-0 w-full inline-flex items-center justify-center rounded-md
+                 border border-white/25 px-8 py-2 text-base font-semibold text-white
+                 hover:bg-white/10 disabled:opacity-60 sm:mt-6"
                   >
                     {savingProfile
                       ? messages.profileSaving
                       : messages.profileSaveButton}
                   </button>
                 </div>
-                <div>
-                  <dt className="text-sm tracking-wide text-gray-400">
+
+                <div className="text-center sm:text-right">
+                  <div className="mt-6 text-sm tracking-wide text-gray-400 sm:mt-0">
                     {messages.accountCreated}
-                  </dt>
-                  <dd className="mt-1 text-right text-sm text-gray-300">
+                  </div>
+                  <div className="mt-1 text-sm text-gray-300">
                     {new Date(user.createdAt!).toLocaleDateString()}
-                  </dd>
+                  </div>
                 </div>
               </div>
             </form>

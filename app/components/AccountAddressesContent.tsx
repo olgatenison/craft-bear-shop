@@ -251,7 +251,7 @@ export default function AccountAddressesContent({
         />
 
         <main className="mt-10 space-y-6 lg:col-span-8 lg:mt-0">
-          <section className="p-6">
+          <section className="px-0 lg:p-6">
             <div className="mb-8 flex items-center justify-between gap-4">
               <div>
                 <h1 className="text-xl font-semibold text-white">
