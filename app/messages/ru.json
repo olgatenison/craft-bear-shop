@@ -237,10 +237,10 @@
     "saveUnknownError": "Не удалось сохранить адрес. Попробуйте ещё раз."
   },
   "AccountOrders": {
-    "title": "История заказов",
-    "intro": "Отслеживайте статус последних заказов, управляйте возвратами и скачивайте счета.",
-    "recentOrdersSrOnly": "Недавние заказы",
-    "orderPlacedOnSrOnly": "Заказ от",
+    "title": "Мои заказы",
+    "intro": "Проверьте статус последних заказов...",
+    "recentOrdersSrOnly": "Последние заказы",
+    "orderPlacedOnSrOnly": "Заказ оформлен",
     "datePlaced": "Дата заказа",
     "orderNumber": "Номер заказа",
     "totalAmount": "Сумма к оплате",
@@ -252,9 +252,19 @@
     "statusHeader": "Статус",
     "infoHeader": "Информация",
     "viewProduct": "Посмотреть товар",
-    "emptyTitle": "У вас ещё нет ни одного заказа",
-    "emptyDescription": "Когда вы оформите первый заказ, он появится здесь.",
-    "emptyCta": "Перейти в магазин"
+    "emptyTitle": "У вас пока нет заказов",
+    "emptyDescription": "Когда вы сделаете первый заказ, он появится здесь",
+    "emptyCta": "Перейти в магазин",
+    "paymentStatus": "Оплата",
+    "deliveryStatus": "Доставка",
+    "shippingAddress": "Адрес доставки",
+    "trackingNumber": "Номер отслеживания",
+    "paid": "Оплачено",
+    "pending": "Ожидает оплаты",
+    "refunded": "Возврат",
+    "fulfilled": "Доставлено",
+    "notShipped": "Не отправлено",
+    "partial": "Частичная отправка"
   },
   "AccountReview": {
     "title": "Мои отзывы",

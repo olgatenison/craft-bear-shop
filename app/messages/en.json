@@ -237,8 +237,8 @@
     "saveUnknownError": "We couldn't save your address. Please try again."
   },
   "AccountOrders": {
-    "title": "Order history",
-    "intro": "Check the status of recent orders, manage returns, and download invoices.",
+    "title": "My Orders",
+    "intro": "Check the status of recent orders...",
     "recentOrdersSrOnly": "Recent orders",
     "orderPlacedOnSrOnly": "Order placed on",
     "datePlaced": "Date placed",
@@ -253,8 +253,18 @@
     "infoHeader": "Info",
     "viewProduct": "View product",
     "emptyTitle": "You don't have any orders yet",
-    "emptyDescription": "Once you place your first order, your orders will appear here.",
-    "emptyCta": "Go to shop"
+    "emptyDescription": "When you place your first order, it will appear here",
+    "emptyCta": "Go to shop",
+    "paymentStatus": "Payment",
+    "deliveryStatus": "Delivery",
+    "shippingAddress": "Shipping Address",
+    "trackingNumber": "Tracking Number",
+    "paid": "Paid",
+    "pending": "Pending",
+    "refunded": "Refunded",
+    "fulfilled": "Delivered",
+    "notShipped": "Not Shipped",
+    "partial": "Partially Shipped"
   },
   "AccountReview": {
     "title": "My Reviews",
