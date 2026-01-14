@@ -17,7 +17,7 @@ export default async function DeliveryPage({
   }
 
   return (
-    <main>
+    <main className="mx-auto max-w-7xl px-6">
       <LegalPageLayout title={page.title} html={page.body} />
     </main>
   );

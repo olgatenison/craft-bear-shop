@@ -134,16 +134,13 @@ export default function ShoppingCardOverviews({
                 >
                   {items.map((product) => {
                     const lineTotal = product.price * product.quantity;
-
-                    // ✅ ссылка в детали товара
                     const href = `/${lang}/product/${product.handle}`;
 
                     return (
                       <li key={product.id} className="flex py-6 sm:py-10">
-                        {/* ✅ Картинка кликабельная */}
                         <Link
                           href={href}
-                          className="shrink-0 size-24 sm:size-48 relative rounded-lg bg-stone-600 overflow-hidden hover:opacity-90 transition-opacity"
+                          className="shrink-0 size-28 sm:size-48 relative rounded-lg bg-stone-600 overflow-hidden hover:opacity-90 transition-opacity"
                           aria-label={product.name}
                         >
                           <Image
@@ -156,9 +153,8 @@ export default function ShoppingCardOverviews({
                         </Link>
 
                         <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-                          <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                          <div className="relative pr-0 xs:pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                             <div>
-                              {/* ✅ Название кликабельное */}
                               <div className="flex justify-between">
                                 <h3 className="text-lg font-medium text-white pr-6">
                                   <Link
@@ -175,21 +171,20 @@ export default function ShoppingCardOverviews({
                                 </h3>
                               </div>
 
-                              {/* Країна | ABV */}
-                              <div className="mt-1 flex text-base text-gray-200">
+                              <div className="mt-1 flex text-base text-gray-200 flex-wrap gap-x-4">
                                 {product.country && (
                                   <p className="text-gray-300">
                                     {product.country}
                                   </p>
                                 )}
                                 {product.abv && (
-                                  <p className="ml-4 border-l border-gray-200 pl-4 text-gray-300">
+                                  <p className="text-gray-300">
+                                    <span className="hidden sm:inline">| </span>
                                     {product.abv}%
                                   </p>
                                 )}
                               </div>
 
-                              {/* Цена за единицу */}
                               <p className="mt-1 text-sm text-gray-400">
                                 {product.price.toFixed(2)} €{" "}
                                 {product.size ? `/ ${product.size}` : ""}
@@ -197,9 +192,9 @@ export default function ShoppingCardOverviews({
                             </div>
 
                             {/* Right side */}
-                            <div className="absolute right-0 top-0 mt-4 sm:mt-0 sm:pr-9 flex flex-col gap-5">
-                              <div className="flex gap-8 items-center">
-                                <p className="mt-1 text-base font-medium text-gray-300">
+                            <div className="mt-3 ml-auto w-fit flex flex-col gap-3 xs:absolute xs:right-0 xs:top-0 xs:mt-4 sm:mt-0 sm:pr-9">
+                              <div className="flex items-center justify-end gap-3">
+                                <p className="text-base font-medium text-gray-300">
                                   {lineTotal.toFixed(2)} €
                                 </p>
                                 <button
@@ -215,7 +210,7 @@ export default function ShoppingCardOverviews({
                                 </button>
                               </div>
 
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center justify-end gap-2">
                                 <button
                                   type="button"
                                   onClick={() =>
@@ -264,7 +259,7 @@ export default function ShoppingCardOverviews({
                 <div className="mt-8">
                   <Link
                     href={`/${lang}/shop`}
-                    className="inline-flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-6 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30"
+                    className="inline-flex items-center justify-center rounded-md border border-white/10 bg-white/10 px-6 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 w-full"
                   >
                     {continueShopping}
                   </Link>
@@ -277,7 +272,7 @@ export default function ShoppingCardOverviews({
           {hasItems && (
             <section
               aria-labelledby="summary-heading"
-              className="mt-16 rounded-lg bg-white/5 border border-white/10 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+              className="mt-16 rounded-lg bg-white/5 border border-white/10 p-3 lg:col-span-5 lg:mt-0 lg:p-8"
             >
               <h2
                 id="summary-heading"
