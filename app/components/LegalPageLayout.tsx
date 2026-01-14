@@ -17,7 +17,7 @@ export function LegalPageLayout({
   return (
     <div className="px-6 py-20 lg:px-8 max-w-4xl mx-auto">
       <div className="">
-        <h1 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+        <h1 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-12">
           {title}
         </h1>
 

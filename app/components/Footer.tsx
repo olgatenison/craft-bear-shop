@@ -68,8 +68,8 @@ export default async function Footer({ lang }: FooterProps) {
       { key: "faq", href: `/${lang}/questions` },
       { key: "shippingPayment", href: `/${lang}/delivery` },
 
-      { key: "cookiePolicy", href: `/${lang}/cookie-policy` },
-      { key: "publicOffer", href: `/${lang}/public-offer` },
+      { key: "cookiePolicy", href: `/${lang}/cookies-policy` },
+      { key: "privacyPolicy", href: `/${lang}/privacy-policy` },
     ],
     company: [
       { key: "aboutUs", href: `/${lang}/about` },

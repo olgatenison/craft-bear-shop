@@ -20,9 +20,9 @@ export async function getReviews(
   shopifyProductId: string
 ): Promise<ReviewsData> {
   try {
-    console.log("🔍 Fetching reviews for product:", shopifyProductId);
-    console.log("📝 Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
-    console.log("🔑 Has service key:", !!process.env.SUPABASE_SERVICE_KEY);
+    // console.log("🔍 Fetching reviews for product:", shopifyProductId);
+    // console.log("📝 Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+    // console.log("🔑 Has service key:", !!process.env.SUPABASE_SERVICE_KEY);
 
     const supabase = getSupabaseServerClient();
 
@@ -40,7 +40,7 @@ export async function getReviews(
     }
 
     if (!reviews || reviews.length === 0) {
-      console.log("No reviews found for product:", shopifyProductId);
+      // console.log("No reviews found for product:", shopifyProductId);
       return EMPTY_REVIEWS;
     }
 
