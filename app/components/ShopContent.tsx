@@ -7,6 +7,7 @@ import Tabs from "./ui/Tabs";
 import AllProducts from "./AllProducts";
 import type { FlattenedProduct } from "@/app/data/mappers";
 import type { Locale } from "@/app/[lang]/messages";
+import ScrollToTopButton from "@/app/components/ui/ScrollToTopButton";
 
 type TabId =
   | "all"
@@ -140,6 +141,7 @@ export default function ShopContent({
           category={currentCategory}
         />
       )}
+      <ScrollToTopButton />
     </>
   );
 }

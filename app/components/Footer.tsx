@@ -156,7 +156,7 @@ export default async function Footer({ lang }: FooterProps) {
       </div>
 
       <div className="mx-auto max-w-7xl px-6 border-t border-gray-700 flex items-center justify-center">
-        <div className="gap-3 text-center flex py-6">
+        <div className="gap-3 text-center flex py-6 sm:flex-row flex-col">
           <p className="text-sm text-gray-400">{t.copyright}</p>
           <a
             key="prodused"

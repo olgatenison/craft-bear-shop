@@ -71,7 +71,7 @@ export default function Hero({
             className="max-w-3xl mx-autorelative font-extrabold uppercase leading-none text-balance
                text-transparent transform translate-all duration-300 group-hover:text-yellow-500  text-5xl sm:text-6xl lg:text-7xl/22 
                [-webkit-text-stroke:2px_white] 
-               [paint-order:stroke_fill] pt-8"
+               [paint-order:stroke_fill] pt-8 wrap-break-word"
           >
             {title}
           </h1>
