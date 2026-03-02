@@ -3,8 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { clerkClient } from "@clerk/nextjs/server";
 import { auth } from "@clerk/nextjs/server";
 
+interface ShopifyFulfillment {
+  tracking_number?: string | null;
+  tracking_numbers?: string[];
+  tracking_url?: string | null;
+  tracking_urls?: string[];
+}
+
 interface ShopifyOrder {
   id: number;
+  name?: string;
   order_number: number;
   email?: string;
   total_price: string;
@@ -12,6 +20,7 @@ interface ShopifyOrder {
   created_at: string;
   financial_status: string;
   fulfillment_status: string | null;
+  fulfillments?: ShopifyFulfillment[];
   shipping_address?: {
     first_name?: string;
     last_name?: string;
@@ -29,14 +38,26 @@ interface ShopifyOrder {
   }>;
 }
 
+interface ClerkOrderItem {
+  title: string;
+  quantity: number;
+  price: string;
+  variantId: string | null;
+}
+
 interface ClerkOrder {
   shopifyOrderId: number;
   orderNumber: number;
+  name?: string;
   totalPrice: string;
   currency: string;
   createdAt: string;
   financialStatus: string;
-  fulfillmentStatus: string | null;
+  fulfillmentStatus: string;
+  tracking?: {
+    number: string;
+    url: string;
+  };
   shippingAddress?: {
     name: string;
     address1: string;
@@ -44,49 +65,57 @@ interface ClerkOrder {
     country: string;
     zip: string;
   };
-  items: Array<{
-    title: string;
-    quantity: number;
-    price: string;
-    variantId: string | null;
-    image: string | null;
-  }>;
+  items: ClerkOrderItem[];
 }
 
-// Получить картинки товаров
-async function getProductImages(
-  productIds: number[],
+// Получаем ПОЛНЫЕ детали одного заказа (без fields — чтобы точно получить fulfillments)
+async function fetchFullOrderDetails(
+  orderId: number,
   accessToken: string,
-  domain: string
-): Promise<Map<number, string>> {
-  const imageMap = new Map<number, string>();
-
-  if (productIds.length === 0) return imageMap;
-
+  domain: string,
+): Promise<ShopifyOrder | null> {
   try {
-    const idsQuery = productIds.join(",");
-    const response = await fetch(
-      `https://${domain}/admin/api/2024-10/products.json?ids=${idsQuery}`,
-      {
-        headers: {
-          "X-Shopify-Access-Token": accessToken,
-        },
-      }
-    );
-
-    if (response.ok) {
-      const data = await response.json();
-      for (const product of data.products || []) {
-        if (product.image?.src) {
-          imageMap.set(product.id, product.image.src);
-        }
-      }
+    const url = `https://${domain}/admin/api/2024-10/orders/${orderId}.json`;
+    const res = await fetch(url, {
+      headers: { "X-Shopify-Access-Token": accessToken },
+    });
+    if (!res.ok) {
+      console.warn(`⚠️ Failed to fetch order ${orderId}:`, res.status);
+      return null;
     }
-  } catch (error) {
-    console.warn("Failed to fetch product images:", error);
+    const data = await res.json();
+    return data.order ?? null;
+  } catch (e) {
+    console.warn(`⚠️ Error fetching order ${orderId}:`, e);
+    return null;
   }
+}
 
-  return imageMap;
+function extractTracking(fulfillments: ShopifyFulfillment[] | undefined):
+  | {
+      number: string;
+      url: string;
+    }
+  | undefined {
+  if (!fulfillments || fulfillments.length === 0) return undefined;
+
+  // Ищем fulfillment с трекингом
+  const withTracking = fulfillments.find(
+    (f) =>
+      f?.tracking_number ||
+      (f?.tracking_numbers && f.tracking_numbers.length > 0),
+  );
+
+  if (!withTracking) return undefined;
+
+  const number =
+    withTracking.tracking_number || withTracking.tracking_numbers?.[0];
+  const url =
+    withTracking.tracking_url || withTracking.tracking_urls?.[0] || "";
+
+  if (!number) return undefined;
+
+  return { number: String(number), url: String(url) };
 }
 
 export async function POST(req: NextRequest) {
@@ -103,15 +132,12 @@ export async function POST(req: NextRequest) {
     const user = await client.users.getUser(userId);
 
     const userEmail = user.emailAddresses[0]?.emailAddress;
-
     if (!userEmail) {
       return NextResponse.json(
         { error: "User email not found" },
-        { status: 400 }
+        { status: 400 },
       );
     }
-
-    console.log("📧 User email:", userEmail);
 
     const shopifyDomain = process.env.SHOPIFY_DOMAIN;
     const accessToken =
@@ -121,69 +147,81 @@ export async function POST(req: NextRequest) {
       throw new Error("Shopify credentials not configured");
     }
 
-    const shopifyUrl = `https://${shopifyDomain}/admin/api/2024-10/orders.json?email=${encodeURIComponent(
-      userEmail
-    )}&status=any&limit=250`;
+    // Шаг 1: получаем список заказов по email (только базовые поля — без fulfillments)
+    const listUrl = `https://${shopifyDomain}/admin/api/2024-10/orders.json?email=${encodeURIComponent(
+      userEmail,
+    )}&status=any&limit=250&fields=id,name,order_number`;
 
-    console.log("🔵 Fetching orders from Shopify...");
+    console.log("🔵 Fetching order list from Shopify...");
 
-    const shopifyResponse = await fetch(shopifyUrl, {
+    const listResponse = await fetch(listUrl, {
       headers: {
         "X-Shopify-Access-Token": accessToken,
         "Content-Type": "application/json",
       },
     });
 
-    if (!shopifyResponse.ok) {
-      const errorText = await shopifyResponse.text();
+    if (!listResponse.ok) {
+      const errorText = await listResponse.text();
       console.error("❌ Shopify API error:", errorText);
-      throw new Error(`Shopify API error: ${shopifyResponse.statusText}`);
+      throw new Error(`Shopify API error: ${listResponse.statusText}`);
     }
 
-    const { orders } = await shopifyResponse.json();
-    console.log(`📦 Found ${orders?.length || 0} orders in Shopify`);
+    const { orders: orderList } = (await listResponse.json()) as {
+      orders: Array<{ id: number; name: string; order_number: number }>;
+    };
 
-    if (!orders || orders.length === 0) {
+    console.log(`📦 Found ${orderList?.length || 0} orders in Shopify`);
+
+    if (!orderList || orderList.length === 0) {
       return NextResponse.json({
         success: true,
         message: "No orders found in Shopify",
         synced: 0,
+        updated: 0,
         totalOrders: 0,
       });
     }
 
+    // Шаг 2: для каждого заказа получаем ПОЛНЫЕ данные (включая fulfillments)
+    console.log("🔵 Fetching full details for each order...");
+    const fullOrders: ShopifyOrder[] = [];
+
+    for (const { id } of orderList) {
+      const full = await fetchFullOrderDetails(id, accessToken, shopifyDomain);
+      if (full) {
+        console.log(
+          `  ✅ Order ${full.name}: fulfillments=${full.fulfillments?.length ?? 0}, tracking=${extractTracking(full.fulfillments)?.number ?? "none"}`,
+        );
+        fullOrders.push(full);
+      }
+    }
+
+    // Шаг 3: мержим с существующими данными в Clerk
     const existingOrders = (user.publicMetadata?.orders as ClerkOrder[]) || [];
-    console.log(`📋 Existing orders in Clerk: ${existingOrders.length}`);
+    const existingMap = new Map<number, ClerkOrder>();
+    for (const o of existingOrders) existingMap.set(o.shopifyOrderId, o);
 
-    // Собираем все product_id для получения картинок
-    const allProductIds = new Set<number>();
-    orders.forEach((order: ShopifyOrder) => {
-      order.line_items.forEach((item) => {
-        if (item.product_id) allProductIds.add(item.product_id);
-      });
-    });
+    let updatedCount = 0;
+    let createdCount = 0;
 
-    console.log("📸 Fetching product images...");
-    const imageMap = await getProductImages(
-      Array.from(allProductIds),
-      accessToken,
-      shopifyDomain
-    );
-    console.log(`✅ Got images for ${imageMap.size} products`);
+    for (const order of fullOrders) {
+      const tracking = extractTracking(order.fulfillments);
+      const fulfillmentStatus = (
+        order.fulfillment_status ??
+        ((order.fulfillments?.length ?? 0) > 0 ? "fulfilled" : "unfulfilled")
+      ).toLowerCase();
 
-    const newOrders: ClerkOrder[] = orders
-      .filter(
-        (order: ShopifyOrder) =>
-          !existingOrders.some((o: ClerkOrder) => o.shopifyOrderId === order.id)
-      )
-      .map((order: ShopifyOrder) => ({
+      const mapped: ClerkOrder = {
         shopifyOrderId: order.id,
         orderNumber: order.order_number,
+        name: order.name || `#${order.order_number}`,
         totalPrice: order.total_price,
         currency: order.currency,
         createdAt: order.created_at,
-        financialStatus: order.financial_status,
-        fulfillmentStatus: order.fulfillment_status,
+        financialStatus: String(order.financial_status || "").toLowerCase(),
+        fulfillmentStatus,
+        tracking,
         shippingAddress: order.shipping_address
           ? {
               name: `${order.shipping_address.first_name || ""} ${
@@ -200,44 +238,50 @@ export async function POST(req: NextRequest) {
           quantity: item.quantity,
           price: item.price,
           variantId: item.variant_id ? `${item.variant_id}` : null,
-          image: item.product_id ? imageMap.get(item.product_id) || null : null,
         })),
-      }));
+      };
 
-    console.log(`✨ New orders to sync: ${newOrders.length}`);
-
-    if (newOrders.length > 0) {
-      await client.users.updateUser(userId, {
-        publicMetadata: {
-          ...user.publicMetadata,
-          orders: [...existingOrders, ...newOrders],
-        },
-      });
-
-      console.log("✅ Orders synced successfully!");
-      console.log(
-        "Order numbers:",
-        newOrders.map((o) => `#${o.orderNumber}`).join(", ")
-      );
-    } else {
-      console.log("ℹ️ All orders already synced");
+      const prev = existingMap.get(order.id);
+      if (prev) {
+        existingMap.set(order.id, { ...prev, ...mapped });
+        updatedCount += 1;
+      } else {
+        existingMap.set(order.id, mapped);
+        createdCount += 1;
+      }
     }
+
+    const mergedOrders = Array.from(existingMap.values()).sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+
+    await client.users.updateUser(userId, {
+      publicMetadata: {
+        ...user.publicMetadata,
+        orders: mergedOrders,
+      },
+    });
+
+    console.log("✅ Orders synced successfully!");
+
+    const sample = mergedOrders.slice(0, 5).map((o) => ({
+      number: o.name || `#${o.orderNumber}`,
+      payment: o.financialStatus,
+      fulfillment: o.fulfillmentStatus,
+      tracking: o.tracking?.number || null,
+      hasShipping: Boolean(o.shippingAddress),
+    }));
+
+    console.log("📊 Sample:", JSON.stringify(sample, null, 2));
 
     return NextResponse.json({
       success: true,
-      message:
-        newOrders.length > 0
-          ? `Synced ${newOrders.length} new order${
-              newOrders.length > 1 ? "s" : ""
-            }`
-          : "All orders already synced",
-      synced: newOrders.length,
-      totalOrders: existingOrders.length + newOrders.length,
-      newOrders: newOrders.map((o) => ({
-        orderNumber: o.orderNumber,
-        total: `${o.totalPrice} ${o.currency}`,
-        date: new Date(o.createdAt).toLocaleDateString(),
-      })),
+      message: `Synced orders. Created: ${createdCount}, Updated: ${updatedCount}`,
+      synced: createdCount,
+      updated: updatedCount,
+      totalOrders: mergedOrders.length,
+      sample,
     });
   } catch (error) {
     console.error("❌ Sync error:", error);
@@ -246,190 +290,7 @@ export async function POST(req: NextRequest) {
         error: "Sync failed",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-
-// // app/api/shopify/sync-orders/route.ts
-// import { NextRequest, NextResponse } from "next/server";
-// import { clerkClient } from "@clerk/nextjs/server";
-// import { auth } from "@clerk/nextjs/server";
-
-// interface ShopifyOrder {
-//   id: number;
-//   order_number: number;
-//   email?: string;
-//   total_price: string;
-//   currency: string;
-//   created_at: string;
-//   financial_status: string;
-//   fulfillment_status: string | null;
-//   line_items: Array<{
-//     title: string;
-//     quantity: number;
-//     price: string;
-//     product_id?: number;
-//     variant_id?: number;
-//   }>;
-// }
-
-// interface ClerkOrder {
-//   shopifyOrderId: number;
-//   orderNumber: number;
-//   totalPrice: string;
-//   currency: string;
-//   createdAt: string;
-//   financialStatus: string;
-//   fulfillmentStatus: string | null;
-//   items: Array<{
-//     title: string;
-//     quantity: number;
-//     price: string;
-//     productHandle: string | null;
-//     image: string | null;
-//   }>;
-// }
-
-// export async function POST(req: NextRequest) {
-//   try {
-//     // Проверка авторизации
-//     const { userId } = await auth();
-
-//     if (!userId) {
-//       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-//     }
-
-//     console.log("🔄 Starting order sync for user:", userId);
-
-//     // Получить данные пользователя
-//     const client = await clerkClient();
-//     const user = await client.users.getUser(userId);
-
-//     const userEmail = user.emailAddresses[0]?.emailAddress;
-
-//     if (!userEmail) {
-//       return NextResponse.json(
-//         { error: "User email not found" },
-//         { status: 400 }
-//       );
-//     }
-
-//     console.log("📧 User email:", userEmail);
-
-//     // 1. Получить все заказы из Shopify для этого email
-//     const shopifyDomain = process.env.SHOPIFY_DOMAIN;
-//     const accessToken =
-//       process.env.SHOPIFY_ADMIN_ACCESS_TOKEN || process.env.SHOPIFY_ADMIN_TOKEN;
-
-//     if (!shopifyDomain || !accessToken) {
-//       throw new Error("Shopify credentials not configured");
-//     }
-
-//     const shopifyUrl = `https://${shopifyDomain}/admin/api/2024-10/orders.json?email=${encodeURIComponent(
-//       userEmail
-//     )}&status=any&limit=250`;
-
-//     console.log("🔵 Fetching orders from Shopify...");
-
-//     const shopifyResponse = await fetch(shopifyUrl, {
-//       headers: {
-//         "X-Shopify-Access-Token": accessToken,
-//         "Content-Type": "application/json",
-//       },
-//     });
-
-//     if (!shopifyResponse.ok) {
-//       const errorText = await shopifyResponse.text();
-//       console.error("❌ Shopify API error:", errorText);
-//       throw new Error(`Shopify API error: ${shopifyResponse.statusText}`);
-//     }
-
-//     const { orders } = await shopifyResponse.json();
-//     console.log(`📦 Found ${orders?.length || 0} orders in Shopify`);
-
-//     if (!orders || orders.length === 0) {
-//       return NextResponse.json({
-//         success: true,
-//         message: "No orders found in Shopify",
-//         synced: 0,
-//         totalOrders: 0,
-//       });
-//     }
-
-//     // 2. Получить существующие заказы из Clerk metadata
-//     const existingOrders = (user.publicMetadata?.orders as ClerkOrder[]) || [];
-//     console.log(`📋 Existing orders in Clerk: ${existingOrders.length}`);
-
-//     // 3. Найти новые заказы (которых нет в Clerk)
-//     const newOrders: ClerkOrder[] = orders
-//       .filter(
-//         (order: ShopifyOrder) =>
-//           !existingOrders.some((o: ClerkOrder) => o.shopifyOrderId === order.id)
-//       )
-//       .map((order: ShopifyOrder) => ({
-//         shopifyOrderId: order.id,
-//         orderNumber: order.order_number,
-//         totalPrice: order.total_price,
-//         currency: order.currency,
-//         createdAt: order.created_at,
-//         financialStatus: order.financial_status,
-//         fulfillmentStatus: order.fulfillment_status,
-//         items: order.line_items.map((item) => ({
-//           title: item.title,
-//           quantity: item.quantity,
-//           price: item.price,
-//           productHandle: item.variant_id
-//             ? `gid://shopify/ProductVariant/${item.variant_id}`
-//             : null,
-//           image: null,
-//         })),
-//       }));
-
-//     console.log(`✨ New orders to sync: ${newOrders.length}`);
-
-//     // 4. Сохранить новые заказы в Clerk
-//     if (newOrders.length > 0) {
-//       await client.users.updateUser(userId, {
-//         publicMetadata: {
-//           ...user.publicMetadata,
-//           orders: [...existingOrders, ...newOrders],
-//         },
-//       });
-
-//       console.log("✅ Orders synced successfully!");
-//       console.log(
-//         "Order numbers:",
-//         newOrders.map((o) => `#${o.orderNumber}`).join(", ")
-//       );
-//     } else {
-//       console.log("ℹ️ All orders already synced");
-//     }
-
-//     return NextResponse.json({
-//       success: true,
-//       message:
-//         newOrders.length > 0
-//           ? `Synced ${newOrders.length} new order${
-//               newOrders.length > 1 ? "s" : ""
-//             }`
-//           : "All orders already synced",
-//       synced: newOrders.length,
-//       totalOrders: existingOrders.length + newOrders.length,
-//       newOrders: newOrders.map((o) => ({
-//         orderNumber: o.orderNumber,
-//         total: `${o.totalPrice} ${o.currency}`,
-//         date: new Date(o.createdAt).toLocaleDateString(),
-//       })),
-//     });
-//   } catch (error) {
-//     console.error("❌ Sync error:", error);
-//     return NextResponse.json(
-//       {
-//         error: "Sync failed",
-//         details: error instanceof Error ? error.message : "Unknown error",
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }

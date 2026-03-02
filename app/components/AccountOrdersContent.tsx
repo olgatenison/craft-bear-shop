@@ -26,33 +26,33 @@ type AccountOrdersContentProps = {
   ordersMessages: AccountOrdersMessages;
 };
 
-// Типы для заказов из Clerk
+// Типы для заказов из Clerk (LITE: без image)
 interface ClerkOrderItem {
   title: string;
   quantity: number;
   price: string;
   variantId: string | null;
-  image: string | null;
 }
 
 interface ClerkOrder {
   shopifyOrderId: number;
   orderNumber: number;
+  name?: string; // "#1003"
   totalPrice: string;
   currency: string;
   createdAt: string;
   financialStatus: string;
   fulfillmentStatus: string | null;
+  tracking?: {
+    number: string;
+    url: string;
+  };
   shippingAddress?: {
     name: string;
     address1: string;
     city: string;
     country: string;
     zip: string;
-  };
-  tracking?: {
-    number: string;
-    url: string;
   };
   items: ClerkOrderItem[];
 }
@@ -73,8 +73,8 @@ export default function AccountOrdersContent({
   const lang = (
     Array.isArray(langFromParams) ? langFromParams[0] : langFromParams
   ) as Locale | undefined;
-  const effectiveLang = (lang || "en") as Locale;
 
+  const effectiveLang = (lang || "en") as Locale;
   const baseAccountPath = `/${effectiveLang}/account`;
 
   const navItems = [
@@ -93,9 +93,7 @@ export default function AccountOrdersContent({
       setSyncing(true);
       const res = await fetch("/api/shopify/sync-orders", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!res.ok) {
@@ -105,7 +103,10 @@ export default function AccountOrdersContent({
 
       const data = await res.json();
       console.log("Sync result:", data);
-      return data.success && data.synced > 0;
+
+      // ВАЖНО: теперь sync может "updated" существующие заказы,
+      // поэтому успешность лучше считать по success, а не synced>0
+      return Boolean(data.success);
     } catch (error) {
       console.warn("Sync error:", error);
       return false;
@@ -116,33 +117,47 @@ export default function AccountOrdersContent({
 
   // Функция форматирования заказов для UI
   const formatOrdersForUI = (clerkOrders: ClerkOrder[]): OrderForUi[] => {
-    return clerkOrders.map((order) => ({
-      shopifyOrderId: order.shopifyOrderId,
-      number: `${order.orderNumber}`,
-      date: new Date(order.createdAt).toLocaleDateString(effectiveLang, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      datetime: order.createdAt,
-      total: `${order.totalPrice} ${order.currency}`,
-      financialStatus: order.financialStatus,
-      fulfillmentStatus: order.fulfillmentStatus,
-      shippingAddress: order.shippingAddress,
-      tracking: order.tracking,
-      products: order.items.map((item) => ({
-        id: item.variantId || `${order.shopifyOrderId}-${item.title}`,
-        name: item.title,
-        href: item.variantId
-          ? `/${effectiveLang}/product/${item.variantId}`
-          : "#",
-        price: `${item.price} ${order.currency}`,
-        status: order.financialStatus,
-        imageSrc: item.image || "/placeholder-product.jpg",
-        imageAlt: item.title,
-        quantity: item.quantity,
-      })),
-    }));
+    return clerkOrders.map((order) => {
+      const financialStatus = (order.financialStatus || "").toLowerCase();
+      const fulfillmentStatus = (
+        order.fulfillmentStatus ?? "unfulfilled"
+      ).toLowerCase();
+
+      return {
+        shopifyOrderId: order.shopifyOrderId,
+
+        // показываем как Shopify Admin
+        number: order.name || `#${order.orderNumber}`,
+
+        date: new Date(order.createdAt).toLocaleDateString(effectiveLang, {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+        datetime: order.createdAt,
+        total: `${order.totalPrice} ${order.currency}`,
+
+        financialStatus,
+        fulfillmentStatus,
+
+        shippingAddress: order.shippingAddress,
+        tracking: order.tracking,
+
+        // LITE: products без картинок
+        products: order.items.map((item) => ({
+          id: item.variantId || `${order.shopifyOrderId}-${item.title}`,
+          name: item.title,
+          href: item.variantId
+            ? `/${effectiveLang}/product/${item.variantId}`
+            : "#",
+          price: `${item.price} ${order.currency}`,
+          status: financialStatus,
+          imageSrc: "/placeholder-product.jpg", // временно (если OrdersList всё ещё ожидает поле)
+          imageAlt: item.title,
+          quantity: item.quantity,
+        })),
+      };
+    });
   };
 
   // Загрузка заказов
@@ -153,30 +168,24 @@ export default function AccountOrdersContent({
 
     const loadOrders = async () => {
       try {
-        // Получаем заказы напрямую из metadata пользователя
-        const clerkOrders = (user.publicMetadata?.orders as ClerkOrder[]) || [];
-
-        // Если заказов нет - пробуем синхронизировать
+        // читаем как есть
+        let clerkOrders = (user.publicMetadata?.orders as ClerkOrder[]) || [];
+        // console.log("🧪 RAW Clerk orders count:", clerkOrders.length);
+        // console.log(
+        //   "🧪 First order raw:",
+        //   JSON.stringify(clerkOrders[0], null, 2),
+        // );
+        // если заказов нет — автосинк
         if (clerkOrders.length === 0 && !cancelled) {
           console.log("📦 No orders found, attempting auto-sync...");
-          const synced = await syncOrders();
-
-          if (synced) {
-            // Перезагружаем пользователя после синхронизации
+          const ok = await syncOrders();
+          if (ok) {
             await user.reload();
-            const updatedOrders =
-              (user.publicMetadata?.orders as ClerkOrder[]) || [];
-
-            if (!cancelled) {
-              setOrders(formatOrdersForUI(updatedOrders));
-            }
-            return;
+            clerkOrders = (user.publicMetadata?.orders as ClerkOrder[]) || [];
           }
         }
 
-        if (!cancelled) {
-          setOrders(formatOrdersForUI(clerkOrders));
-        }
+        if (!cancelled) setOrders(formatOrdersForUI(clerkOrders));
       } catch (e) {
         console.warn("Orders load error", e);
         if (!cancelled) setOrders([]);
@@ -213,7 +222,7 @@ export default function AccountOrdersContent({
   if (!user) return null;
 
   return (
-    <section className="relative mx-auto my-10 max-w-7xl rounded-b-3xl">
+    <section className="">
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16">
         <AccountSidebar
           user={user}
