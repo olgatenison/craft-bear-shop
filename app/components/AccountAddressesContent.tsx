@@ -155,7 +155,7 @@ export default function AccountAddressesContent({
 
   const handleChange = <K extends keyof AddressFormState>(
     field: K,
-    value: AddressFormState[K]
+    value: AddressFormState[K],
   ) => {
     setAddressForm((prev) => ({ ...prev, [field]: value }));
   };
@@ -171,8 +171,8 @@ export default function AccountAddressesContent({
         phoneCheck.error === "invalid"
           ? accountMessages.phoneErrorInvalid
           : phoneCheck.error === "tooShort"
-          ? accountMessages.phoneErrorTooShort
-          : accountMessages.phoneErrorTooLong;
+            ? accountMessages.phoneErrorTooShort
+            : accountMessages.phoneErrorTooLong;
 
       setPhoneError(msg);
       return;
@@ -236,7 +236,7 @@ export default function AccountAddressesContent({
   if (!user) return null;
 
   return (
-    <section className="relative mx-auto my-10 max-w-7xl rounded-b-3xl">
+    <section className="relative mx-auto my-10 max-w-7xl ">
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16">
         <AccountSidebar
           user={user}
@@ -251,7 +251,7 @@ export default function AccountAddressesContent({
         />
 
         <main className="mt-10 space-y-6 lg:col-span-8 lg:mt-0">
-          <section className="px-0 lg:p-6">
+          <section className="px-0 ">
             <div className="mb-8 flex items-center justify-between gap-4">
               <div>
                 <h1 className="text-xl font-semibold text-white">

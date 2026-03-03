@@ -260,103 +260,118 @@ export default function OrdersList({
                     </h3>
 
                     {/* Order header */}
-                    <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-6 text-sm text-gray-200 sm:px-6">
-                      <div className="sm:flex sm:items-start sm:justify-between sm:gap-6">
-                        {/* Main info */}
-                        <dl className="flex-auto divide-y divide-gray-700 text-sm sm:grid sm:grid-cols-3 sm:gap-x-6 sm:divide-y-0 lg:flex-none lg:gap-x-8">
-                          <div className="flex justify-between py-3 first:pt-0 last:pb-0 sm:block sm:py-0">
-                            <dt className="font-medium text-gray-400">
-                              {messages.datePlaced}
-                            </dt>
-                            <dd className="text-white sm:mt-1">
-                              <time dateTime={order.datetime}>
-                                {order.date}
-                              </time>
-                            </dd>
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[200px_minmax(0,2fr)_220px] lg:items-start border-b border-gray-700/70 pb-6">
+                      {/* COL 1 */}
+                      <div className="text-xs">
+                        <div className="space-y-1">
+                          <div className="font-medium text-gray-600">
+                            {messages.datePlaced}
                           </div>
-
-                          <div className="flex justify-between py-3 first:pt-0 last:pb-0 sm:block sm:py-0">
-                            <dt className="font-medium text-gray-400">
-                              {messages.orderNumber}
-                            </dt>
-                            <dd className="text-white sm:mt-1">
-                              {order.number}
-                            </dd>
+                          <div className="text-white">
+                            <time dateTime={order.datetime}>{order.date}</time>
                           </div>
+                        </div>
 
-                          <div className="flex justify-between py-3 first:pt-0 last:pb-0 sm:block sm:py-0">
-                            <dt className="font-medium text-gray-400">
-                              {messages.totalAmount}
-                            </dt>
-                            <dd className="font-medium text-yellow-400 sm:mt-1">
-                              {order.total}
-                            </dd>
+                        <div className="mt-6 space-y-1">
+                          <div className="text-gray-600">
+                            {messages.orderNumber}
                           </div>
-                        </dl>
+                          <div className="text-gray-600">{order.number}</div>
+                        </div>
+                      </div>
 
-                        {/* Statuses + toggle */}
-                        <div className="mt-6 space-y-4 sm:ml-6 sm:mt-0 sm:w-auto sm:flex-none">
-                          {/* Payment */}
-                          {order.financialStatus && (
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-gray-400">
-                                {messages.paymentStatus || "Payment"}:
-                              </span>
-                              {getPaymentStatusBadge(
-                                order.financialStatus,
-                                messages,
-                              )}
+                      {/* COL 2 */}
+                      <div className="min-w-0">
+                        <h4 className="mb-3 text-xs text-gray-600">
+                          {messages.productHeader || "Products"}
+                        </h4>
+
+                        <ul className="space-y-3">
+                          {order.products.map((product) => (
+                            <li
+                              key={product.id}
+                              className="flex items-start gap-3"
+                            >
+                              <span className="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-white/70" />
+
+                              <div className="min-w-0 flex-1">
+                                <h5 className="text-lg font-medium text-white">
+                                  {product.name}
+                                </h5>
+
+                                <div className="mt-2 flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+                                  <div className="text-xs text-gray-600">
+                                    <div>
+                                      {messages.priceHeader || "Price"}:{" "}
+                                      <span className="text-gray-400">
+                                        {product.price}
+                                      </span>
+                                    </div>
+                                    {product.quantity != null && (
+                                      <div>
+                                        Quantity:{" "}
+                                        <span className="text-gray-400">
+                                          {product.quantity}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  <a
+                                    href={product.href}
+                                    className="text-xs text-gray-600 transition-colors hover:text-gray-300 border-b border-gray-600/70 hover:border-gray-300"
+                                  >
+                                    {messages.viewProduct}
+                                  </a>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* COL 3 */}
+                      <div className="space-y-4 w-full lg:justify-self-stretch md:pl-10">
+                        <div className="space-y-1">
+                          <div className="text-xs font-medium text-gray-400">
+                            {messages.totalAmount}
+                          </div>
+                          <div className="text-base font-semibold text-yellow-400">
+                            {order.total}
+                          </div>
+                        </div>
+
+                        {order.tracking?.number && (
+                          <div className="space-y-1">
+                            <div className="text-xs text-gray-400">
+                              {messages.trackingNumber || "Tracking"}:
                             </div>
-                          )}
-
-                          {/* Fulfillment */}
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-gray-400">
-                              {messages.fulfillmentStatus || "Fulfillment"}:
-                            </span>
-                            {getFulfillmentStatusBadge(
-                              order.fulfillmentStatus,
-                              messages,
+                            {order.tracking.url ? (
+                              <a
+                                href={order.tracking.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs font-medium text-yellow-400 hover:text-yellow-300"
+                              >
+                                {order.tracking.number}
+                              </a>
+                            ) : (
+                              <span className="text-xs text-white">
+                                {order.tracking.number}
+                              </span>
                             )}
                           </div>
+                        )}
 
-                          {/* Tracking — ВАЖНО: показываем в шапке */}
-                          {order.tracking?.number && (
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-gray-400">
-                                {messages.trackingNumber || "Tracking"}:
-                              </span>
-
-                              {order.tracking.url ? (
-                                <a
-                                  href={order.tracking.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-xs font-medium text-yellow-400 hover:text-yellow-300"
-                                >
-                                  {order.tracking.number}
-                                </a>
-                              ) : (
-                                <span className="text-xs text-white">
-                                  {order.tracking.number}
-                                </span>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Toggle details */}
-                          <button
-                            type="button"
-                            onClick={() => toggleOrder(order.number)}
-                            aria-expanded={isOpen}
-                            aria-controls={detailsId}
-                            className="flex w-full items-center justify-center rounded-md border border-white/25 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 sm:w-auto"
-                          >
-                            {isOpen
-                              ? messages.hideDetails
-                              : messages.viewDetails}
-                          </button>
-                        </div>
+                        <button
+                          type="button"
+                          onClick={() => toggleOrder(order.number)}
+                          aria-expanded={isOpen}
+                          aria-controls={detailsId}
+                          className="flex w-full items-center justify-center rounded-md border border-gray-500/70 px-4 text-xs text-gray-300 hover:bg-white/10 hover:text-white h-9 whitespace-nowrap leading-none"
+                        >
+                          {isOpen ? messages.hideDetails : messages.viewDetails}
+                        </button>
                       </div>
                     </div>
 
@@ -366,6 +381,54 @@ export default function OrdersList({
                         id={detailsId}
                         className="mt-4 space-y-6 rounded-xl border border-white/10 bg-white/5 p-6"
                       >
+                        {/* Payment */}
+                        {/* {order.financialStatus && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-gray-400">
+                                {messages.paymentStatus || "Payment"}:
+                              </span>
+                              {getPaymentStatusBadge(
+                                order.financialStatus,
+                                messages,
+                              )}
+                            </div>
+                          )} */}
+                        {/* Fulfillment */}
+                        {/* <div className="flex items-center gap-2">
+                            <span className="text-xs text-gray-400">
+                              {messages.fulfillmentStatus || "Fulfillment"}:
+                            </span>
+                            {getFulfillmentStatusBadge(
+                              order.fulfillmentStatus,
+                              messages,
+                            )}
+                          </div> */}
+                        {/* <div className="border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8">
+                  <h4 className="sr-only">Status</h4>
+                  <p className="text-sm font-medium text-gray-900">
+                    {product.status} on <time dateTime={product.datetime}>{product.date}</time>
+                  </p>
+                  <div aria-hidden="true" className="mt-6">
+                    <div className="overflow-hidden rounded-full bg-gray-200">
+                      <div
+                        style={{ width: `calc((${product.step} * 2 + 1) / 8 * 100%)` }}
+                        className="h-2 rounded-full bg-indigo-600"
+                      />
+                    </div>
+                    <div className="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
+                      <div className="text-indigo-600">Order placed</div>
+                      <div className={classNames(product.step > 0 ? 'text-indigo-600' : '', 'text-center')}>
+                        Processing
+                      </div>
+                      <div className={classNames(product.step > 1 ? 'text-indigo-600' : '', 'text-center')}>
+                        Shipped
+                      </div>
+                      <div className={classNames(product.step > 2 ? 'text-indigo-600' : '', 'text-right')}>
+                        Delivered
+                      </div>
+                    </div>
+                  </div>
+                </div> */}
                         {/* Shipping address */}
                         {order.shippingAddress && (
                           <div>

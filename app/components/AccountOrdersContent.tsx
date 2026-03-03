@@ -222,7 +222,7 @@ export default function AccountOrdersContent({
   if (!user) return null;
 
   return (
-    <section className="">
+    <section className="relative mx-auto my-10 max-w-7xl ">
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16">
         <AccountSidebar
           user={user}

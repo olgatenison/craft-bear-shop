@@ -77,7 +77,7 @@ export default function AccountContent({ messages }: AccountContentProps) {
 
   const handleProfileChange = (
     field: keyof typeof profileForm,
-    value: string
+    value: string,
   ) => {
     setProfileForm((prev) => ({ ...prev, [field]: value }));
   };
@@ -97,8 +97,8 @@ export default function AccountContent({ messages }: AccountContentProps) {
         phoneCheck.error === "invalid"
           ? messages.phoneErrorInvalid
           : phoneCheck.error === "tooShort"
-          ? messages.phoneErrorTooShort
-          : messages.phoneErrorTooLong;
+            ? messages.phoneErrorTooShort
+            : messages.phoneErrorTooLong;
 
       setPhoneError(msg);
       setSavingProfile(false);
@@ -134,7 +134,7 @@ export default function AccountContent({ messages }: AccountContentProps) {
     } catch (err) {
       console.error(err);
       setProfileError(
-        err instanceof Error ? err.message : messages.profileSaveUnknownError
+        err instanceof Error ? err.message : messages.profileSaveUnknownError,
       );
     } finally {
       setSavingProfile(false);
@@ -162,7 +162,7 @@ export default function AccountContent({ messages }: AccountContentProps) {
   if (!user) return null;
 
   return (
-    <div>
+    <div className="relative mx-auto my-10 max-w-7xl ">
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-12 xl:gap-x-16 ">
         {/* LEFT: сайдбар */}
         <AccountSidebar
