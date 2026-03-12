@@ -69,13 +69,37 @@ interface ClerkOrder {
 }
 
 // Получаем ПОЛНЫЕ детали одного заказа (без fields — чтобы точно получить fulfillments)
+// async function fetchFullOrderDetails(
+//   orderId: number,
+//   accessToken: string,
+//   domain: string,
+// ): Promise<ShopifyOrder | null> {
+//   try {
+//     const url = `https://${domain}/admin/api/2024-10/orders/${orderId}.json`;
+//     const res = await fetch(url, {
+//       headers: { "X-Shopify-Access-Token": accessToken },
+//     });
+//     if (!res.ok) {
+//       console.warn(`⚠️ Failed to fetch order ${orderId}:`, res.status);
+//       return null;
+//     }
+//     const data = await res.json();
+//     return data.order ?? null;
+//   } catch (e) {
+//     console.warn(`⚠️ Error fetching order ${orderId}:`, e);
+//     return null;
+//   }
+// }
+// Замени функцию fetchFullOrderDetails на эту версию
 async function fetchFullOrderDetails(
   orderId: number,
   accessToken: string,
   domain: string,
 ): Promise<ShopifyOrder | null> {
   try {
-    const url = `https://${domain}/admin/api/2024-10/orders/${orderId}.json`;
+    // Запрашиваем явно все нужные поля включая shipping_address
+    const url = `https://${domain}/admin/api/2024-10/orders/${orderId}.json?fields=id,name,order_number,email,total_price,currency,created_at,financial_status,fulfillment_status,fulfillments,shipping_address,line_items`;
+
     const res = await fetch(url, {
       headers: { "X-Shopify-Access-Token": accessToken },
     });
@@ -84,13 +108,16 @@ async function fetchFullOrderDetails(
       return null;
     }
     const data = await res.json();
+    console.log(
+      `🏠 shipping_address for ${orderId}:`,
+      JSON.stringify(data.order?.shipping_address),
+    );
     return data.order ?? null;
   } catch (e) {
     console.warn(`⚠️ Error fetching order ${orderId}:`, e);
     return null;
   }
 }
-
 function extractTracking(fulfillments: ShopifyFulfillment[] | undefined):
   | {
       number: string;
@@ -191,6 +218,11 @@ export async function POST(req: NextRequest) {
       const full = await fetchFullOrderDetails(id, accessToken, shopifyDomain);
       if (full) {
         console.log(
+          `Order ${full.name} FULL shipping_address:`,
+          JSON.stringify(full.shipping_address),
+        );
+        console.log(`Order ${full.name} keys:`, Object.keys(full));
+        console.log(
           `  ✅ Order ${full.name}: fulfillments=${full.fulfillments?.length ?? 0}, tracking=${extractTracking(full.fulfillments)?.number ?? "none"}`,
         );
         fullOrders.push(full);
@@ -211,6 +243,11 @@ export async function POST(req: NextRequest) {
         order.fulfillment_status ??
         ((order.fulfillments?.length ?? 0) > 0 ? "fulfilled" : "unfulfilled")
       ).toLowerCase();
+
+      console.log(
+        "🏠 Shipping address raw:",
+        JSON.stringify(order.shipping_address, null, 2),
+      );
 
       const mapped: ClerkOrder = {
         shopifyOrderId: order.id,

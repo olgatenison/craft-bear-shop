@@ -279,57 +279,6 @@ export default function OrdersList({
                           <div className="text-gray-600">{order.number}</div>
                         </div>
                       </div>
-
-                      {/* COL 2 */}
-                      <div className="min-w-0">
-                        <h4 className="mb-3 text-xs text-gray-600">
-                          {messages.productHeader || "Products"}
-                        </h4>
-
-                        <ul className="space-y-3">
-                          {order.products.map((product) => (
-                            <li
-                              key={product.id}
-                              className="flex items-start gap-3"
-                            >
-                              <span className="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-white/70" />
-
-                              <div className="min-w-0 flex-1">
-                                <h5 className="text-lg font-medium text-white">
-                                  {product.name}
-                                </h5>
-
-                                <div className="mt-2 flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
-                                  <div className="text-xs text-gray-600">
-                                    <div>
-                                      {messages.priceHeader || "Price"}:{" "}
-                                      <span className="text-gray-400">
-                                        {product.price}
-                                      </span>
-                                    </div>
-                                    {product.quantity != null && (
-                                      <div>
-                                        Quantity:{" "}
-                                        <span className="text-gray-400">
-                                          {product.quantity}
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-
-                                  <a
-                                    href={product.href}
-                                    className="text-xs text-gray-600 transition-colors hover:text-gray-300 border-b border-gray-600/70 hover:border-gray-300"
-                                  >
-                                    {messages.viewProduct}
-                                  </a>
-                                </div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
                       {/* COL 3 */}
                       <div className="space-y-4 w-full lg:justify-self-stretch md:pl-10">
                         <div className="space-y-1">
@@ -340,10 +289,9 @@ export default function OrdersList({
                             {order.total}
                           </div>
                         </div>
-
                         {order.tracking?.number && (
                           <div className="space-y-1">
-                            <div className="text-xs text-gray-400">
+                            <div className="text-xs text-gray-600">
                               {messages.trackingNumber || "Tracking"}:
                             </div>
                             {order.tracking.url ? (
@@ -351,28 +299,27 @@ export default function OrdersList({
                                 href={order.tracking.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-xs font-medium text-yellow-400 hover:text-yellow-300"
+                                className=" text-gray-300"
                               >
                                 {order.tracking.number}
                               </a>
                             ) : (
-                              <span className="text-xs text-white">
+                              <span className="text-xs text-gray-300">
                                 {order.tracking.number}
                               </span>
                             )}
                           </div>
                         )}
-
-                        <button
-                          type="button"
-                          onClick={() => toggleOrder(order.number)}
-                          aria-expanded={isOpen}
-                          aria-controls={detailsId}
-                          className="flex w-full items-center justify-center rounded-md border border-gray-500/70 px-4 text-xs text-gray-300 hover:bg-white/10 hover:text-white h-9 whitespace-nowrap leading-none"
-                        >
-                          {isOpen ? messages.hideDetails : messages.viewDetails}
-                        </button>
-                      </div>
+                      </div>{" "}
+                      <button
+                        type="button"
+                        onClick={() => toggleOrder(order.number)}
+                        aria-expanded={isOpen}
+                        aria-controls={detailsId}
+                        className="flex w-full items-center justify-center rounded-md border border-gray-500/70 px-4 text-xs text-gray-300 hover:bg-white/10 hover:text-white h-9 whitespace-nowrap leading-none"
+                      >
+                        {isOpen ? messages.hideDetails : messages.viewDetails}
+                      </button>
                     </div>
 
                     {/* Details */}
@@ -381,6 +328,55 @@ export default function OrdersList({
                         id={detailsId}
                         className="mt-4 space-y-6 rounded-xl border border-white/10 bg-white/5 p-6"
                       >
+                        {/* COL 2 */}
+                        <div className="min-w-0">
+                          <h4 className="mb-3 text-xs text-gray-600">
+                            {messages.productHeader || "Products"}
+                          </h4>
+
+                          <ul className="space-y-3">
+                            {order.products.map((product) => (
+                              <li
+                                key={product.id}
+                                className="flex items-start gap-3"
+                              >
+                                <span className="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-white/70" />
+
+                                <div className="min-w-0 flex-1">
+                                  <h5 className="text-lg font-medium text-white">
+                                    {product.name}
+                                  </h5>
+
+                                  <div className="mt-2 flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+                                    <div className="text-xs text-gray-600">
+                                      <div>
+                                        {messages.priceHeader || "Price"}:{" "}
+                                        <span className="text-gray-400">
+                                          {product.price}
+                                        </span>
+                                      </div>
+                                      {product.quantity != null && (
+                                        <div>
+                                          Quantity:{" "}
+                                          <span className="text-gray-400">
+                                            {product.quantity}
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    <a
+                                      href={product.href}
+                                      className="text-xs text-gray-600 transition-colors hover:text-gray-300 border-b border-gray-600/70 hover:border-gray-300"
+                                    >
+                                      {messages.viewProduct}
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                         {/* Payment */}
                         {/* {order.financialStatus && (
                             <div className="flex items-center gap-2">
@@ -435,14 +431,26 @@ export default function OrdersList({
                             <h4 className="text-sm font-medium text-gray-400">
                               {messages.shippingAddress || "Shipping Address"}
                             </h4>
-                            <div className="mt-2 text-sm text-white">
-                              <p>{order.shippingAddress.name}</p>
-                              <p>{order.shippingAddress.address1}</p>
-                              <p>
-                                {order.shippingAddress.city},{" "}
-                                {order.shippingAddress.zip}
-                              </p>
-                              <p>{order.shippingAddress.country}</p>
+                            <div className="mt-2 text-sm text-white space-y-0.5">
+                              {order.shippingAddress.name && (
+                                <p>{order.shippingAddress.name}</p>
+                              )}
+                              {order.shippingAddress.address1 && (
+                                <p>{order.shippingAddress.address1}</p>
+                              )}
+                              {(order.shippingAddress.city ||
+                                order.shippingAddress.zip) && (
+                                <p>
+                                  {order.shippingAddress.city}
+                                  {order.shippingAddress.city &&
+                                    order.shippingAddress.zip &&
+                                    ", "}
+                                  {order.shippingAddress.zip}
+                                </p>
+                              )}
+                              {order.shippingAddress.country && (
+                                <p>{order.shippingAddress.country}</p>
+                              )}
                             </div>
                           </div>
                         )}
