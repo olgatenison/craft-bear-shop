@@ -1,9 +1,8 @@
-// app/api/account/orders/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import type { OrderForUi } from "@/app/components/ui/OrdersList";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const { userId } = await auth();
 
@@ -11,19 +10,19 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const lang = req.nextUrl.searchParams.get("lang") || "en";
+
     const client = await clerkClient();
     const user = await client.users.getUser(userId);
 
-    // Получаем заказы из metadata
     const ordersFromMeta = (user.publicMetadata?.orders as any[]) || [];
 
-    // Преобразуем в формат для UI
     const orders: OrderForUi[] = ordersFromMeta.map((order) => ({
       number:
         order.orderNumber?.toString() ||
         order.shopifyOrderId?.toString() ||
         "N/A",
-      date: new Date(order.createdAt).toLocaleDateString("en-US", {
+      date: new Date(order.createdAt).toLocaleDateString(lang, {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -32,19 +31,23 @@ export async function GET() {
       total: `${order.totalPrice} ${order.currency}`,
       products:
         order.items?.map((item: any, index: number) => ({
-          id: `${order.shopifyOrderId}-${index}`,
+          id:
+            item.variantId ||
+            item.productHandle ||
+            `${order.shopifyOrderId}-${index}`,
           name: item.title,
-          href: item.productHandle ? `/product/${item.productHandle}` : "#",
+          href: item.productHandle
+            ? `/${lang}/product/${item.productHandle}`
+            : "#",
           price: `${item.price} ${order.currency}`,
           status: order.fulfillmentStatus || "pending",
-          imageSrc: item.image || "/placeholder.png",
+          imageSrc: "/placeholder.png",
           imageAlt: item.title,
         })) || [],
     }));
 
-    // Сортируем по дате (новые первыми)
     orders.sort(
-      (a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+      (a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime(),
     );
 
     return NextResponse.json({ orders });
@@ -52,11 +55,10 @@ export async function GET() {
     console.error("Orders API error:", error);
     return NextResponse.json(
       { error: "Failed to load orders" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-
 // 3. Добавьте в .env:
 // bashSHOPIFY_WEBHOOK_SECRET=your_webhook_secret_here
 // 4. Настройте webhook в Shopify:

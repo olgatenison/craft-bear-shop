@@ -27,11 +27,11 @@ type ReviewMessages = {
   deleteReview: string;
   deleteConfirm: string;
   deleting: string;
-  page: string; // ✅ добавлено
-  of: string; // ✅ добавлено
-  showing: string; // ✅ добавлено
-  prev: string; // ✅ добавлено
-  next: string; // ✅ добавлено
+  page: string;
+  of: string;
+  showing: string;
+  prev: string;
+  next: string;
 };
 
 type AccountReviewContentProps = {

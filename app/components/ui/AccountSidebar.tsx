@@ -52,7 +52,7 @@ export function AccountSidebar({
         <p className=" truncate text-2xl font-semibold text-white">
           {user.firstName || user.primaryEmailAddress?.emailAddress}
         </p>
-        <p className="mt-1 truncate text-sm text-gray-500">
+        <p className="mt-1 truncate text-sm text-gray-400">
           {user.primaryEmailAddress?.emailAddress}
         </p>
       </div>
@@ -74,7 +74,7 @@ export function AccountSidebar({
                   "w-full flex-1 border-b-2 pb-3 px-1 text-left text-base transition-colors",
                   isActive
                     ? "border-yellow-400 font-semibold text-yellow-400"
-                    : "border-transparent text-gray-400 hover:text-white"
+                    : "border-transparent text-gray-400 hover:text-white",
                 )}
               >
                 {item.label}

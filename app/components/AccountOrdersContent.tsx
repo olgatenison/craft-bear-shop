@@ -1,4 +1,4 @@
-// app/components/AccountOrdersContent.tsx
+// app/components/AccountOrdersContent.tsx"use client";
 "use client";
 
 import { useUser, useClerk } from "@clerk/nextjs";
@@ -26,7 +26,6 @@ type AccountOrdersContentProps = {
   ordersMessages: AccountOrdersMessages;
 };
 
-// Типы для заказов из Clerk (LITE: без image)
 interface ClerkOrderItem {
   title: string;
   quantity: number;
@@ -37,7 +36,7 @@ interface ClerkOrderItem {
 interface ClerkOrder {
   shopifyOrderId: number;
   orderNumber: number;
-  name?: string; // "#1003"
+  name?: string;
   totalPrice: string;
   currency: string;
   createdAt: string;
@@ -57,6 +56,44 @@ interface ClerkOrder {
   items: ClerkOrderItem[];
 }
 
+function formatOrdersForUI(
+  clerkOrders: ClerkOrder[],
+  lang: Locale,
+): OrderForUi[] {
+  return clerkOrders.map((order) => {
+    const financialStatus = (order.financialStatus || "").toLowerCase();
+    const fulfillmentStatus = (
+      order.fulfillmentStatus ?? "unfulfilled"
+    ).toLowerCase();
+
+    return {
+      shopifyOrderId: order.shopifyOrderId,
+      number: order.name || `#${order.orderNumber}`,
+      date: new Date(order.createdAt).toLocaleDateString(lang, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      datetime: order.createdAt,
+      total: `${order.totalPrice} ${order.currency}`,
+      financialStatus,
+      fulfillmentStatus,
+      shippingAddress: order.shippingAddress,
+      tracking: order.tracking,
+      products: order.items.map((item) => ({
+        id: item.variantId || `${order.shopifyOrderId}-${item.title}`,
+        name: item.title,
+        href: item.variantId ? `/${lang}/product/${item.variantId}` : "#",
+        price: `${item.price} ${order.currency}`,
+        status: financialStatus,
+        imageSrc: "/placeholder-product.jpg",
+        imageAlt: item.title,
+        quantity: item.quantity,
+      })),
+    };
+  });
+}
+
 export default function AccountOrdersContent({
   accountMessages,
   ordersMessages,
@@ -67,7 +104,6 @@ export default function AccountOrdersContent({
 
   const [loadingLogout, setLoadingLogout] = useState(false);
   const [orders, setOrders] = useState<OrderForUi[] | null>(null);
-  const [syncing, setSyncing] = useState(false);
 
   const langFromParams = params?.lang;
   const lang = (
@@ -87,10 +123,8 @@ export default function AccountOrdersContent({
     },
   ];
 
-  // Функция синхронизации
   const syncOrders = async () => {
     try {
-      setSyncing(true);
       const res = await fetch("/api/shopify/sync-orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -104,119 +138,48 @@ export default function AccountOrdersContent({
       const data = await res.json();
       console.log("Sync result:", data);
 
-      // ВАЖНО: теперь sync может "updated" существующие заказы,
-      // поэтому успешность лучше считать по success, а не synced>0
       return Boolean(data.success);
     } catch (error) {
       console.warn("Sync error:", error);
       return false;
-    } finally {
-      setSyncing(false);
     }
   };
 
-  // Функция форматирования заказов для UI
-  const formatOrdersForUI = (clerkOrders: ClerkOrder[]): OrderForUi[] => {
-    return clerkOrders.map((order) => {
-      const financialStatus = (order.financialStatus || "").toLowerCase();
-      const fulfillmentStatus = (
-        order.fulfillmentStatus ?? "unfulfilled"
-      ).toLowerCase();
-
-      return {
-        shopifyOrderId: order.shopifyOrderId,
-
-        // показываем как Shopify Admin
-        number: order.name || `#${order.orderNumber}`,
-
-        date: new Date(order.createdAt).toLocaleDateString(effectiveLang, {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
-        datetime: order.createdAt,
-        total: `${order.totalPrice} ${order.currency}`,
-
-        financialStatus,
-        fulfillmentStatus,
-
-        shippingAddress: order.shippingAddress,
-        tracking: order.tracking,
-
-        // LITE: products без картинок
-        products: order.items.map((item) => ({
-          id: item.variantId || `${order.shopifyOrderId}-${item.title}`,
-          name: item.title,
-          href: item.variantId
-            ? `/${effectiveLang}/product/${item.variantId}`
-            : "#",
-          price: `${item.price} ${order.currency}`,
-          status: financialStatus,
-          imageSrc: "/placeholder-product.jpg", // временно (если OrdersList всё ещё ожидает поле)
-          imageAlt: item.title,
-          quantity: item.quantity,
-        })),
-      };
-    });
-  };
-
-  // Загрузка заказов
   useEffect(() => {
     if (!user) return;
 
     let cancelled = false;
 
-    // const loadOrders = async () => {
-    //   try {
-    //     // 1. Сразу показываем то, что уже есть в Clerk (без задержки)
-    //     let clerkOrders = (user.publicMetadata?.orders as ClerkOrder[]) || [];
-    //     if (clerkOrders.length > 0 && !cancelled) {
-    //       setOrders(formatOrdersForUI(clerkOrders));
-    //     }
-
-    //     // 2. Всегда синкаем с Shopify (чтобы новые заказы появлялись)
-    //     const ok = await syncOrders();
-    //     if (ok) {
-    //       await user.reload();
-    //       clerkOrders = (user.publicMetadata?.orders as ClerkOrder[]) || [];
-    //     }
-
-    //     // 3. Обновляем UI актуальными данными
-    //     if (!cancelled) setOrders(formatOrdersForUI(clerkOrders));
-    //   } catch (e) {
-    //     console.warn("Orders load error", e);
-    //     if (!cancelled) setOrders([]);
-    //   }
-    // };
     const loadOrders = async () => {
       try {
-        // 1. Показываем что есть в клиентском кэше (мгновенно)
         const cached = (user.publicMetadata?.orders as ClerkOrder[]) || [];
         if (cached.length > 0 && !cancelled) {
-          setOrders(formatOrdersForUI(cached));
+          setOrders(formatOrdersForUI(cached, effectiveLang));
         }
 
-        // 2. Синкаем с Shopify
         await syncOrders();
 
-        // 3. Читаем СВЕЖИЕ данные с сервера (минуя кэш Clerk)
         const res = await fetch("/api/shopify/get-orders");
         if (res.ok) {
           const { orders: freshOrders } = await res.json();
-          if (!cancelled)
-            setOrders(formatOrdersForUI(freshOrders as ClerkOrder[]));
+          if (!cancelled) {
+            setOrders(
+              formatOrdersForUI(freshOrders as ClerkOrder[], effectiveLang),
+            );
+          }
         }
       } catch (e) {
         console.warn("Orders load error", e);
         if (!cancelled) setOrders([]);
       }
     };
+
     loadOrders();
 
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, [user, effectiveLang]);
 
   const handleSignOut = async () => {
     setLoadingLogout(true);
@@ -256,6 +219,7 @@ export default function AccountOrdersContent({
         />
 
         <OrdersList
+          key={effectiveLang}
           messages={ordersMessages}
           lang={effectiveLang}
           orders={orders ?? []}
