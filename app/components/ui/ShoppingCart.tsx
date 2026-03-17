@@ -1,5 +1,5 @@
-// app/components/ui/ShoppingCart.tsx
 "use client";
+
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useCart } from "@/app/context/CartContext";
@@ -12,7 +12,6 @@ type ShoppingCartMsgs = {
   itemsInCart: string;
 };
 
-// Обновляем тип Messages чтобы он был более гибким
 type Messages = Record<string, unknown> & {
   ShoppingCart?: ShoppingCartMsgs;
 };
@@ -24,18 +23,24 @@ const FALLBACK: ShoppingCartMsgs = {
   itemsInCart: "items in cart",
 };
 
-export default function ShoppingCart({
-  href = "/cart",
-  messages,
-}: {
+type ShoppingCartProps = {
   lang?: Locale | string;
   href?: string;
   messages?: Messages;
-}) {
+  className?: string;
+};
+
+export default function ShoppingCart({
+  lang,
+  href,
+  messages,
+  className = "",
+}: ShoppingCartProps) {
   const { itemCount } = useCart();
 
-  // Получаем переводы из messages.ShoppingCart
   const dict = messages?.ShoppingCart ?? FALLBACK;
+
+  const finalHref = href || (lang ? `/${lang}/cart` : "/cart");
 
   const label =
     itemCount > 0
@@ -44,20 +49,19 @@ export default function ShoppingCart({
 
   return (
     <Link
-      href={href}
+      href={finalHref}
       prefetch={false}
       aria-label={label}
       title={label}
-      className="group -m-2 flex items-center p-2 relative"
+      className={`group relative -m-2 flex items-center p-2 transition-colors ${className}`}
     >
       <ShoppingCartIcon
         aria-hidden="true"
-        className="size-6 shrink-0 text-gray-400 group-hover:text-yellow-500 transition-colors"
+        className="size-6 shrink-0 transition-colors"
       />
 
-      {/* Badge с количеством */}
       {itemCount > 0 && (
-        <span className="absolute -top-1 -right-1 flex size-5 items-center justify-center rounded-full bg-yellow-500 text-xs font-bold text-gray-900">
+        <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-yellow-500 text-xs font-bold text-gray-900">
           {itemCount > 99 ? "99+" : itemCount}
         </span>
       )}
