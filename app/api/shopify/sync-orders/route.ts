@@ -43,6 +43,7 @@ interface ClerkOrderItem {
   quantity: number;
   price: string;
   variantId: string | null;
+  shopifyProductId: string | null;
 }
 
 interface ClerkOrder {
@@ -145,7 +146,8 @@ function extractTracking(fulfillments: ShopifyFulfillment[] | undefined):
   return { number: String(number), url: String(url) };
 }
 
-export async function POST(req: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function POST(_req: NextRequest) {
   try {
     const { userId } = await auth();
 
@@ -275,6 +277,7 @@ export async function POST(req: NextRequest) {
           quantity: item.quantity,
           price: item.price,
           variantId: item.variant_id ? `${item.variant_id}` : null,
+          shopifyProductId: item.product_id ? `${item.product_id}` : null,
         })),
       };
 

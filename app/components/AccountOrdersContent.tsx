@@ -26,73 +26,73 @@ type AccountOrdersContentProps = {
   ordersMessages: AccountOrdersMessages;
 };
 
-interface ClerkOrderItem {
-  title: string;
-  quantity: number;
-  price: string;
-  variantId: string | null;
-}
+// interface ClerkOrderItem {
+//   title: string;
+//   quantity: number;
+//   price: string;
+//   variantId: string | null;
+// }
 
-interface ClerkOrder {
-  shopifyOrderId: number;
-  orderNumber: number;
-  name?: string;
-  totalPrice: string;
-  currency: string;
-  createdAt: string;
-  financialStatus: string;
-  fulfillmentStatus: string | null;
-  tracking?: {
-    number: string;
-    url: string;
-  };
-  shippingAddress?: {
-    name: string;
-    address1: string;
-    city: string;
-    country: string;
-    zip: string;
-  };
-  items: ClerkOrderItem[];
-}
+// interface ClerkOrder {
+//   shopifyOrderId: number;
+//   orderNumber: number;
+//   name?: string;
+//   totalPrice: string;
+//   currency: string;
+//   createdAt: string;
+//   financialStatus: string;
+//   fulfillmentStatus: string | null;
+//   tracking?: {
+//     number: string;
+//     url: string;
+//   };
+//   shippingAddress?: {
+//     name: string;
+//     address1: string;
+//     city: string;
+//     country: string;
+//     zip: string;
+//   };
+//   items: ClerkOrderItem[];
+// }
 
-function formatOrdersForUI(
-  clerkOrders: ClerkOrder[],
-  lang: Locale,
-): OrderForUi[] {
-  return clerkOrders.map((order) => {
-    const financialStatus = (order.financialStatus || "").toLowerCase();
-    const fulfillmentStatus = (
-      order.fulfillmentStatus ?? "unfulfilled"
-    ).toLowerCase();
+// function formatOrdersForUI(
+//   clerkOrders: ClerkOrder[],
+//   lang: Locale,
+// ): OrderForUi[] {
+//   return clerkOrders.map((order) => {
+//     const financialStatus = (order.financialStatus || "").toLowerCase();
+//     const fulfillmentStatus = (
+//       order.fulfillmentStatus ?? "unfulfilled"
+//     ).toLowerCase();
 
-    return {
-      shopifyOrderId: order.shopifyOrderId,
-      number: order.name || `#${order.orderNumber}`,
-      date: new Date(order.createdAt).toLocaleDateString(lang, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      datetime: order.createdAt,
-      total: `${order.totalPrice} ${order.currency}`,
-      financialStatus,
-      fulfillmentStatus,
-      shippingAddress: order.shippingAddress,
-      tracking: order.tracking,
-      products: order.items.map((item) => ({
-        id: item.variantId || `${order.shopifyOrderId}-${item.title}`,
-        name: item.title,
-        href: item.variantId ? `/${lang}/product/${item.variantId}` : "#",
-        price: `${item.price} ${order.currency}`,
-        status: financialStatus,
-        imageSrc: "/placeholder-product.jpg",
-        imageAlt: item.title,
-        quantity: item.quantity,
-      })),
-    };
-  });
-}
+//     return {
+//       shopifyOrderId: order.shopifyOrderId,
+//       number: order.name || `#${order.orderNumber}`,
+//       date: new Date(order.createdAt).toLocaleDateString(lang, {
+//         year: "numeric",
+//         month: "long",
+//         day: "numeric",
+//       }),
+//       datetime: order.createdAt,
+//       total: `${order.totalPrice} ${order.currency}`,
+//       financialStatus,
+//       fulfillmentStatus,
+//       shippingAddress: order.shippingAddress,
+//       tracking: order.tracking,
+//       products: order.items.map((item) => ({
+//         id: item.variantId || `${order.shopifyOrderId}-${item.title}`,
+//         name: item.title,
+//         href: item.variantId ? `/${lang}/product/${item.variantId}` : "#",
+//         price: `${item.price} ${order.currency}`,
+//         status: financialStatus,
+//         imageSrc: "/placeholder-product.jpg",
+//         imageAlt: item.title,
+//         quantity: item.quantity,
+//       })),
+//     };
+//   });
+// }
 
 export default function AccountOrdersContent({
   accountMessages,
@@ -152,20 +152,20 @@ export default function AccountOrdersContent({
 
     const loadOrders = async () => {
       try {
-        const cached = (user.publicMetadata?.orders as ClerkOrder[]) || [];
-        if (cached.length > 0 && !cancelled) {
-          setOrders(formatOrdersForUI(cached, effectiveLang));
-        }
+        // const cached = (user.publicMetadata?.orders as ClerkOrder[]) || [];
+        // if (cached.length > 0 && !cancelled) {
+        //   setOrders(formatOrdersForUI(cached, effectiveLang));
+        // }
 
         await syncOrders();
 
-        const res = await fetch("/api/shopify/get-orders");
+        const res = await fetch(
+          `/${effectiveLang}/api/account/orders?lang=${effectiveLang}`,
+        );
         if (res.ok) {
           const { orders: freshOrders } = await res.json();
           if (!cancelled) {
-            setOrders(
-              formatOrdersForUI(freshOrders as ClerkOrder[], effectiveLang),
-            );
+            setOrders(freshOrders);
           }
         }
       } catch (e) {

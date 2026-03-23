@@ -565,7 +565,7 @@ export default function OrdersList({
                                     key={product.id}
                                     className="flex items-start gap-3"
                                   >
-                                    <span className="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-white" />
+                                    <span className="mt-3 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-white" />
 
                                     <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                       <div className="min-w-0">
