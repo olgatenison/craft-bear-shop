@@ -10,7 +10,12 @@ type BannerCookieClientProps = {
   policyHref: string;
 };
 
-const STORAGE_KEY = "cookie-consent"; // "accepted" | "rejected"
+const STORAGE_KEY = "cookie-consent";
+
+function getInitialVisible() {
+  if (typeof window === "undefined") return false;
+  return !localStorage.getItem(STORAGE_KEY);
+}
 
 export default function BannerCookieClient({
   text,
@@ -19,16 +24,10 @@ export default function BannerCookieClient({
   policyLabel,
   policyHref,
 }: BannerCookieClientProps) {
-  const [visible, setVisible] = useState(() => {
-    if (typeof window === "undefined") return false;
-    const value = window.localStorage.getItem(STORAGE_KEY);
-    return !value;
-  });
+  const [visible, setVisible] = useState(getInitialVisible);
 
   const handleChoice = (choice: "accepted" | "rejected") => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem(STORAGE_KEY, choice);
-    }
+    localStorage.setItem(STORAGE_KEY, choice);
     setVisible(false);
   };
 
@@ -36,12 +35,7 @@ export default function BannerCookieClient({
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 px-6 pb-6 z-50">
-      <div
-        className="pointer-events-auto ml-auto rounded-2xl shadow-lg shadow-black/50 max-w-lg p-8
-        ring-1 ring-white/15 dark:ring-stone/20
-        bg-linear-to-b from-white/55 to-white/20
-        dark:from-stone-950/75 dark:to-stone-950/80"
-      >
+      <div className="pointer-events-auto ml-auto rounded-2xl shadow-lg shadow-black/50 max-w-lg p-8 ring-1 ring-white/15 dark:ring-stone/20 bg-linear-to-b from-white/55 to-white/20 dark:from-stone-950/75 dark:to-stone-950/80">
         <p className="text-base/6 text-gray-300">
           {text}{" "}
           <a
@@ -56,7 +50,7 @@ export default function BannerCookieClient({
           <button
             type="button"
             onClick={() => handleChoice("accepted")}
-            className="rounded-md text-yellow-500 bg-linear-to-br from-stone-300/20 to-stone-900/50  px-3 py-2 text-base font-semibold  shadow-sm hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="rounded-md text-yellow-500 bg-linear-to-br from-stone-300/20 to-stone-900/50 px-3 py-2 text-base font-semibold shadow-sm hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             {acceptLabel}
           </button>

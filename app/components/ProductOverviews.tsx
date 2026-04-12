@@ -27,6 +27,8 @@ type ProductOverviewsProps = {
   shelf_life_days: string;
   days: string;
   volume: string;
+  ean: string;
+  boxNumber: string;
 };
 
 function classNames(...classes: Array<string | false | undefined>) {
@@ -101,6 +103,8 @@ export default function ProductOverviews({
   shelf_life_days,
   days,
   volume,
+  ean,
+  boxNumber,
 }: ProductOverviewsProps) {
   const price = product.priceRange.minVariantPrice.amount;
   const packSize = product.specs?.pack_size_l;
@@ -115,14 +119,16 @@ export default function ProductOverviews({
   const productPairing = product.specs?.pairing;
   const productShelfLifeDays = product.specs?.shelf_life_days;
   const productVolume = product.specs?.volume;
+  const productGtin = product.specs?.gtin;
+  const productBoxNumber = product.specs?.box_number;
 
   const rawVariants = getVariantNodes(product as ProductWithVariants);
 
   const getVolumeVariant = (value: "0.5" | "1") =>
     rawVariants.find((v) =>
       (v.selectedOptions ?? []).some(
-        (o) => o.name.toLowerCase() === "volume" && o.value === value
-      )
+        (o) => o.name.toLowerCase() === "volume" && o.value === value,
+      ),
     );
 
   const vHalf = getVolumeVariant("0.5");
@@ -296,7 +302,7 @@ export default function ProductOverviews({
                             rating > ratingValue
                               ? "text-yellow-400"
                               : "text-gray-500",
-                            "size-5 shrink-0"
+                            "size-5 shrink-0",
                           )}
                         />
                       ))}
@@ -328,7 +334,7 @@ export default function ProductOverviews({
                         image.primary
                           ? "lg:col-span-2 lg:row-span-2"
                           : "hidden lg:block",
-                        "relative aspect-square w-full overflow-hidden rounded-lg bg-stone-200 transition-colors duration-300"
+                        "relative aspect-square w-full overflow-hidden rounded-lg bg-stone-200 transition-colors duration-300",
                       )}
                     >
                       <Image
@@ -365,7 +371,6 @@ export default function ProductOverviews({
               ) : (
                 <AddToCartButton product={product} addToCart={addToCart} />
               )}
-
               {/* Product Description */}
               {/* {product.descriptionHtml && (
                 <div className="mt-8 border-t border-gray-200 pt-8">
@@ -381,7 +386,6 @@ export default function ProductOverviews({
                   />
                 </div>
               )} */}
-
               {product.descriptionHtml && (
                 <div className="mt-8 border-t border-white/10 pt-8">
                   <h2 className="text-lg font-semibold text-white ">
@@ -404,7 +408,6 @@ export default function ProductOverviews({
                   />
                 </div>
               )}
-
               {/* Tasted best with */}
               {pairingList.length > 0 && (
                 <div className="mt-8 border-t border-gray-200 pt-8">
@@ -425,7 +428,6 @@ export default function ProductOverviews({
                   </div>
                 </div>
               )}
-
               {/* Volume */}
               {productVolume && (
                 <div className="w-full flex items-baseline gap-2 mt-6">
@@ -437,7 +439,6 @@ export default function ProductOverviews({
                   </span>
                 </div>
               )}
-
               {isDraft ? (
                 <div className="w-full flex items-baseline gap-2 mt-6">
                   <span className="text-lg text-white font-semibold whitespace-nowrap">
@@ -459,7 +460,6 @@ export default function ProductOverviews({
                   </div>
                 )
               )}
-
               {/* Allergens */}
               {productAllergens && (
                 <div className="w-full flex items-baseline gap-2 mt-6">
@@ -471,7 +471,6 @@ export default function ProductOverviews({
                   </span>
                 </div>
               )}
-
               {/* Ingredients */}
               {productIngredients && (
                 <div className="w-full mt-6 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-2">
@@ -483,7 +482,6 @@ export default function ProductOverviews({
                   </span>
                 </div>
               )}
-
               {/* сколько годен */}
               {productShelfLifeDays && (
                 <div className="w-full flex items-baseline gap-2 mt-6">
@@ -492,6 +490,26 @@ export default function ProductOverviews({
                   </span>
                   <span className="text-base text-gray-300">
                     {productShelfLifeDays} {days}
+                  </span>
+                </div>
+              )}
+              {/* EAN / GTIN */}
+              {productGtin && (
+                <div className="w-full flex items-baseline gap-2 mt-6">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {ean}:
+                  </span>
+                  <span className="text-base text-gray-300">{productGtin}</span>
+                </div>
+              )}
+              {/* boxNumber */}
+              {productBoxNumber !== undefined && productBoxNumber !== null && (
+                <div className="w-full flex items-baseline gap-2 mt-6">
+                  <span className="text-lg text-white font-semibold whitespace-nowrap">
+                    {boxNumber}:
+                  </span>
+                  <span className="text-base text-gray-300">
+                    {productBoxNumber}
                   </span>
                 </div>
               )}

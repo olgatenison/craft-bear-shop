@@ -28,7 +28,7 @@ const VALID_CATEGORIES: CategoryKey[] = [
 ];
 
 function getCategoryFromProduct(
-  collections: string[] | undefined
+  collections: string[] | undefined,
 ): string | undefined {
   if (!collections || collections.length === 0) return undefined;
 
@@ -109,6 +109,8 @@ export default async function ProductPage({
         days={t.OneProduct.days}
         volume={t.OneProduct.volume}
         reviewCount={reviews.totalCount}
+        ean={t.OneProduct.ean}
+        boxNumber={t.OneProduct.boxNumber}
       />
 
       <section id="product-reviews" className="mt-16">

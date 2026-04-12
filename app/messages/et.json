@@ -66,7 +66,9 @@
     "ingredients": "Koostisosad",
     "shelfLifeDays": "Termini",
     "days": "päeva",
-    "volume": "Maht"
+    "volume": "Maht",
+    "ean": "EAN",
+    "boxNumber": "Laatikon numero"
   },
   "CustomerReviews": {
     "title": "Kliendiarvustused",
