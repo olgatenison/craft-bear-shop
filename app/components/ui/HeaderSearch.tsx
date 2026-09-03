@@ -1,4 +1,4 @@
-// app\components\ui\HeaderSearch.tsx
+// app/components/ui/HeaderSearch.tsx
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -10,14 +10,14 @@ type HeaderSearchDict = {
   label?: string;
   placeholder?: string;
 
-  closeSearch?: string; // overlay aria-label
-  close?: string; // кнопка X
+  closeSearch?: string;
+  close?: string;
 
   searching?: string;
   typeHint?: string;
-  noResults?: string; // будет использоваться как "No results found for"
-  hotkeyOpen?: string; // "to open"
-  hotkeyClose?: string; // "to close"
+  noResults?: string;
+  hotkeyOpen?: string;
+  hotkeyClose?: string;
 };
 
 type MessagesLike = {
@@ -28,16 +28,29 @@ type SearchItem = {
   id: string;
   title: string;
   handle: string;
-  image?: { url: string; alt?: string | null };
-  price?: { amount: string; currencyCode: string };
+  image?: {
+    url: string;
+    alt?: string | null;
+  };
+  price?: {
+    amount: string;
+    currencyCode: string;
+  };
 };
 
 function useDebouncedValue<T>(value: T, delay = 250) {
   const [debounced, setDebounced] = useState(value);
+
   useEffect(() => {
-    const t = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(t);
+    const timeout = setTimeout(() => {
+      setDebounced(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [value, delay]);
+
   return debounced;
 }
 
@@ -47,7 +60,7 @@ export default function HeaderSearch({
   label,
 }: {
   lang: string;
-  messages?: MessagesLike; // ✅ сюда передаём общий messages
+  messages?: MessagesLike;
   label?: string;
 }) {
   const dict = messages?.HeaderSearch;
@@ -67,6 +80,7 @@ export default function HeaderSearch({
 
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
+
   const debouncedQ = useDebouncedValue(q, 250);
 
   const [items, setItems] = useState<SearchItem[]>([]);
@@ -75,15 +89,32 @@ export default function HeaderSearch({
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  // Custom scrollbar styles
   useEffect(() => {
     const style = document.createElement("style");
+
     style.innerHTML = `
-      .search-results-scroll::-webkit-scrollbar { width: 8px; }
-      .search-results-scroll::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
-      .search-results-scroll::-webkit-scrollbar-thumb { background: #515151; border-radius: 4px; }
-      .search-results-scroll::-webkit-scrollbar-thumb:hover { background: #e0e0e0; }
+      .search-results-scroll::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .search-results-scroll::-webkit-scrollbar-track {
+        background: #1f2937;
+        border-radius: 4px;
+      }
+
+      .search-results-scroll::-webkit-scrollbar-thumb {
+        background: #515151;
+        border-radius: 4px;
+      }
+
+      .search-results-scroll::-webkit-scrollbar-thumb:hover {
+        background: #e0e0e0;
+      }
     `;
+
     document.head.appendChild(style);
+
     return () => {
       document.head.removeChild(style);
     };
@@ -92,29 +123,45 @@ export default function HeaderSearch({
   // Hotkey: Cmd/Ctrl + K
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      const isK = e.key.toLowerCase() === "k";
-      if ((e.ctrlKey || e.metaKey) && isK) {
+      const key = typeof e.key === "string" ? e.key.toLowerCase() : "";
+
+      if ((e.ctrlKey || e.metaKey) && key === "k") {
         e.preventDefault();
         setOpen(true);
+        return;
       }
-      if (e.key === "Escape") setOpen(false);
+
+      if (key === "escape") {
+        setOpen(false);
+      }
     };
+
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, []);
 
-  // focus input when open
+  // Focus input when search opens
   useEffect(() => {
     if (!open) return;
-    const t = setTimeout(() => inputRef.current?.focus(), 0);
-    return () => clearTimeout(t);
+
+    const timeout = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [open]);
 
-  // fetch results
+  // Fetch search results
   useEffect(() => {
     if (!open) return;
 
     const query = debouncedQ.trim();
+
     if (query.length < 2) {
       setItems([]);
       setLoading(false);
@@ -123,18 +170,28 @@ export default function HeaderSearch({
     }
 
     const controller = new AbortController();
-    (async () => {
+
+    const fetchResults = async () => {
       try {
         setLoading(true);
         setError(null);
 
         const res = await fetch(
           `/${lang}/api/search?q=${encodeURIComponent(query)}`,
-          { signal: controller.signal, cache: "no-store" }
+          {
+            signal: controller.signal,
+            cache: "no-store",
+          },
         );
 
-        if (!res.ok) throw new Error(`Search failed (${res.status})`);
-        const data = (await res.json()) as { items: SearchItem[] };
+        if (!res.ok) {
+          throw new Error(`Search failed (${res.status})`);
+        }
+
+        const data = (await res.json()) as {
+          items?: SearchItem[];
+        };
+
         setItems(data.items ?? []);
       } catch (e: unknown) {
         if (
@@ -142,8 +199,9 @@ export default function HeaderSearch({
           typeof e === "object" &&
           "name" in e &&
           e.name === "AbortError"
-        )
+        ) {
           return;
+        }
 
         const errorMessage =
           e &&
@@ -158,9 +216,13 @@ export default function HeaderSearch({
       } finally {
         setLoading(false);
       }
-    })();
+    };
 
-    return () => controller.abort();
+    fetchResults();
+
+    return () => {
+      controller.abort();
+    };
   }, [debouncedQ, open, lang]);
 
   const close = () => {
@@ -182,6 +244,7 @@ export default function HeaderSearch({
         className="p-2 text-gray-400 hover:text-yellow-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-yellow-500 rounded-md transition-colors"
       >
         <span className="sr-only">{Label}</span>
+
         <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
       </button>
 
@@ -192,24 +255,28 @@ export default function HeaderSearch({
           aria-label={Label}
           className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4"
         >
-          {/* overlay */}
+          {/* Overlay */}
           <button
+            type="button"
             aria-label={CloseSearch}
             onClick={close}
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
           />
 
           <div className="relative w-full max-w-2xl bg-[#1a1a1a] rounded-2xl shadow-2xl border border-gray-800">
-            {/* input */}
+            {/* Input */}
             <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-800">
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-500 shrink-0" />
+
               <input
                 ref={inputRef}
+                type="search"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder={Placeholder}
                 className="w-full bg-transparent outline-none text-white placeholder:text-gray-500 text-lg"
               />
+
               <button
                 type="button"
                 onClick={close}
@@ -220,7 +287,7 @@ export default function HeaderSearch({
               </button>
             </div>
 
-            {/* results */}
+            {/* Results */}
             <div
               className="max-h-[60vh] overflow-y-auto search-results-scroll"
               style={{
@@ -248,7 +315,8 @@ export default function HeaderSearch({
                   items.length === 0 &&
                   debouncedQ.trim().length >= 2 && (
                     <span>
-                      {NoResults} &ldquo;{debouncedQ}&rdquo;
+                      {NoResults} &ldquo;
+                      {debouncedQ}&rdquo;
                     </span>
                   )}
               </div>
@@ -282,6 +350,7 @@ export default function HeaderSearch({
                           <div className="truncate text-base font-medium text-white group-hover:text-yellow-500 transition-colors">
                             {p.title}
                           </div>
+
                           <div className="truncate text-sm text-gray-500 mt-0.5">
                             /{p.handle}
                           </div>
@@ -300,7 +369,7 @@ export default function HeaderSearch({
               )}
             </div>
 
-            {/* footer tip */}
+            {/* Footer */}
             <div className="px-6 py-3 text-xs text-gray-500 border-t border-gray-800 flex items-center justify-center gap-4">
               <span>
                 <kbd className="px-2 py-1 bg-gray-800 rounded text-gray-400 font-mono">
@@ -308,7 +377,9 @@ export default function HeaderSearch({
                 </kbd>{" "}
                 {HotkeyOpen}
               </span>
+
               <span className="text-gray-700">•</span>
+
               <span>
                 <kbd className="px-2 py-1 bg-gray-800 rounded text-gray-400 font-mono">
                   Esc

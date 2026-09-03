@@ -15,7 +15,7 @@ export function LegalPageLayout({
   //   console.log(html);
 
   return (
-    <div className="lg:py-20  w-full mx-auto py-6">
+    <div className="lg:py-20 w-full mx-auto py-6">
       <div className="">
         <h1 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:mb-16 mb-4 text-center md:text-left">
           {title}

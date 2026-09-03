@@ -2,7 +2,7 @@
 import { fetchPageByHandle } from "@/app/data/repo";
 import { notFound } from "next/navigation";
 import type { Locale } from "@/app/lib/locale";
-import { LegalPageLayout } from "@/app/components/LegalPageLayout";
+// import { LegalPageLayout } from "@/app/components/LegalPageLayout";
 import ContactAdresses from "@/app/components/ui/ContactAdresses";
 
 export default async function ContactPage({
@@ -18,9 +18,9 @@ export default async function ContactPage({
   }
 
   return (
-    <main>
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <ContactAdresses />
-      <LegalPageLayout title={page.title} html={page.body} />
+      {/* <LegalPageLayout title={page.title} html={page.body} /> */}
     </main>
   );
 }
