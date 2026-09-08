@@ -22,6 +22,7 @@ export type FlattenedProduct = Omit<
     ibu: string;
     fg: string;
     volume: string;
+    box_number: string;
   }>;
   shopify?: Partial<{
     "beer-style": string;
@@ -44,7 +45,7 @@ function extractMetafieldValue(mf: Metafield): string | null {
       const metaobject = edge.node;
       if (!metaobject?.fields) continue;
       const nameField = metaobject.fields.find(
-        (f) => f.key === "name" || f.key === "title" || f.key === "value"
+        (f) => f.key === "name" || f.key === "title" || f.key === "value",
       );
       if (nameField?.value) names.push(nameField.value);
       else if (metaobject.handle) names.push(metaobject.handle);
@@ -59,7 +60,7 @@ function extractMetafieldValue(mf: Metafield): string | null {
     mf.reference?.fields
   ) {
     const nameField = mf.reference.fields.find(
-      (f) => f.key === "name" || f.key === "title" || f.key === "value"
+      (f) => f.key === "name" || f.key === "title" || f.key === "value",
     );
     if (nameField?.value) return nameField.value;
     if (mf.reference.handle) return mf.reference.handle;
@@ -116,7 +117,7 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
 export function getMetafieldValue(
   product: FlattenedProduct,
   namespace: "specs" | "shopify",
-  key: string
+  key: string,
 ): string | undefined {
   const nsData = product[namespace];
   if (!nsData) return undefined;
@@ -140,6 +141,7 @@ export function getProductSpecs(product: FlattenedProduct): Array<{
       fg: "FG",
       pack_size_l: "Volume",
       volume: "Weight (g)",
+      box_number: "Box number",
       country: "Country",
       brand: "Brand",
       allergens: "Allergens",
