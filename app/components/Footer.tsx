@@ -1,4 +1,5 @@
 // app/components/Footer.tsx
+import { AgeRestriction } from "@/app/components/ui/AgeRestriction";
 import Link from "next/link";
 import type { SVGProps } from "react";
 import type { Locale } from "@/app/lib/locale";
@@ -80,7 +81,7 @@ export default async function Footer({ lang }: FooterProps) {
 
   return (
     <footer className="mt-6">
-      <div className="mx-auto max-w-7xl px-6 py-5 border-t border-gray-400 flex items-center md:justify-between text-sm text-gray-400  justify-center md:flex-row flex-col">
+      <div className="mx-auto max-w-7xl px-6 py-5 border-t border-gray-400 flex items-center md:justify-between text-sm text-gray-400  justify-center lg:flex-row flex-col">
         <div className="flex gap-12 md:flex-row flex-col text-center md:text-left">
           {/* Каталог */}
           <div>
@@ -116,7 +117,7 @@ export default async function Footer({ lang }: FooterProps) {
             </ul>
           </div>
         </div>
-
+        <AgeRestriction message={t.ageRestriction} />
         {/* Компания + соцсети */}
         <div className="flex flex-col justify-between h-full items-center gap-6">
           <div className="text-center md:mt-0 mt-10">
