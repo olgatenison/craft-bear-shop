@@ -68,7 +68,7 @@
     "days": "дней",
     "volume": "Объём",
     "ean": "EAN",
-      "boxNumber": "Номер коробки"
+    "boxNumber": "Номер коробки"
   },
   "CustomerReviews": {
     "title": "Отзывы покупателей",
@@ -316,34 +316,42 @@
     "signUp": "Зарегистрироваться",
     "welcomeBack": "С возвращением! Войдите, чтобы продолжить",
     "createAccount": "Создайте аккаунт, чтобы начать покупки",
-    "email": "Email",
+
+    "email": "Электронная почта",
+    "confirmEmail": "Подтвердите электронную почту",
+    "emailsDontMatch": "Адреса электронной почты не совпадают",
+
     "password": "Пароль",
     "confirmPassword": "Подтвердите пароль",
+    "passwordsDontMatch": "Пароли не совпадают.",
 
     "passwordStrength": "Надёжность пароля",
     "passwordHint": "(минимум 8 символов, буквы и цифры)",
     "passwordStrengthWeak": "Слабый",
     "passwordStrengthMedium": "Средний",
     "passwordStrengthStrong": "Сильный",
+    "weakPassword": "Пароль должен содержать минимум 8 символов, буквы и цифры.",
 
     "showPasswordAria": "Показать пароль",
     "hidePasswordAria": "Скрыть пароль",
 
     "forgotPassword": "Забыли пароль?",
     "submitSignIn": "Войти",
-    "submitSignUp": "Создать аккаунт",
+    "submitSignUp": "Зарегистрироваться",
 
-    "passwordsDontMatch": "Пароли не совпадают.",
-    "enterEmailFirst": "Сначала введите email.",
-    "resetSent": "Если такой email существует, мы отправили инструкции по восстановлению пароля.",
-    "weakPassword": "Пароль должен быть не короче 8 символов и содержать буквы и цифры.",
+    "enterEmailFirst": "Сначала введите адрес электронной почты.",
+    "resetSent": "Если этот адрес электронной почты существует, мы отправили инструкции по сбросу пароля.",
 
     "accountCreated": "Аккаунт успешно создан!",
-    "signInFlowIncomplete": "Завершите вход в аккаунт.",
-    "signUpFlowIncomplete": "Завершите регистрацию.",
+    "signInFlowIncomplete": "Пожалуйста, завершите процесс входа.",
+    "signUpFlowIncomplete": "Пожалуйста, завершите процесс регистрации.",
     "somethingWentWrong": "Что-то пошло не так. Попробуйте ещё раз.",
 
-    "forgotPasswordDescription": "Введите свой email, чтобы получить код для сброса пароля.",
+    "emailAlreadyExists": "Аккаунт с этим адресом электронной почты уже существует.",
+    "incorrectPassword": "Неверный пароль.",
+    "userNotFound": "Пользователь с таким адресом электронной почты не найден.",
+
+    "forgotPasswordDescription": "Введите электронную почту, чтобы получить код для сброса пароля.",
     "resetPasswordDescription": "Введите код из письма и новый пароль.",
     "sendResetCodeButton": "Отправить код",
     "resetPasswordButton": "Сбросить пароль"

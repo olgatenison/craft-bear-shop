@@ -311,40 +311,48 @@
   },
   "auth": {
     "signIn": "Kirjaudu sisään",
-    "signUp": "Luo tili",
+    "signUp": "Rekisteröidy",
     "welcomeBack": "Tervetuloa takaisin! Kirjaudu sisään jatkaaksesi",
-    "createAccount": "Luo tili aloittaaksesi ostosten teon",
+    "createAccount": "Luo tili aloittaaksesi ostokset",
+
     "email": "Sähköpostiosoite",
+    "confirmEmail": "Vahvista sähköposti",
+    "emailsDontMatch": "Sähköpostiosoitteet eivät täsmää",
+
     "password": "Salasana",
     "confirmPassword": "Vahvista salasana",
+    "passwordsDontMatch": "Salasanat eivät täsmää.",
 
     "passwordStrength": "Salasanan vahvuus",
     "passwordHint": "(vähintään 8 merkkiä, kirjaimia ja numeroita)",
     "passwordStrengthWeak": "Heikko",
-    "passwordStrengthMedium": "Keskitaso",
+    "passwordStrengthMedium": "Keskitasoinen",
     "passwordStrengthStrong": "Vahva",
+    "weakPassword": "Salasanassa on oltava vähintään 8 merkkiä, kirjaimia ja numeroita.",
 
     "showPasswordAria": "Näytä salasana",
     "hidePasswordAria": "Piilota salasana",
 
     "forgotPassword": "Unohditko salasanan?",
     "submitSignIn": "Kirjaudu sisään",
-    "submitSignUp": "Luo tili",
+    "submitSignUp": "Rekisteröidy",
 
-    "passwordsDontMatch": "Salasanat eivät täsmää.",
-    "enterEmailFirst": "Anna ensin sähköpostiosoitteesi.",
-    "resetSent": "Jos tällainen sähköpostiosoite on olemassa, lähetimme ohjeet salasanan palauttamiseksi.",
-    "weakPassword": "Salasanassa on oltava vähintään 8 merkkiä ja sen tulee sisältää sekä kirjaimia että numeroita.",
+    "enterEmailFirst": "Syötä ensin sähköpostiosoitteesi.",
+    "resetSent": "Jos sähköpostiosoite on olemassa, lähetimme ohjeet salasanan palauttamiseen.",
 
-    "accountCreated": "Tili on luotu onnistuneesti!",
-    "signInFlowIncomplete": "Viimeistele kirjautumisprosessi.",
-    "signUpFlowIncomplete": "Viimeistele rekisteröitymisprosessi.",
-    "somethingWentWrong": "Jotain meni vikaan. Yritä uudelleen.",
+    "accountCreated": "Tili luotu onnistuneesti!",
+    "signInFlowIncomplete": "Viimeistele sisäänkirjautuminen.",
+    "signUpFlowIncomplete": "Viimeistele rekisteröityminen.",
+    "somethingWentWrong": "Jokin meni pieleen. Yritä uudelleen.",
 
-    "forgotPasswordDescription": "Anna sähköpostiosoitteesi saadaksesi palautuskoodin.",
-    "resetPasswordDescription": "Syötä sähköpostiin tullut koodi ja uusi salasana.",
-    "sendResetCodeButton": "Lähetä koodi",
-    "resetPasswordButton": "Vaihda salasana"
+    "emailAlreadyExists": "Tällä sähköpostiosoitteella on jo tili.",
+    "incorrectPassword": "Virheellinen salasana.",
+    "userNotFound": "Tällä sähköpostiosoitteella ei löytynyt käyttäjää.",
+
+    "forgotPasswordDescription": "Syötä sähköpostiosoitteesi saadaksesi salasanan palautuskoodin.",
+    "resetPasswordDescription": "Syötä sähköpostiin lähetetty koodi ja uusi salasana.",
+    "sendResetCodeButton": "Lähetä palautuskoodi",
+    "resetPasswordButton": "Palauta salasana"
   },
   "ShoppingCardOverviews": {
     "shoppingCart": "Ostoskori",

@@ -312,39 +312,47 @@
   },
   "auth": {
     "signIn": "Logi sisse",
-    "signUp": "Loo konto",
-    "welcomeBack": "Tere tulemast tagasi! Palun logi sisse, et jätkata",
-    "createAccount": "Loo konto, et alustada ostlemist",
+    "signUp": "Registreeru",
+    "welcomeBack": "Tere tulemast tagasi! Jätkamiseks logi sisse",
+    "createAccount": "Ostlemise alustamiseks loo konto",
+
     "email": "E-posti aadress",
+    "confirmEmail": "Kinnita e-posti aadress",
+    "emailsDontMatch": "E-posti aadressid ei ühti",
+
     "password": "Parool",
     "confirmPassword": "Kinnita parool",
+    "passwordsDontMatch": "Paroolid ei ühti.",
 
     "passwordStrength": "Parooli tugevus",
     "passwordHint": "(vähemalt 8 märki, tähed ja numbrid)",
     "passwordStrengthWeak": "Nõrk",
     "passwordStrengthMedium": "Keskmine",
     "passwordStrengthStrong": "Tugev",
+    "weakPassword": "Parool peab sisaldama vähemalt 8 märki, tähti ja numbreid.",
 
     "showPasswordAria": "Näita parooli",
     "hidePasswordAria": "Peida parool",
 
     "forgotPassword": "Unustasid parooli?",
     "submitSignIn": "Logi sisse",
-    "submitSignUp": "Loo konto",
+    "submitSignUp": "Registreeru",
 
-    "passwordsDontMatch": "Paroolid ei ühti.",
-    "enterEmailFirst": "Sisesta esmalt oma e-posti aadress.",
-    "resetSent": "Kui selline e-posti aadress on olemas, saatsime juhised parooli lähtestamiseks.",
-    "weakPassword": "Parool peab olema vähemalt 8 märki pikk ja sisaldama nii tähti kui numbreid.",
+    "enterEmailFirst": "Sisesta kõigepealt oma e-posti aadress.",
+    "resetSent": "Kui see e-posti aadress on olemas, saatsime juhised parooli lähtestamiseks.",
 
     "accountCreated": "Konto on edukalt loodud!",
-    "signInFlowIncomplete": "Palun lõpeta sisselogimisprotsess.",
-    "signUpFlowIncomplete": "Palun lõpeta registreerimisprotsess.",
+    "signInFlowIncomplete": "Palun lõpeta sisselogimise protsess.",
+    "signUpFlowIncomplete": "Palun lõpeta registreerimise protsess.",
     "somethingWentWrong": "Midagi läks valesti. Palun proovi uuesti.",
 
-    "forgotPasswordDescription": "Sisesta oma e-posti aadress, et saada lähtestuskood.",
+    "emailAlreadyExists": "Selle e-posti aadressiga konto on juba olemas.",
+    "incorrectPassword": "Vale parool.",
+    "userNotFound": "Selle e-posti aadressiga kasutajat ei leitud.",
+
+    "forgotPasswordDescription": "Sisesta oma e-posti aadress, et saada parooli lähtestamise kood.",
     "resetPasswordDescription": "Sisesta e-kirjast saadud kood ja uus parool.",
-    "sendResetCodeButton": "Saada kood",
+    "sendResetCodeButton": "Saada lähtestuskood",
     "resetPasswordButton": "Lähtesta parool"
   },
 
