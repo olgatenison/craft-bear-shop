@@ -7,8 +7,6 @@ export type AuthMessages = {
   createAccount: string;
 
   email: string;
-  confirmEmail: string;
-  emailsDontMatch: string;
 
   password: string;
   confirmPassword: string;
@@ -39,6 +37,26 @@ export type AuthMessages = {
   emailAlreadyExists: string;
   incorrectPassword: string;
   userNotFound: string;
+
+  passwordOrEmailIncorrect: string;
+  passwordValidationFailed: string;
+  passwordMatchesIdentifier: string;
+  passwordCompromised: string;
+
+  verificationCodeIncorrect: string;
+  verificationExpired: string;
+  verificationFailed: string;
+
+  invalidEmail: string;
+  tooManyRequests: string;
+
+  verifyEmailTitle: string;
+  verificationCodeSentTo: string;
+  verificationCodeLabel: string;
+  verifyEmailButton: string;
+  resendCodeButton: string;
+  resendCodeSuccess: string;
+  changeEmailButton: string;
 
   forgotPasswordDescription: string;
   resetPasswordDescription: string;

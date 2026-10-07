@@ -316,8 +316,6 @@
     "createAccount": "Luo tili aloittaaksesi ostokset",
 
     "email": "Sähköpostiosoite",
-    "confirmEmail": "Vahvista sähköposti",
-    "emailsDontMatch": "Sähköpostiosoitteet eivät täsmää",
 
     "password": "Salasana",
     "confirmPassword": "Vahvista salasana",
@@ -326,31 +324,50 @@
     "passwordStrength": "Salasanan vahvuus",
     "passwordHint": "(vähintään 8 merkkiä, kirjaimia ja numeroita)",
     "passwordStrengthWeak": "Heikko",
-    "passwordStrengthMedium": "Keskitasoinen",
+    "passwordStrengthMedium": "Keskivahva",
     "passwordStrengthStrong": "Vahva",
-    "weakPassword": "Salasanassa on oltava vähintään 8 merkkiä, kirjaimia ja numeroita.",
+    "weakPassword": "Salasanan tulee sisältää vähintään 8 merkkiä, kirjaimia ja numeroita.",
 
     "showPasswordAria": "Näytä salasana",
     "hidePasswordAria": "Piilota salasana",
 
-    "forgotPassword": "Unohditko salasanan?",
+    "forgotPassword": "Unohditko salasanasi?",
     "submitSignIn": "Kirjaudu sisään",
     "submitSignUp": "Rekisteröidy",
 
-    "enterEmailFirst": "Syötä ensin sähköpostiosoitteesi.",
-    "resetSent": "Jos sähköpostiosoite on olemassa, lähetimme ohjeet salasanan palauttamiseen.",
+    "enterEmailFirst": "Anna ensin sähköpostiosoitteesi.",
+    "resetSent": "Jos sähköpostiosoite on olemassa, olemme lähettäneet ohjeet salasanan palauttamiseen.",
 
-    "accountCreated": "Tili luotu onnistuneesti!",
+    "accountCreated": "Tili luotiin onnistuneesti!",
     "signInFlowIncomplete": "Viimeistele sisäänkirjautuminen.",
     "signUpFlowIncomplete": "Viimeistele rekisteröityminen.",
     "somethingWentWrong": "Jokin meni pieleen. Yritä uudelleen.",
 
-    "emailAlreadyExists": "Tällä sähköpostiosoitteella on jo tili.",
-    "incorrectPassword": "Virheellinen salasana.",
-    "userNotFound": "Tällä sähköpostiosoitteella ei löytynyt käyttäjää.",
+    "emailAlreadyExists": "Tällä sähköpostiosoitteella on jo olemassa tili.",
+    "incorrectPassword": "Väärä salasana. Yritä uudelleen.",
+    "userNotFound": "Tällä sähköpostiosoitteella ei löytynyt tiliä.",
+    "passwordOrEmailIncorrect": "Väärä sähköpostiosoite tai salasana.",
+    "passwordValidationFailed": "Salasana ei täytä turvallisuusvaatimuksia.",
+    "passwordMatchesIdentifier": "Salasana ei voi olla sama kuin sähköpostiosoitteesi, puhelinnumerosi tai käyttäjänimesi.",
+    "passwordCompromised": "Tämä salasana on löytynyt tietovuodosta. Käytä toista salasanaa.",
 
-    "forgotPasswordDescription": "Syötä sähköpostiosoitteesi saadaksesi salasanan palautuskoodin.",
-    "resetPasswordDescription": "Syötä sähköpostiin lähetetty koodi ja uusi salasana.",
+    "verificationCodeIncorrect": "Väärä vahvistuskoodi. Tarkista koodi ja yritä uudelleen.",
+    "verificationExpired": "Vahvistuskoodi on vanhentunut. Pyydä uusi koodi.",
+    "verificationFailed": "Liian monta epäonnistunutta vahvistusyritystä. Yritä uudelleen tai pyydä uusi koodi.",
+
+    "invalidEmail": "Anna kelvollinen sähköpostiosoite.",
+    "tooManyRequests": "Liian monta yritystä. Odota hetki ja yritä uudelleen.",
+
+    "verifyEmailTitle": "Vahvista sähköpostiosoitteesi",
+    "verificationCodeSentTo": "Lähetimme vahvistuskoodin osoitteeseen",
+    "verificationCodeLabel": "Vahvistuskoodi",
+    "verifyEmailButton": "Vahvista sähköposti",
+    "resendCodeButton": "Lähetä koodi uudelleen",
+    "resendCodeSuccess": "Uusi vahvistuskoodi on lähetetty.",
+    "changeEmailButton": "Vaihda sähköpostiosoite",
+
+    "forgotPasswordDescription": "Anna sähköpostiosoitteesi saadaksesi salasanan palautuskoodin.",
+    "resetPasswordDescription": "Anna sähköpostiin lähetetty koodi ja uusi salasana.",
     "sendResetCodeButton": "Lähetä palautuskoodi",
     "resetPasswordButton": "Palauta salasana"
   },

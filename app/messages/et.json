@@ -317,8 +317,6 @@
     "createAccount": "Ostlemise alustamiseks loo konto",
 
     "email": "E-posti aadress",
-    "confirmEmail": "Kinnita e-posti aadress",
-    "emailsDontMatch": "E-posti aadressid ei ühti",
 
     "password": "Parool",
     "confirmPassword": "Kinnita parool",
@@ -347,8 +345,27 @@
     "somethingWentWrong": "Midagi läks valesti. Palun proovi uuesti.",
 
     "emailAlreadyExists": "Selle e-posti aadressiga konto on juba olemas.",
-    "incorrectPassword": "Vale parool.",
+    "incorrectPassword": "Vale parool. Palun proovi uuesti.",
     "userNotFound": "Selle e-posti aadressiga kasutajat ei leitud.",
+    "passwordOrEmailIncorrect": "Vale e-posti aadress või parool.",
+    "passwordValidationFailed": "Parool ei vasta turvanõuetele.",
+    "passwordMatchesIdentifier": "Parool ei tohi olla sama mis sinu e-posti aadress, telefoninumber või kasutajanimi.",
+    "passwordCompromised": "See parool on leitud andmelekkest. Palun kasuta teist parooli.",
+
+    "verificationCodeIncorrect": "Vale kinnituskood. Kontrolli koodi ja proovi uuesti.",
+    "verificationExpired": "Kinnituskood on aegunud. Palun taotle uus kood.",
+    "verificationFailed": "Liiga palju ebaõnnestunud kinnitamiskatseid. Proovi uuesti või taotle uus kood.",
+
+    "invalidEmail": "Palun sisesta kehtiv e-posti aadress.",
+    "tooManyRequests": "Liiga palju katseid. Palun oota veidi ja proovi uuesti.",
+
+    "verifyEmailTitle": "Kinnita oma e-posti aadress",
+    "verificationCodeSentTo": "Saatsime kinnituskoodi aadressile",
+    "verificationCodeLabel": "Kinnituskood",
+    "verifyEmailButton": "Kinnita e-post",
+    "resendCodeButton": "Saada kood uuesti",
+    "resendCodeSuccess": "Uus kinnituskood on saadetud.",
+    "changeEmailButton": "Muuda e-posti aadressi",
 
     "forgotPasswordDescription": "Sisesta oma e-posti aadress, et saada parooli lähtestamise kood.",
     "resetPasswordDescription": "Sisesta e-kirjast saadud kood ja uus parool.",
