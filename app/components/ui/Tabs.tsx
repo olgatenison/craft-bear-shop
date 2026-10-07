@@ -1,9 +1,13 @@
 // app/components/ui/Tabs.tsx
+
 "use client";
 
 interface TabsProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
+
+  visibleTabs?: string[];
+
   labels?: {
     all: string;
     beer: string;
@@ -18,6 +22,7 @@ interface TabsProps {
 export default function Tabs({
   activeTab,
   onTabChange,
+  visibleTabs,
   labels = {
     all: "All Products",
     beer: "Beer",
@@ -28,7 +33,7 @@ export default function Tabs({
     giftsSets: "Gifts & Sets",
   },
 }: TabsProps) {
-  const tabs = [
+  const allTabs = [
     { id: "all", label: labels.all },
     { id: "beer", label: labels.beer },
     { id: "draft-beer", label: labels.draftBeer ?? "Draft beer" },
@@ -38,9 +43,13 @@ export default function Tabs({
     { id: "gifts-sets", label: labels.giftsSets ?? "Gifts & Sets" },
   ];
 
+  const tabs = visibleTabs
+    ? allTabs.filter((tab) => visibleTabs.includes(tab.id))
+    : allTabs;
+
   return (
     <div className="mb-4">
-      {/* ✅ Phone + Tablet (< md): wrapped chips */}
+      {/* Phone + Tablet (< md): wrapped chips */}
       <div className="md:hidden">
         <div
           role="tablist"
@@ -49,6 +58,7 @@ export default function Tabs({
         >
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
+
             return (
               <button
                 key={tab.id}
@@ -73,7 +83,7 @@ export default function Tabs({
         </div>
       </div>
 
-      {/* ✅ Desktop (>= md): underline tabs */}
+      {/* Desktop (>= md): underline tabs */}
       <div className="hidden md:block">
         <div
           role="tablist"
@@ -82,6 +92,7 @@ export default function Tabs({
         >
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
+
             return (
               <button
                 key={tab.id}
@@ -108,64 +119,3 @@ export default function Tabs({
     </div>
   );
 }
-
-// // app/components/ui/Tabs.tsx
-// "use client";
-
-// interface TabsProps {
-//   activeTab: string;
-//   onTabChange: (tab: string) => void;
-//   labels?: {
-//     all: string;
-//     beer: string;
-//     draftBeer?: string; // ✅ додали
-//     cider: string;
-//     snacks: string;
-//     nonAlcoholic?: string;
-//     giftsSets?: string;
-//   };
-// }
-
-// export default function Tabs({
-//   activeTab,
-//   onTabChange,
-//   labels = {
-//     all: "All Products",
-//     beer: "Beer",
-//     draftBeer: "Draft beer", // ✅ дефолт
-//     cider: "Cider",
-//     snacks: "Snacks",
-//     nonAlcoholic: "Non-alcoholic",
-//     giftsSets: "Gifts & Sets",
-//   },
-// }: TabsProps) {
-//   const tabs = [
-//     { id: "all", label: labels.all },
-//     { id: "beer", label: labels.beer },
-//     { id: "draft-beer", label: labels.draftBeer ?? "Draft beer" }, // ✅ новий таб
-//     { id: "cider", label: labels.cider },
-//     { id: "non-alcoholic", label: labels.nonAlcoholic ?? "Non-alcoholic" },
-//     { id: "snacks", label: labels.snacks },
-//     { id: "gifts-sets", label: labels.giftsSets ?? "Gifts & Sets" },
-//   ];
-
-//   return (
-//     <div className="mb-4">
-//       <div className="flex gap-4 border-b border-gray-700">
-//         {tabs.map((tab) => (
-//           <button
-//             key={tab.id}
-//             onClick={() => onTabChange(tab.id)}
-//             className={`pb-3 px-1 transition-colors ${
-//               activeTab === tab.id
-//                 ? "text-yellow-400 border-b-2 border-yellow-400"
-//                 : "text-gray-400 hover:text-white"
-//             }`}
-//           >
-//             {tab.label}
-//           </button>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
