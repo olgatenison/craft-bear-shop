@@ -44,7 +44,10 @@
       "all": "All Products",
       "beer": "Beer",
       "cider": "Cider",
-      "snacks": "Snacks"
+      "snacks": "Snacks",
+      "draft": "Draft beer",
+      "non-alcoholic": "Non-alcoholic",
+      "beer-boxes": "Beer boxes"
     }
   },
   "OneProduct": {
@@ -68,7 +71,10 @@
     "days": "days",
     "volume": "Volume",
     "ean": "EAN",
-    "boxNumber": "Box number"
+    "boxNumber": "Box number",
+    "box": "Box",
+    "pieces": "pcs",
+    "piecesPerBox": "pcs / box"
   },
 
   "CustomerReviews": {
@@ -144,7 +150,8 @@
     "cider": "Cider",
     "snacks": "Snacks",
     "nonAlcoholic": "Non-alcoholic",
-    "giftsSets": "Gifts & Sets"
+    "giftsSets": "Gifts & Sets",
+    "beerBoxes": "Beer boxes"
   },
 
   "Footer": {

@@ -13,6 +13,7 @@ import ScrollToTopButton from "@/app/components/ui/ScrollToTopButton";
 type TabId =
   | "all"
   | "beer"
+  | "beer-boxes"
   | "draft-beer"
   | "cider"
   | "non-alcoholic"
@@ -33,6 +34,7 @@ interface ShopContentProps {
     tabs: {
       all: string;
       beer: string;
+      beerBoxes?: string;
       draftBeer?: string;
       cider: string;
       snacks: string;
@@ -47,6 +49,7 @@ interface ShopContentProps {
 const TABS: TabId[] = [
   "all",
   "beer",
+  "beer-boxes",
   "draft-beer",
   "cider",
   "non-alcoholic",
@@ -61,6 +64,9 @@ function getTabTitle(tab: TabId, t: ShopContentProps["translations"]["tabs"]) {
 
     case "beer":
       return t.beer;
+
+    case "beer-boxes":
+      return t.beerBoxes ?? "Beer boxes";
 
     case "draft-beer":
       return t.draftBeer ?? "Draft beer";
@@ -89,7 +95,7 @@ export default function ShopContent({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Оставляем только те табы, в которых реально есть товары
+  // Оставляем только те табы, где реально есть товары
   const availableTabs = useMemo<TabId[]>(() => {
     return TABS.filter((tab) => {
       if (tab === "all") return true;
@@ -101,7 +107,8 @@ export default function ShopContent({
   const categoryParam =
     searchParams.get("category") ?? initialCategory ?? "all";
 
-  const activeTab: TabId = TABS.includes(categoryParam as TabId)
+  // Если категория не существует или в ней нет товаров — показываем all
+  const activeTab: TabId = availableTabs.includes(categoryParam as TabId)
     ? (categoryParam as TabId)
     : "all";
 
@@ -121,6 +128,7 @@ export default function ShopContent({
     });
   };
 
+  // Фильтруем товары по Shopify collection
   const filteredProducts = useMemo(() => {
     if (activeTab === "all") return products;
 
@@ -131,10 +139,7 @@ export default function ShopContent({
 
   const categoryTitle = getTabTitle(activeTab, translations.tabs);
 
-  const currentCategory =
-    activeTab === "beer" || activeTab === "cider" || activeTab === "snacks"
-      ? activeTab
-      : undefined;
+  const currentCategory = activeTab === "all" ? undefined : activeTab;
 
   return (
     <>

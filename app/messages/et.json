@@ -44,7 +44,10 @@
       "all": "Kõik tooted",
       "beer": "Õlu",
       "cider": "Siider",
-      "snacks": "Suupisted"
+      "snacks": "Suupisted",
+      "draft": "Kraaniõlu",
+      "non-alcoholic": "Alkoholi vaba",
+      "beer-boxes": "Õlde kastid"
     }
   },
   "OneProduct": {
@@ -57,18 +60,21 @@
     "style": "Stiil",
     "addToCart": "Lisa ostukorvi",
     "reviews": "Arvustused",
-    "outOf5Stars": "5-st tärnist",
+    "outOf5Stars": "5 tärnist",
     "viewAllReviews": "Vaata kõiki arvustusi",
     "leaveAReview": "Jäta arvustus",
     "description": "Kirjeldus",
-    "tastedBestWith": "Sobib hästi koos",
+    "tastedBestWith": "Sobib kõige paremini",
     "allergens": "Allergeenid",
     "ingredients": "Koostisosad",
-    "shelfLifeDays": "Termini",
+    "shelfLifeDays": "Säilivusaeg",
     "days": "päeva",
     "volume": "Maht",
     "ean": "EAN",
-    "boxNumber": "Laatikon numero"
+    "boxNumber": "Kogus kastis",
+    "box": "Kast",
+    "pieces": "tk",
+    "piecesPerBox": "tk / kast"
   },
   "CustomerReviews": {
     "title": "Kliendiarvustused",
@@ -144,7 +150,8 @@
     "cider": "Siider",
     "snacks": "Snäkid",
     "nonAlcoholic": "Alkoholivaba",
-    "giftsSets": "Kingitused & komplektid"
+    "giftsSets": "Kingitused & komplektid",
+    "beerBoxes": "Õlde kastid"
   },
   "Footer": {
     "catalog": {

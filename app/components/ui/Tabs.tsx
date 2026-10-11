@@ -11,6 +11,7 @@ interface TabsProps {
   labels?: {
     all: string;
     beer: string;
+    beerBoxes?: string;
     draftBeer?: string;
     cider: string;
     snacks: string;
@@ -26,6 +27,7 @@ export default function Tabs({
   labels = {
     all: "All Products",
     beer: "Beer",
+    beerBoxes: "Beer boxes",
     draftBeer: "Draft beer",
     cider: "Cider",
     snacks: "Snacks",
@@ -36,6 +38,7 @@ export default function Tabs({
   const allTabs = [
     { id: "all", label: labels.all },
     { id: "beer", label: labels.beer },
+    { id: "beer-boxes", label: labels.beerBoxes ?? "Beer boxes" },
     { id: "draft-beer", label: labels.draftBeer ?? "Draft beer" },
     { id: "cider", label: labels.cider },
     { id: "non-alcoholic", label: labels.nonAlcoholic ?? "Non-alcoholic" },

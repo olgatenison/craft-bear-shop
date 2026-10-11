@@ -38,7 +38,7 @@ export default async function ShopPage({
         rating: reviews.average,
         reviewCount: reviews.totalCount,
       };
-    })
+    }),
   );
 
   return (
@@ -52,6 +52,7 @@ export default async function ShopPage({
             categories: {
               all: t.ShopTabs.all,
               beer: t.ShopTabs.beer,
+              "beer-boxes": t.ShopTabs.beerBoxes,
               "draft-beer": t.ShopTabs.draftBeer,
               cider: t.ShopTabs.cider,
               "non-alcoholic": t.ShopTabs.nonAlcoholic,

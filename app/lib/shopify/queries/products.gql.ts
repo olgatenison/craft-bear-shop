@@ -10,44 +10,57 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
     products(first: $first, after: $after, sortKey: UPDATED_AT, reverse: true) {
       edges {
         cursor
+
         node {
           id
           title
           handle
           descriptionHtml
+
           featuredImage {
             url
             altText
           }
+
           priceRange {
             minVariantPrice {
               amount
               currencyCode
             }
           }
-          # ДОБАВЛЕНО: variants для корзины
+
           variants(first: 20) {
             edges {
               node {
                 id
                 title
+
                 price {
                   amount
                   currencyCode
                 }
+
                 compareAtPrice {
                   amount
                   currencyCode
                 }
+
                 availableForSale
                 quantityAvailable
+
                 selectedOptions {
                   name
                   value
                 }
+
+                image {
+                  url
+                  altText
+                }
               }
             }
           }
+
           collections(first: 10) {
             edges {
               node {
@@ -56,6 +69,7 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
               }
             }
           }
+
           metafields(
             identifiers: [
               { namespace: "specs", key: "abv" }
@@ -71,6 +85,8 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
               { namespace: "specs", key: "pack_type" }
               { namespace: "specs", key: "pairing" }
               { namespace: "specs", key: "shelf_life_days" }
+              { namespace: "specs", key: "box_number" }
+              { namespace: "specs", key: "bottle_in_box" }
               { namespace: "shopify", key: "beer-style" }
               { namespace: "shopify", key: "package-type" }
               { namespace: "marketing", key: "trending" }
@@ -83,6 +99,7 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
           }
         }
       }
+
       pageInfo {
         hasNextPage
         endCursor
@@ -102,10 +119,12 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
       title
       handle
       descriptionHtml
+
       featuredImage {
         url
         altText
       }
+
       images(first: 10) {
         edges {
           node {
@@ -114,35 +133,46 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
           }
         }
       }
+
       priceRange {
         minVariantPrice {
           amount
           currencyCode
         }
       }
-      # ДОБАВЛЕНО: variants для корзины
+
       variants(first: 20) {
         edges {
           node {
             id
             title
+
             price {
               amount
               currencyCode
             }
+
             compareAtPrice {
               amount
               currencyCode
             }
+
             availableForSale
             quantityAvailable
+
             selectedOptions {
               name
               value
             }
+
+            image {
+              url
+              altText
+            }
           }
         }
       }
+
       collections(first: 20) {
         edges {
           node {
@@ -151,6 +181,7 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
           }
         }
       }
+
       metafields(
         identifiers: [
           { namespace: "specs", key: "abv" }
@@ -166,6 +197,7 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
           { namespace: "specs", key: "shelf_life_days" }
           { namespace: "specs", key: "gtin" }
           { namespace: "specs", key: "box_number" }
+          { namespace: "specs", key: "bottle_in_box" }
           { namespace: "shopify", key: "beer-style" }
           { namespace: "shopify", key: "package-type" }
           { namespace: "shopify", key: "allergen-information" }
@@ -176,6 +208,7 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
         key
         type
         value
+
         references(first: 10) {
           edges {
             node {
@@ -183,15 +216,18 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
                 id
                 handle
                 type
+
                 fields {
                   key
                   value
                   type
+
                   references(first: 5) {
                     edges {
                       node {
                         ... on Metaobject {
                           handle
+
                           fields {
                             key
                             value
@@ -221,48 +257,62 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
     collection(handle: $handle) {
       id
       title
+
       products(first: $first, after: $after, sortKey: CREATED, reverse: true) {
         edges {
           cursor
+
           node {
             id
             title
             handle
             updatedAt
             descriptionHtml
+
             featuredImage {
               url
               altText
             }
+
             priceRange {
               minVariantPrice {
                 amount
                 currencyCode
               }
             }
-            # ДОБАВЛЕНО: variants для корзины
+
             variants(first: 20) {
               edges {
                 node {
                   id
                   title
+
                   price {
                     amount
                     currencyCode
                   }
+
                   compareAtPrice {
                     amount
                     currencyCode
                   }
+
                   availableForSale
                   quantityAvailable
+
                   selectedOptions {
                     name
                     value
                   }
+
+                  image {
+                    url
+                    altText
+                  }
                 }
               }
             }
+
             collections(first: 10) {
               edges {
                 node {
@@ -271,16 +321,23 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
                 }
               }
             }
+
             metafields(
               identifiers: [
                 { namespace: "specs", key: "abv" }
                 { namespace: "specs", key: "ibu" }
                 { namespace: "specs", key: "fg" }
                 { namespace: "specs", key: "pack_size_l" }
+                { namespace: "specs", key: "volume" }
                 { namespace: "specs", key: "country" }
                 { namespace: "specs", key: "brand" }
                 { namespace: "specs", key: "ingredients" }
                 { namespace: "specs", key: "allergens" }
+                { namespace: "specs", key: "pairing" }
+                { namespace: "specs", key: "shelf_life_days" }
+                { namespace: "specs", key: "gtin" }
+                { namespace: "specs", key: "box_number" }
+                { namespace: "specs", key: "bottle_in_box" }
                 { namespace: "shopify", key: "beer-style" }
                 { namespace: "shopify", key: "package-type" }
                 { namespace: "marketing", key: "trending" }
@@ -293,6 +350,7 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
             }
           }
         }
+
         pageInfo {
           hasNextPage
           endCursor
@@ -310,10 +368,12 @@ export const PRODUCT_BY_ID = /* GraphQL */ `
       title
       handle
       descriptionHtml
+
       featuredImage {
         url
         altText
       }
+
       images(first: 10) {
         edges {
           node {
@@ -322,34 +382,46 @@ export const PRODUCT_BY_ID = /* GraphQL */ `
           }
         }
       }
+
       priceRange {
         minVariantPrice {
           amount
           currencyCode
         }
       }
+
       variants(first: 20) {
         edges {
           node {
             id
             title
+
             price {
               amount
               currencyCode
             }
+
             compareAtPrice {
               amount
               currencyCode
             }
+
             availableForSale
             quantityAvailable
+
             selectedOptions {
               name
               value
             }
+
+            image {
+              url
+              altText
+            }
           }
         }
       }
+
       collections(first: 20) {
         edges {
           node {
@@ -358,17 +430,23 @@ export const PRODUCT_BY_ID = /* GraphQL */ `
           }
         }
       }
+
       metafields(
         identifiers: [
           { namespace: "specs", key: "abv" }
           { namespace: "specs", key: "ibu" }
           { namespace: "specs", key: "fg" }
           { namespace: "specs", key: "pack_size_l" }
+          { namespace: "specs", key: "volume" }
           { namespace: "specs", key: "country" }
           { namespace: "specs", key: "brand" }
           { namespace: "specs", key: "ingredients" }
           { namespace: "specs", key: "allergens" }
           { namespace: "specs", key: "pairing" }
+          { namespace: "specs", key: "shelf_life_days" }
+          { namespace: "specs", key: "gtin" }
+          { namespace: "specs", key: "box_number" }
+          { namespace: "specs", key: "bottle_in_box" }
           { namespace: "shopify", key: "beer-style" }
           { namespace: "shopify", key: "package-type" }
           { namespace: "marketing", key: "trending" }
@@ -378,6 +456,7 @@ export const PRODUCT_BY_ID = /* GraphQL */ `
         key
         type
         value
+
         references(first: 10) {
           edges {
             node {
@@ -385,15 +464,18 @@ export const PRODUCT_BY_ID = /* GraphQL */ `
                 id
                 handle
                 type
+
                 fields {
                   key
                   value
                   type
+
                   references(first: 5) {
                     edges {
                       node {
                         ... on Metaobject {
                           handle
+
                           fields {
                             key
                             value

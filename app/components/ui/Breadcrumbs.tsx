@@ -8,6 +8,7 @@ type Lang = "en" | "uk" | "ru" | "et" | "fi";
 type CategoryKey =
   | "all"
   | "beer"
+  | "beer-boxes"
   | "draft-beer"
   | "cider"
   | "non-alcoholic"
@@ -17,6 +18,7 @@ type CategoryKey =
 const CATEGORY_KEYS: CategoryKey[] = [
   "all",
   "beer",
+  "beer-boxes",
   "draft-beer",
   "cider",
   "non-alcoholic",
@@ -48,12 +50,18 @@ const CATEGORY_ALIASES: Record<string, CategoryKey> = {
   "alcohol-free": "non-alcoholic",
   alcoholfree: "non-alcoholic",
 
+  // beer-boxes aliases
+  "beer-boxes": "beer-boxes",
+  beerboxes: "beer-boxes",
+  "beer-box": "beer-boxes",
+  beerbox: "beer-boxes",
+
   // gifts-sets aliases
   "gifts-sets": "gifts-sets",
   "gift-sets": "gifts-sets",
   "gifts-and-sets": "gifts-sets",
 
-  // остальные категории (прямое соответствие)
+  // остальные категории
   all: "all",
   beer: "beer",
   cider: "cider",
@@ -63,8 +71,8 @@ const CATEGORY_ALIASES: Record<string, CategoryKey> = {
 };
 
 /**
- * Преобразует строку категории в валидный ключ CategoryKey
- * Возвращает null если категория не распознана
+ * Преобразует строку категории в валидный ключ CategoryKey.
+ * Возвращает null, если категория не распознана.
  */
 function resolveCategory(input?: string | null): CategoryKey | null {
   if (!input) return null;
@@ -109,7 +117,10 @@ export default function Breadcrumbs({
   const searchParams = useSearchParams();
 
   const items: { href: string; label: string }[] = [
-    { href: `/${lang}`, label: labels.home },
+    {
+      href: `/${lang}`,
+      label: labels.home,
+    },
   ];
 
   const parts = pathname.split("/").filter(Boolean);
@@ -119,7 +130,10 @@ export default function Breadcrumbs({
   const isProductPage = afterLang[0] === "product";
 
   if (isShopPage) {
-    items.push({ href: `/${lang}/shop`, label: labels.shop });
+    items.push({
+      href: `/${lang}/shop`,
+      label: labels.shop,
+    });
 
     const categoryFromQuery =
       resolveCategory(searchParams.get("category")) ?? "all";
@@ -134,7 +148,10 @@ export default function Breadcrumbs({
   }
 
   if (isProductPage) {
-    items.push({ href: `/${lang}/shop`, label: labels.shop });
+    items.push({
+      href: `/${lang}/shop`,
+      label: labels.shop,
+    });
 
     const categoryFromProduct = resolveCategory(productCategory);
 
@@ -149,31 +166,36 @@ export default function Breadcrumbs({
 
   // Добавляем текущую страницу (название продукта)
   if (currentLabel) {
-    items.push({ href: "#", label: currentLabel });
+    items.push({
+      href: "#",
+      label: currentLabel,
+    });
   }
 
   return (
     <nav aria-label="Breadcrumb" className="mx-auto max-w-7xl pb-8">
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
-        {items.map((it, i) => {
-          const last = i === items.length - 1;
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1;
+
           return (
-            <li key={`${it.href}-${i}`} className="flex items-center">
-              {i > 0 && (
+            <li key={`${item.href}-${index}`} className="flex items-center">
+              {index > 0 && (
                 <span aria-hidden="true" className="pr-3 text-gray-400">
                   {separator}
                 </span>
               )}
-              {last ? (
+
+              {isLast ? (
                 <span className="text-sm font-medium text-gray-300">
-                  {it.label}
+                  {item.label}
                 </span>
               ) : (
                 <Link
-                  href={it.href}
+                  href={item.href}
                   className="text-sm font-medium text-gray-400 hover:text-white"
                 >
-                  {it.label}
+                  {item.label}
                 </Link>
               )}
             </li>

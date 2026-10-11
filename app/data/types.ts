@@ -1,69 +1,66 @@
 // app/data/types.ts
+
+export interface Money {
+  amount: string;
+  currencyCode: string;
+}
+
+export interface ProductImage {
+  url: string;
+  altText?: string | null;
+}
+
+export interface ProductVariantSelectedOption {
+  name: string;
+  value: string;
+}
+
 export interface ProductVariantNode {
   id: string;
   title: string;
-  price: {
-    amount: string;
-    currencyCode: string;
-  };
-  compareAtPrice?: {
-    amount: string;
-    currencyCode: string;
-  } | null;
+
+  price: Money;
+
+  compareAtPrice?: Money | null;
+
   availableForSale: boolean;
+
   quantityAvailable?: number | null;
-  selectedOptions?: Array<{
-    name: string;
-    value: string;
-  }>;
+
+  selectedOptions: ProductVariantSelectedOption[];
+
+  // Картинка конкретного варианта
+  image?: ProductImage | null;
+}
+
+export interface ProductVariantEdge {
+  node: ProductVariantNode;
+}
+
+export interface ProductVariantConnection {
+  edges: ProductVariantEdge[];
 }
 
 export interface ProductNode {
   id: string;
   title: string;
   handle: string;
+
   descriptionHtml?: string;
-  featuredImage?: {
-    url: string;
-    altText?: string;
-  };
+
+  featuredImage?: ProductImage | null;
+
   images?: {
     edges: Array<{
-      node: {
-        url: string;
-        altText?: string;
-      };
+      node: ProductImage;
     }>;
   };
+
   priceRange: {
-    minVariantPrice: {
-      amount: string;
-      currencyCode: string;
-    };
+    minVariantPrice: Money;
   };
-  // 👇 ДОБАВЬ ЭТО
-  variants?: {
-    edges: Array<{
-      node: {
-        id: string; // GID варианта
-        title: string;
-        price: {
-          amount: string;
-          currencyCode: string;
-        };
-        compareAtPrice?: {
-          amount: string;
-          currencyCode: string;
-        } | null;
-        availableForSale: boolean;
-        quantityAvailable?: number | null;
-        selectedOptions: Array<{
-          name: string;
-          value: string;
-        }>;
-      };
-    }>;
-  };
+
+  variants?: ProductVariantConnection;
 
   collections?: {
     edges: Array<{
@@ -73,8 +70,13 @@ export interface ProductNode {
       };
     }>;
   };
+
   metafields?: Metafield[];
-  translations?: Array<{ key: string; value: string }>;
+
+  translations?: Array<{
+    key: string;
+    value: string;
+  }>;
 }
 
 export interface Metafield {
@@ -82,17 +84,21 @@ export interface Metafield {
   key: string;
   type: string;
   value: string;
+
   reference?: {
     handle?: string;
+
     fields?: Array<{
       key: string;
       value: string;
     }>;
   };
+
   references?: {
     edges: Array<{
       node: {
         handle?: string;
+
         fields?: Array<{
           key: string;
           value: string;
@@ -103,12 +109,14 @@ export interface Metafield {
 }
 
 // Response types
+
 export interface ProductsAllResponse {
   products: {
     edges: Array<{
       node: ProductNode;
       cursor: string;
     }>;
+
     pageInfo: {
       hasNextPage: boolean;
       endCursor: string;
@@ -120,11 +128,13 @@ export interface ProductsByCollectionResponse {
   collection?: {
     id: string;
     title: string;
+
     products: {
       edges: Array<{
         node: ProductNode;
         cursor: string;
       }>;
+
       pageInfo: {
         hasNextPage: boolean;
         endCursor: string;
@@ -140,5 +150,5 @@ export interface ProductByHandleResponse {
 export interface ShopifyPage {
   id: string;
   title: string;
-  body: string; // HTML из Shopify
+  body: string;
 }

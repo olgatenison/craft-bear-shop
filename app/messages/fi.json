@@ -44,31 +44,37 @@
       "all": "Kaikki tuotteet",
       "beer": "Olut",
       "cider": "Siideri",
-      "snacks": "Välipalat"
+      "snacks": "Välipalat",
+      "draft": "Hanaolut",
+      "non-alcoholic": "Alkoholiton",
+      "beer-boxes": "Olutlaatikot"
     }
   },
   "OneProduct": {
-    "perUnit": "1 kpl",
+    "perUnit": "per 1 kpl",
     "abv": "ABV",
     "ibu": "IBU",
     "fg": "FG",
     "country": "Maa",
-    "brand": "Merkki",
+    "brand": "Brändi",
     "style": "Tyyli",
     "addToCart": "Lisää ostoskoriin",
     "reviews": "Arvostelut",
-    "outOf5Stars": "viidestä tähdestä",
+    "outOf5Stars": "5 tähdestä",
     "viewAllReviews": "Näytä kaikki arvostelut",
     "leaveAReview": "Jätä arvostelu",
     "description": "Kuvaus",
-    "tastedBestWith": "Parhaiten nautittuna",
+    "tastedBestWith": "Sopii parhaiten",
     "allergens": "Allergeenit",
     "ingredients": "Ainesosat",
-    "shelfLifeDays": "Termini",
+    "shelfLifeDays": "Säilyvyysaika",
     "days": "päivää",
     "volume": "Tilavuus",
     "ean": "EAN",
-    "boxNumber": "Laatikon numero"
+    "boxNumber": "Määrä laatikossa",
+    "box": "Laatikko",
+    "pieces": "kpl",
+    "piecesPerBox": "kpl / laatikko"
   },
   "CustomerReviews": {
     "title": "Asiakasarviot",
@@ -143,7 +149,8 @@
     "cider": "Siideri",
     "snacks": "Naposteltavat",
     "nonAlcoholic": "Alkoholiton",
-    "giftsSets": "Lahjat & setit"
+    "giftsSets": "Lahjat & setit",
+    "beerBoxes": "Olutlaatikot"
   },
   "Footer": {
     "catalog": {

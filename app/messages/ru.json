@@ -44,11 +44,14 @@
       "all": "Все продукты",
       "beer": "Пиво",
       "cider": "Сидр",
-      "snacks": "Закуски"
+      "snacks": "Закуски",
+      "draft": "Пиво на кране",
+      "non-alcoholic": "Безалкогольное",
+      "beer-boxes": "Пивные боксы"
     }
   },
   "OneProduct": {
-    "perUnit": "за 1 шт",
+    "perUnit": "за 1 шт.",
     "abv": "ABV",
     "ibu": "IBU",
     "fg": "FG",
@@ -57,8 +60,8 @@
     "style": "Стиль",
     "addToCart": "Добавить в корзину",
     "reviews": "Отзывы",
-    "outOf5Stars": "из 5 звёзд",
-    "viewAllReviews": "Смотреть все отзывы",
+    "outOf5Stars": "из 5 звезд",
+    "viewAllReviews": "Посмотреть все отзывы",
     "leaveAReview": "Оставить отзыв",
     "description": "Описание",
     "tastedBestWith": "Лучше всего сочетается с",
@@ -68,7 +71,10 @@
     "days": "дней",
     "volume": "Объём",
     "ean": "EAN",
-    "boxNumber": "Номер коробки"
+    "boxNumber": "Количество в коробке",
+    "box": "Коробка",
+    "pieces": "шт.",
+    "piecesPerBox": "шт. / коробка"
   },
   "CustomerReviews": {
     "title": "Отзывы покупателей",
@@ -143,7 +149,8 @@
     "cider": "Сидр",
     "snacks": "Закуски",
     "nonAlcoholic": "Безалкогольное",
-    "giftsSets": "Подарки и наборы"
+    "giftsSets": "Подарки и наборы",
+    "beerBoxes": "Пивные боксы"
   },
 
   "Footer": {

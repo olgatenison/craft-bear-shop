@@ -44,11 +44,14 @@
       "all": "Усі продукти",
       "beer": "Пиво",
       "cider": "Сидр",
-      "snacks": "Закуски"
+      "snacks": "Закуски",
+      "draft": "Пиво на крані",
+      "non-alcoholic": "Безалкогольне",
+      "beer-boxes": "Пивні бокси"
     }
   },
   "OneProduct": {
-    "perUnit": "за 1 шт",
+    "perUnit": "за 1 шт.",
     "abv": "ABV",
     "ibu": "IBU",
     "fg": "FG",
@@ -57,7 +60,7 @@
     "style": "Стиль",
     "addToCart": "Додати в кошик",
     "reviews": "Відгуки",
-    "outOf5Stars": "із 5 зірок",
+    "outOf5Stars": "з 5 зірок",
     "viewAllReviews": "Переглянути всі відгуки",
     "leaveAReview": "Залишити відгук",
     "description": "Опис",
@@ -68,7 +71,10 @@
     "days": "днів",
     "volume": "Обʼєм",
     "ean": "EAN",
-    "boxNumber": "Номер коробки"
+    "boxNumber": "Кількість у коробці",
+    "box": "Коробка",
+    "pieces": "шт.",
+    "piecesPerBox": "шт. / коробка"
   },
   "CustomerReviews": {
     "title": "Відгуки покупців",
@@ -144,7 +150,8 @@
     "cider": "Сидр",
     "snacks": "Закуски",
     "nonAlcoholic": "Безалкогольне",
-    "giftsSets": "Подарунки та набори"
+    "giftsSets": "Подарунки та набори",
+    "beerBoxes": "Пивні бокси"
   },
   "Footer": {
     "catalog": {
