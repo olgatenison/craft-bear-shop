@@ -14,6 +14,7 @@ type TabId =
   | "all"
   | "beer"
   | "beer-boxes"
+  | "kegs"
   | "draft-beer"
   | "cider"
   | "non-alcoholic"
@@ -35,6 +36,7 @@ interface ShopContentProps {
       all: string;
       beer: string;
       beerBoxes?: string;
+      kegs?: string;
       draftBeer?: string;
       cider: string;
       snacks: string;
@@ -50,6 +52,7 @@ const TABS: TabId[] = [
   "all",
   "beer",
   "beer-boxes",
+  "kegs",
   "draft-beer",
   "cider",
   "non-alcoholic",
@@ -67,6 +70,9 @@ function getTabTitle(tab: TabId, t: ShopContentProps["translations"]["tabs"]) {
 
     case "beer-boxes":
       return t.beerBoxes ?? "Beer boxes";
+
+    case "kegs":
+      return t.kegs ?? "Kegs";
 
     case "draft-beer":
       return t.draftBeer ?? "Draft beer";
@@ -95,10 +101,13 @@ export default function ShopContent({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Оставляем только те табы, где реально есть товары
+  // Показываем только те вкладки,
+  // где реально есть товары в Shopify collection.
   const availableTabs = useMemo<TabId[]>(() => {
     return TABS.filter((tab) => {
-      if (tab === "all") return true;
+      if (tab === "all") {
+        return true;
+      }
 
       return products.some((product) => product.collections?.includes(tab));
     });
@@ -107,7 +116,8 @@ export default function ShopContent({
   const categoryParam =
     searchParams.get("category") ?? initialCategory ?? "all";
 
-  // Если категория не существует или в ней нет товаров — показываем all
+  // Если категории нет или она пустая,
+  // возвращаем пользователя на All.
   const activeTab: TabId = availableTabs.includes(categoryParam as TabId)
     ? (categoryParam as TabId)
     : "all";
@@ -128,9 +138,11 @@ export default function ShopContent({
     });
   };
 
-  // Фильтруем товары по Shopify collection
+  // Фильтрация по Shopify collection handle.
   const filteredProducts = useMemo(() => {
-    if (activeTab === "all") return products;
+    if (activeTab === "all") {
+      return products;
+    }
 
     return products.filter((product) =>
       product.collections?.includes(activeTab),

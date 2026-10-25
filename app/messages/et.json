@@ -47,7 +47,9 @@
       "snacks": "Suupisted",
       "draft": "Kraaniõlu",
       "non-alcoholic": "Alkoholi vaba",
-      "beer-boxes": "Õlde kastid"
+      "beer-boxes": "Õlde kastid",
+      "kegs": "Vaadiõlu",
+      "gifts-sets": "Kingitused & komplektid"
     }
   },
   "OneProduct": {
@@ -151,7 +153,9 @@
     "snacks": "Snäkid",
     "nonAlcoholic": "Alkoholivaba",
     "giftsSets": "Kingitused & komplektid",
-    "beerBoxes": "Õlde kastid"
+    "beerBoxes": "Õlde kastid",
+    "kegs": "Vaadiõlu",
+    "gifts": "Kingitused ja komplektid"
   },
   "Footer": {
     "catalog": {
@@ -161,7 +165,9 @@
       "cider": "Siider",
       "nonAlcoholic": "Alkoholivaba",
       "snacks": "Suupisted",
-      "gifts": "Kingitused ja komplektid"
+      "gifts": "Kingitused ja komplektid",
+      "beerBoxes": "Õlde kastid",
+      "kegs": "Vaadiõlu"
     },
     "customers": {
       "title": "Klientidele",

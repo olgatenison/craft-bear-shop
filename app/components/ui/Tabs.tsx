@@ -13,6 +13,7 @@ interface TabsProps {
     beer: string;
     beerBoxes?: string;
     draftBeer?: string;
+    kegs?: string;
     cider: string;
     snacks: string;
     nonAlcoholic?: string;
@@ -29,6 +30,7 @@ export default function Tabs({
     beer: "Beer",
     beerBoxes: "Beer boxes",
     draftBeer: "Draft beer",
+    kegs: "Kegs",
     cider: "Cider",
     snacks: "Snacks",
     nonAlcoholic: "Non-alcoholic",
@@ -44,6 +46,7 @@ export default function Tabs({
     { id: "non-alcoholic", label: labels.nonAlcoholic ?? "Non-alcoholic" },
     { id: "snacks", label: labels.snacks },
     { id: "gifts-sets", label: labels.giftsSets ?? "Gifts & Sets" },
+    { id: "kegs", label: labels.kegs ?? "Kegs" },
   ];
 
   const tabs = visibleTabs

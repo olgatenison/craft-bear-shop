@@ -47,7 +47,9 @@
       "snacks": "Закуски",
       "draft": "Пиво на крані",
       "non-alcoholic": "Безалкогольне",
-      "beer-boxes": "Пивні бокси"
+      "beer-boxes": "Пивні бокси",
+      "kegs": "Пивні кеги",
+      "gifts-sets": "Подарунки та набори"
     }
   },
   "OneProduct": {
@@ -151,7 +153,8 @@
     "snacks": "Закуски",
     "nonAlcoholic": "Безалкогольне",
     "giftsSets": "Подарунки та набори",
-    "beerBoxes": "Пивні бокси"
+    "beerBoxes": "Пивні бокси",
+    "kegs": "Пивні кеги"
   },
   "Footer": {
     "catalog": {
@@ -161,7 +164,9 @@
       "cider": "Сидр",
       "nonAlcoholic": "Безалкогольне",
       "snacks": "Закуски",
-      "gifts": "Подарунки та набори"
+      "gifts": "Подарунки та набори",
+      "beerBoxes": "Пивні бокси",
+      "kegs": "Пивні кеги"
     },
     "customers": {
       "title": "Покупцям",

@@ -4,11 +4,11 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 type Lang = "en" | "uk" | "ru" | "et" | "fi";
-
 type CategoryKey =
   | "all"
   | "beer"
   | "beer-boxes"
+  | "kegs"
   | "draft-beer"
   | "cider"
   | "non-alcoholic"
@@ -19,13 +19,13 @@ const CATEGORY_KEYS: CategoryKey[] = [
   "all",
   "beer",
   "beer-boxes",
+  "kegs",
   "draft-beer",
   "cider",
   "non-alcoholic",
   "snacks",
   "gifts-sets",
 ];
-
 const CATEGORY_SET = new Set<CategoryKey>(CATEGORY_KEYS);
 
 // Простая нормализация: убираем пробелы, приводим к lowercase

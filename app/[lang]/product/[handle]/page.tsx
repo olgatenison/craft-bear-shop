@@ -14,6 +14,7 @@ import { getReviews } from "@/app/lib/getReviews";
 type CategoryKey =
   | "beer"
   | "beer-boxes"
+  | "kegs"
   | "draft-beer"
   | "cider"
   | "non-alcoholic"
@@ -22,6 +23,7 @@ type CategoryKey =
 
 const VALID_CATEGORIES: CategoryKey[] = [
   "beer-boxes",
+  "kegs",
   "draft-beer",
   "non-alcoholic",
   "gifts-sets",
@@ -76,13 +78,13 @@ export default async function ProductPage({
     notFound();
   }
 
-  // Если category пришла из URL и она валидная — используем её.
+  // Если категория пришла из URL и она валидная — используем её.
   const categoryFromQuery =
     category && VALID_CATEGORIES.includes(category as CategoryKey)
       ? (category as CategoryKey)
       : undefined;
 
-  // Если category нет в URL — определяем её по коллекциям товара.
+  // Если category нет в URL — определяем категорию по коллекциям товара.
   const productCategory =
     categoryFromQuery ?? getCategoryFromProduct(product.collections);
 
@@ -101,6 +103,7 @@ export default async function ProductPage({
               all: t.ShopTabs.all,
               beer: t.ShopTabs.beer,
               "beer-boxes": t.ShopTabs.beerBoxes,
+              kegs: t.ShopTabs.kegs,
               "draft-beer": t.ShopTabs.draftBeer,
               cider: t.ShopTabs.cider,
               "non-alcoholic": t.ShopTabs.nonAlcoholic,

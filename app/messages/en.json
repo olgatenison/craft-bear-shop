@@ -47,7 +47,9 @@
       "snacks": "Snacks",
       "draft": "Draft beer",
       "non-alcoholic": "Non-alcoholic",
-      "beer-boxes": "Beer boxes"
+      "beer-boxes": "Beer boxes",
+      "kegs": "Kegs",
+      "gifts-sets": "Gifts & Sets"
     }
   },
   "OneProduct": {
@@ -151,7 +153,8 @@
     "snacks": "Snacks",
     "nonAlcoholic": "Non-alcoholic",
     "giftsSets": "Gifts & Sets",
-    "beerBoxes": "Beer boxes"
+    "beerBoxes": "Beer boxes",
+    "kegs": "Kegs"
   },
 
   "Footer": {
@@ -162,7 +165,9 @@
       "cider": "Cider",
       "nonAlcoholic": "Non-alcoholic",
       "snacks": "Snacks",
-      "gifts": "Gifts & bundles"
+      "gifts": "Gifts & bundles",
+      "beerBoxes": "Beer boxes",
+      "kegs": "Kegs"
     },
     "customers": {
       "title": "Customers",

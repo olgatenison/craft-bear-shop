@@ -47,7 +47,12 @@
       "snacks": "Välipalat",
       "draft": "Hanaolut",
       "non-alcoholic": "Alkoholiton",
-      "beer-boxes": "Olutlaatikot"
+      "beer-boxes": "Olutlaatikot",
+      "kegs": "Tynnyrit",
+      "gifts-sets": "Lahjat & setit",
+      "gifts": "Lahjat ja setit"
+    
+
     }
   },
   "OneProduct": {
@@ -150,7 +155,9 @@
     "snacks": "Naposteltavat",
     "nonAlcoholic": "Alkoholiton",
     "giftsSets": "Lahjat & setit",
-    "beerBoxes": "Olutlaatikot"
+    "beerBoxes": "Olutlaatikot",
+    "kegs": "Tynnyrit",
+    "gifts": "Lahjat ja setit"
   },
   "Footer": {
     "catalog": {
@@ -160,7 +167,9 @@
       "cider": "Siideri",
       "nonAlcoholic": "Alkoholiton",
       "snacks": "Naposteltavat",
-      "gifts": "Lahjat ja setit"
+      "gifts": "Lahjat ja setit",
+      "beerBoxes": "Olutlaatikot",
+      "kegs": "Tynnyrit"
     },
     "customers": {
       "title": "Asiakkaille",

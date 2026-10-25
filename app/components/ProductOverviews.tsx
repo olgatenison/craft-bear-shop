@@ -118,6 +118,20 @@ function getPackageType(variant: VariantNode): string | undefined {
     .toLowerCase();
 }
 
+function getVolume(variant: VariantNode): number | null {
+  const value = variant.selectedOptions?.find(
+    (option) => option.name.trim().toLowerCase() === "volume",
+  )?.value;
+
+  if (!value) {
+    return null;
+  }
+
+  const parsed = Number(String(value).replace(",", "."));
+
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
 export default function ProductOverviews({
   product,
   category,
@@ -185,38 +199,107 @@ export default function ProductOverviews({
 
   const rawVariants = getVariantNodes(product as ProductWithVariants);
 
+  /*
+   * --------------------------------------------------
+   * CATEGORY MODES
+   * --------------------------------------------------
+   */
+
   const isBeerBox = category === "beer-boxes";
+
+  const isKeg = category === "kegs";
+
+  /*
+   * --------------------------------------------------
+   * BOX VARIANT
+   * --------------------------------------------------
+   */
 
   const boxVariant = isBeerBox
     ? rawVariants.find((variant) => getPackageType(variant) === "box")
     : undefined;
 
-  const displayPrice =
-    isBeerBox && boxVariant?.price?.amount
-      ? boxVariant.price.amount
-      : product.priceRange.minVariantPrice.amount;
+  /*
+   * --------------------------------------------------
+   * KEG VARIANT
+   * --------------------------------------------------
+   *
+   * Для категории kegs используем volume = 30
+   */
 
-  const productForCart: FlattenedProduct =
-    isBeerBox && boxVariant
-      ? {
-          ...product,
-          variantId: boxVariant.id,
-        }
-      : product;
+  const kegVariant = isKeg
+    ? rawVariants.find((variant) => getVolume(variant) === 30)
+    : undefined;
+
+  /*
+   * --------------------------------------------------
+   * SELECTED SPECIAL VARIANT
+   * --------------------------------------------------
+   */
+
+  const selectedVariant = isBeerBox
+    ? boxVariant
+    : isKeg
+      ? kegVariant
+      : undefined;
+
+  /*
+   * --------------------------------------------------
+   * DISPLAY PRICE
+   * --------------------------------------------------
+   */
+
+  const displayPrice = selectedVariant?.price?.amount
+    ? selectedVariant.price.amount
+    : product.priceRange.minVariantPrice.amount;
+
+  /*
+   * --------------------------------------------------
+   * CART PRODUCT
+   * --------------------------------------------------
+   */
+
+  const productForCart: FlattenedProduct = selectedVariant
+    ? {
+        ...product,
+        variantId: selectedVariant.id,
+      }
+    : product;
+
+  /*
+   * --------------------------------------------------
+   * DRAFT VARIANTS
+   * --------------------------------------------------
+   */
 
   const getVolumeVariant = (value: "0.5" | "1") =>
     rawVariants.find((variant) =>
       (variant.selectedOptions ?? []).some(
         (option) =>
-          option.name.toLowerCase() === "volume" && option.value === value,
+          option.name.trim().toLowerCase() === "volume" &&
+          option.value.trim() === value,
       ),
     );
 
   const vHalf = getVolumeVariant("0.5");
   const vLiter = getVolumeVariant("1");
 
+  /*
+   * Draft mode нужен только в обычной категории.
+   *
+   * В beer-boxes и kegs он выключен.
+   */
+
   const isDraft =
-    !isBeerBox && Boolean(vHalf?.price?.amount && vLiter?.price?.amount);
+    !isBeerBox &&
+    !isKeg &&
+    Boolean(vHalf?.price?.amount && vLiter?.price?.amount);
+
+  /*
+   * --------------------------------------------------
+   * IMAGES
+   * --------------------------------------------------
+   */
 
   const productImages =
     product.images?.edges.map((edge) => ({
@@ -224,19 +307,24 @@ export default function ProductOverviews({
       imageAlt: edge.node.altText || product.title,
     })) ?? [];
 
-  const boxImage =
-    isBeerBox && boxVariant?.image?.url
-      ? {
-          imageSrc: boxVariant.image.url,
-          imageAlt: boxVariant.image.altText || `${product.title} ${box}`,
-        }
-      : null;
+  const specialImage = selectedVariant?.image?.url
+    ? {
+        imageSrc: selectedVariant.image.url,
+        imageAlt:
+          selectedVariant.image.altText ||
+          (isKeg ? `${product.title} 30 L keg` : `${product.title} ${box}`),
+      }
+    : null;
 
-  const orderedImages = boxImage
+  /*
+   * Для Box / Keg ставим variant image первой.
+   */
+
+  const orderedImages = specialImage
     ? [
-        boxImage,
+        specialImage,
         ...productImages.filter(
-          (image) => image.imageSrc !== boxImage.imageSrc,
+          (image) => image.imageSrc !== specialImage.imageSrc,
         ),
       ]
     : productImages;
@@ -248,7 +336,19 @@ export default function ProductOverviews({
     primary: index === 0,
   }));
 
+  /*
+   * --------------------------------------------------
+   * RATING
+   * --------------------------------------------------
+   */
+
   const rating = ratingAverage ?? 0;
+
+  /*
+   * --------------------------------------------------
+   * PAIRING
+   * --------------------------------------------------
+   */
 
   const pairingList = productPairing
     ? productPairing
@@ -256,6 +356,12 @@ export default function ProductOverviews({
         .map((item) => item.trim())
         .filter(Boolean)
     : [];
+
+  /*
+   * --------------------------------------------------
+   * DRAFT CART PRODUCTS
+   * --------------------------------------------------
+   */
 
   const productHalf: FlattenedProduct | null =
     isDraft && vHalf
@@ -288,6 +394,8 @@ export default function ProductOverviews({
                     <span className="ml-3 text-xl text-white">
                       {bottleInBox ? `${bottleInBox} ${pieces}` : box}
                     </span>
+                  ) : isKeg ? (
+                    <span className="ml-3 text-xl text-white">30 L</span>
                   ) : isDraft ? (
                     <span className="ml-3 text-xl text-white">0.5 / 1 L</span>
                   ) : (
@@ -298,7 +406,7 @@ export default function ProductOverviews({
                     )
                   )}
 
-                  {!isBeerBox && productVolume && (
+                  {!isBeerBox && !isKeg && productVolume && (
                     <span className="ml-3 text-xl text-white">
                       {productVolume} g
                     </span>
@@ -330,7 +438,9 @@ export default function ProductOverviews({
                           ? bottleInBox
                             ? `${bottleInBox} ${piecesPerBox}`
                             : box
-                          : perUnit}
+                          : isKeg
+                            ? "30 L / keg"
+                            : perUnit}
                       </span>
                     </>
                   )}
@@ -573,8 +683,19 @@ export default function ProductOverviews({
                 </div>
               )}
 
+              {/* Keg volume */}
+              {isKeg && (
+                <div className="mt-6 flex w-full items-baseline gap-2">
+                  <span className="whitespace-nowrap text-lg font-semibold text-white">
+                    {volume}:
+                  </span>
+
+                  <span className="text-base text-gray-300">30 L</span>
+                </div>
+              )}
+
               {/* Weight */}
-              {!isBeerBox && productVolume && (
+              {!isBeerBox && !isKeg && productVolume && (
                 <div className="mt-6 flex w-full items-baseline gap-2">
                   <span className="whitespace-nowrap text-lg font-semibold text-white">
                     {volume}:
@@ -588,6 +709,7 @@ export default function ProductOverviews({
 
               {/* Volume */}
               {!isBeerBox &&
+                !isKeg &&
                 (isDraft ? (
                   <div className="mt-6 flex w-full items-baseline gap-2">
                     <span className="whitespace-nowrap text-lg font-semibold text-white">
@@ -662,6 +784,7 @@ export default function ProductOverviews({
 
               {/* Existing boxNumber */}
               {!isBeerBox &&
+                !isKeg &&
                 productBoxNumber !== undefined &&
                 productBoxNumber !== null && (
                   <div className="mt-6 flex w-full items-baseline gap-2">

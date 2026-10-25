@@ -50,6 +50,7 @@ type ProductWithVariants = FlattenedProduct & {
 type CategoryKey =
   | "beer"
   | "beer-boxes"
+  | "kegs"
   | "draft-beer"
   | "cider"
   | "non-alcoholic"
@@ -80,6 +81,20 @@ function getPackageType(variant: VariantNode): string | undefined {
     .toLowerCase();
 }
 
+function getVolume(variant: VariantNode): number | null {
+  const value = variant.selectedOptions.find(
+    (option) => option.name.trim().toLowerCase() === "volume",
+  )?.value;
+
+  if (!value) {
+    return null;
+  }
+
+  const parsed = Number(String(value).replace(",", "."));
+
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
 export default function AllProducts({
   title,
   stars,
@@ -101,38 +116,88 @@ export default function AllProducts({
           const variants: VariantNode[] =
             pv.variants?.edges?.map((edge) => edge.node) ?? [];
 
+          const isBoxCategory = category === "beer-boxes";
+
+          const isKegCategory = category === "kegs";
+
           /*
-           * Для обычного магазина ничего специально не выбираем.
+           * --------------------------------------------------
+           * BOX
+           * --------------------------------------------------
            *
-           * Для beer-boxes ищем именно Shopify variant:
-           * Package type = Box
+           * Используем только в beer-boxes
            */
-          const boxVariant =
-            category === "beer-boxes"
-              ? variants.find((variant) => getPackageType(variant) === "box")
+
+          const boxVariant = isBoxCategory
+            ? variants.find((variant) => getPackageType(variant) === "box")
+            : undefined;
+
+          /*
+           * --------------------------------------------------
+           * KEG 30 L
+           * --------------------------------------------------
+           *
+           * Используем только в kegs
+           */
+
+          const kegVariant = isKegCategory
+            ? variants.find((variant) => getVolume(variant) === 30)
+            : undefined;
+
+          /*
+           * --------------------------------------------------
+           * ACTIVE SPECIAL VARIANT
+           * --------------------------------------------------
+           */
+
+          const selectedVariant = isBoxCategory
+            ? boxVariant
+            : isKegCategory
+              ? kegVariant
               : undefined;
 
           /*
-           * Картинка:
-           * beer-boxes -> картинка Box variant
-           * остальные -> featuredImage товара
+           * --------------------------------------------------
+           * IMAGE
+           * --------------------------------------------------
            */
-          const img =
-            category === "beer-boxes" && boxVariant?.image?.url
-              ? boxVariant.image
-              : p.featuredImage;
+
+          const img = selectedVariant?.image?.url
+            ? selectedVariant.image
+            : p.featuredImage;
 
           /*
-           * Цена:
-           * beer-boxes -> цена Box variant
-           * остальные -> обычная minVariantPrice
+           * --------------------------------------------------
+           * PRICE
+           * --------------------------------------------------
            */
-          const price =
-            category === "beer-boxes" && boxVariant?.price
-              ? boxVariant.price
-              : p.priceRange?.minVariantPrice;
 
-          // ABV
+          const price = selectedVariant?.price
+            ? selectedVariant.price
+            : p.priceRange?.minVariantPrice;
+
+          /*
+           * --------------------------------------------------
+           * CART PRODUCT
+           * --------------------------------------------------
+           *
+           * Box category -> Box variant
+           * Kegs -> 30L variant
+           */
+
+          const productForCart: FlattenedProduct = selectedVariant
+            ? {
+                ...p,
+                variantId: selectedVariant.id,
+              }
+            : p;
+
+          /*
+           * --------------------------------------------------
+           * ABV
+           * --------------------------------------------------
+           */
+
           const abvRaw = p.specs?.abv;
 
           const abvNum =
@@ -142,12 +207,22 @@ export default function AllProducts({
 
           const isAlcoholFree = hasAbv && abvNum === 0;
 
-          // Размер одной бутылки / банки
+          /*
+           * --------------------------------------------------
+           * NORMAL PACK SIZE
+           * --------------------------------------------------
+           */
+
           const packText = p.specs?.pack_size_l
             ? `${p.specs.pack_size_l} L`
             : null;
 
-          // Количество бутылок в коробке
+          /*
+           * --------------------------------------------------
+           * BOTTLES IN BOX
+           * --------------------------------------------------
+           */
+
           const bottleInBoxRaw = p.specs?.bottle_in_box;
 
           const bottleInBox =
@@ -160,58 +235,75 @@ export default function AllProducts({
             !Number.isNaN(bottleInBox) &&
             bottleInBox > 0;
 
-          // Volume values для разливного
+          /*
+           * --------------------------------------------------
+           * DRAFT VOLUMES
+           * --------------------------------------------------
+           *
+           * 30L не учитываем как обычный
+           * потребительский объём Draft Beer.
+           */
+
           const volumeValues = variants
-            .map(
-              (variant) =>
-                variant.selectedOptions.find(
-                  (option) => option.name.toLowerCase() === "volume",
-                )?.value,
-            )
-            .filter((value): value is string => Boolean(value))
-            .map((value) => Number(String(value).replace(",", ".")))
-            .filter((value) => !Number.isNaN(value));
+            .map((variant) => getVolume(variant))
+            .filter((value): value is number => value !== null && value !== 30);
 
           const minVolume = volumeValues.length
             ? Math.min(...volumeValues)
             : null;
 
           /*
-           * Подпись возле цены.
-           *
-           * Beer boxes:
-           * "15 bottles"
-           *
-           * Обычные товары:
-           * "0.5 L" и т.д.
+           * --------------------------------------------------
+           * UNIT NEXT TO PRICE
+           * --------------------------------------------------
            */
-          const unitForPrice =
-            category === "beer-boxes"
-              ? hasBottleInBox
-                ? `${bottleInBox} bottles`
-                : "box"
+
+          const unitForPrice = isBoxCategory
+            ? hasBottleInBox
+              ? `${bottleInBox} bottles`
+              : "box"
+            : isKegCategory
+              ? "30 L keg"
               : (packText ?? (minVolume ? `${minVolume} L` : null));
 
-          // Информация под названием
+          /*
+           * --------------------------------------------------
+           * META UNDER TITLE
+           * --------------------------------------------------
+           */
+
           const metaParts: string[] = [];
 
           if (hasAbv) {
             metaParts.push(`${abvNum} %`);
           }
 
-          if (category === "beer-boxes") {
+          if (isBoxCategory) {
             if (hasBottleInBox) {
               metaParts.push(`${bottleInBox} bottles`);
             }
+          } else if (isKegCategory) {
+            metaParts.push("30 L keg");
           } else if (packText) {
             metaParts.push(packText);
           }
 
           const meta = metaParts.join(" • ");
 
-          // Рейтинг
+          /*
+           * --------------------------------------------------
+           * RATING
+           * --------------------------------------------------
+           */
+
           const productRating = p.rating ?? 0;
           const productReviewCount = p.reviewCount ?? 0;
+
+          /*
+           * --------------------------------------------------
+           * LINK
+           * --------------------------------------------------
+           */
 
           const href = `/${lang}/product/${p.handle}${
             category ? `?category=${category}` : ""
@@ -290,7 +382,7 @@ export default function AllProducts({
                 </div>
               </div>
 
-              {/* Рейтинг */}
+              {/* Rating */}
               <div className="mt-3 flex flex-col">
                 <span className="sr-only">
                   {productRating} {stars}
@@ -317,7 +409,7 @@ export default function AllProducts({
               {/* Add to cart */}
               <div className="mt-6 w-full">
                 <AddToCartButton
-                  product={p}
+                  product={productForCart}
                   addToCart={add}
                   className="relative flex w-full items-center justify-center rounded-md border border-white/10 bg-white/10 px-8 py-2 text-sm font-medium text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 sm:w-auto"
                 />
