@@ -420,5 +420,14 @@
   "Questions": {
     "title": "Frequently asked questions",
     "empty": "No questions yet"
+  },
+  "WholesalePage": {
+    "title": "Wholesale",
+    "intro": "Wholesale prices for our products. For orders, availability and cooperation, please contact us directly.",
+    "productLabel": "Product",
+    "priceLabel": "Wholesale price",
+    "viewProduct": "View product",
+    "contactText": "Interested in our wholesale offer? Contact us directly to discuss prices, availability and cooperation.",
+    "contactButton": "Contact us"
   }
 }

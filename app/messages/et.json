@@ -421,5 +421,14 @@
   "Questions": {
     "title": "Korduma kippuvad küsimused",
     "empty": "Küsimusi ei ole veel lisatud"
+  },
+  "WholesalePage": {
+    "title": "Hulgihinnad",
+    "intro": "Meie toodete hulgihinnad. Tellimuste, saadavuse ja koostöö küsimustes võtke meiega otse ühendust.",
+    "productLabel": "Toode",
+    "priceLabel": "Hulgihind",
+    "viewProduct": "Vaata toodet",
+    "contactText": "Kas olete huvitatud meie hulgipakkumisest? Võtke meiega otse ühendust, et arutada hindu, saadavust ja koostöötingimusi.",
+    "contactButton": "Võta ühendust"
   }
 }

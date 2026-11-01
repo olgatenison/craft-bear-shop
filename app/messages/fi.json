@@ -51,8 +51,6 @@
       "kegs": "Tynnyrit",
       "gifts-sets": "Lahjat & setit",
       "gifts": "Lahjat ja setit"
-    
-
     }
   },
   "OneProduct": {
@@ -422,5 +420,14 @@
   "Questions": {
     "title": "Usein kysytyt kysymykset",
     "empty": "Kysymyksiä ei ole vielä lisätty"
+  },
+  "WholesalePage": {
+    "title": "Tukkuhinnat",
+    "intro": "Tuotteidemme tukkuhinnat. Tilauksia, saatavuutta ja yhteistyötä koskevissa asioissa ota meihin suoraan yhteyttä.",
+    "productLabel": "Tuote",
+    "priceLabel": "Tukkuhinta",
+    "viewProduct": "Näytä tuote",
+    "contactText": "Kiinnostuitko tukkutarjouksestamme? Ota meihin suoraan yhteyttä keskustellaksesi hinnoista, saatavuudesta ja yhteistyöstä.",
+    "contactButton": "Ota yhteyttä"
   }
 }

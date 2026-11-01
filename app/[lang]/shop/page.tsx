@@ -1,4 +1,5 @@
 // app/[lang]/shop/page.tsx
+
 import { Suspense } from "react";
 import { fetchAllProductsFlattened } from "../../data/repo";
 import ShopContent from "@/app/components/ShopContent";
@@ -16,13 +17,18 @@ export default async function ShopPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<{ category?: string }>;
+  params: Promise<{
+    lang: string;
+  }>;
+  searchParams: Promise<{
+    category?: string;
+  }>;
 }) {
   const { lang: rawLang } = await params;
   const lang = normalizeLocale(rawLang);
 
   const { category } = await searchParams;
+
   const t = await getMessages(lang);
 
   const allProducts = await fetchAllProductsFlattened(lang);
@@ -49,10 +55,12 @@ export default async function ShopPage({
           labels={{
             home: t.common.home,
             shop: t.common.shop,
+
             categories: {
               all: t.ShopTabs.all,
               beer: t.ShopTabs.beer,
               "beer-boxes": t.ShopTabs.beerBoxes,
+              kegs: t.ShopTabs.kegs,
               "draft-beer": t.ShopTabs.draftBeer,
               cider: t.ShopTabs.cider,
               "non-alcoholic": t.ShopTabs.nonAlcoholic,
