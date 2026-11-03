@@ -25,6 +25,8 @@ export type FlattenedProduct = Omit<
     volume: string;
     box_number: string;
     bottle_in_box: string;
+    wholesale_price: string;
+    wholesale_unit: string;
   }>;
 
   shopify?: Partial<{
@@ -92,7 +94,7 @@ function extractMetafieldValue(mf: Metafield): string | null {
     return null;
   }
 
-  // обычная строка
+  // обычное значение
   return mf.value;
 }
 
@@ -123,7 +125,7 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
   }
 
   const collections =
-    p.collections?.edges?.map((edge) => edge.node.handle) || [];
+    p.collections?.edges?.map((edge) => edge.node.handle) ?? [];
 
   type ProductBase = Omit<
     ProductNode,
@@ -134,13 +136,16 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
     ...(p as ProductBase),
   };
 
-  const marketing = grouped["marketing"] || {};
+  const marketing = grouped["marketing"] ?? {};
 
   /*
-   * Пока оставляем первый variant как дефолтный.
+   * Первый variant оставляем дефолтным.
    *
    * Для beer-boxes конкретный Box variant
-   * выбирается отдельно в UI по selectedOptions.
+   * выбирается отдельно в UI.
+   *
+   * Для kegs конкретный 30 L variant
+   * тоже выбирается отдельно в UI.
    */
   const firstVariant = p.variants?.edges?.[0]?.node;
 
@@ -157,7 +162,6 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
 
     shopify: grouped["shopify"] as FlattenedProduct["shopify"],
 
-    // Shopify хранит boolean как "true"/"false"/"1"
     trending: marketing["trending"] === "true" || marketing["trending"] === "1",
   };
 }
@@ -205,6 +209,10 @@ export function getProductSpecs(product: FlattenedProduct): Array<{
       box_number: "Box number",
 
       bottle_in_box: "Bottle in box",
+
+      wholesale_price: "Wholesale price",
+
+      wholesale_unit: "Wholesale unit",
 
       country: "Country",
 

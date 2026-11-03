@@ -1,4 +1,4 @@
-// lib/shopify/queries/products.gql.ts
+// app/lib/shopify/queries/products.gql.ts
 
 export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
   query ProductsAllWithMetafields(
@@ -87,6 +87,8 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
               { namespace: "specs", key: "shelf_life_days" }
               { namespace: "specs", key: "box_number" }
               { namespace: "specs", key: "bottle_in_box" }
+              { namespace: "specs", key: "wholesale_price" }
+              { namespace: "specs", key: "wholesale_unit" }
               { namespace: "shopify", key: "beer-style" }
               { namespace: "shopify", key: "package-type" }
               { namespace: "marketing", key: "trending" }
@@ -198,6 +200,8 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
           { namespace: "specs", key: "gtin" }
           { namespace: "specs", key: "box_number" }
           { namespace: "specs", key: "bottle_in_box" }
+          { namespace: "specs", key: "wholesale_price" }
+          { namespace: "specs", key: "wholesale_unit" }
           { namespace: "shopify", key: "beer-style" }
           { namespace: "shopify", key: "package-type" }
           { namespace: "shopify", key: "allergen-information" }
@@ -338,6 +342,8 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
                 { namespace: "specs", key: "gtin" }
                 { namespace: "specs", key: "box_number" }
                 { namespace: "specs", key: "bottle_in_box" }
+                { namespace: "specs", key: "wholesale_price" }
+                { namespace: "specs", key: "wholesale_unit" }
                 { namespace: "shopify", key: "beer-style" }
                 { namespace: "shopify", key: "package-type" }
                 { namespace: "marketing", key: "trending" }
@@ -447,6 +453,8 @@ export const PRODUCT_BY_ID = /* GraphQL */ `
           { namespace: "specs", key: "gtin" }
           { namespace: "specs", key: "box_number" }
           { namespace: "specs", key: "bottle_in_box" }
+          { namespace: "specs", key: "wholesale_price" }
+          { namespace: "specs", key: "wholesale_unit" }
           { namespace: "shopify", key: "beer-style" }
           { namespace: "shopify", key: "package-type" }
           { namespace: "marketing", key: "trending" }

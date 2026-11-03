@@ -20,12 +20,12 @@ export default async function ForgotPasswordPage({
   }
 
   return (
-    <div className="mx-auto max-w-2xl py-8 px-4">
+    <main className="mx-auto max-w-2xl py-8 px-4">
       <h1 className="mb-4 text-2xl font-semibold">
         {messages.auth.forgotPassword}
       </h1>
 
       <ForgotPasswordForm messages={messages.auth} />
-    </div>
+    </main>
   );
 }

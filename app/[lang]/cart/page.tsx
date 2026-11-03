@@ -12,7 +12,7 @@ export default async function CartPage({
   const t = await getMessages(lang);
 
   return (
-    <>
+    <main>
       <ShoppingCardOverviews
         lang={lang}
         shoppingCart={t.ShoppingCardOverviews.shoppingCart}
@@ -30,6 +30,6 @@ export default async function CartPage({
         CTAAdd={t.ShoppingCardOverviews.CTAAdd}
         continueShopping={t.ShoppingCardOverviews.continueShopping}
       />
-    </>
+    </main>
   );
 }

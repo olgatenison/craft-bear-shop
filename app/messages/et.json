@@ -404,7 +404,8 @@
   },
   "Contact": {
     "title": "Teeme koostööd",
-    "subtitle": "Meil on hea meel sinust kuulda! Kui sul on küsimusi meie toodete kohta, vajad abi tellimusega või soovid jagada tagasisidet, siis meie tiim aitab hea meelega.",
+    "subtitle": "Soovite meiega koostööd teha või teil on küsimusi toodete ja tellimuste kohta? Kirjutage meile ja arutame hea meelega kõiki üksikasju.",
+    "wholesaleLink": "Vaata meie hulgihindu",
     "firstname": "Eesnimi",
     "lastname": "Perekonnanimi",
     "emailLabel": "E-post",
@@ -429,6 +430,13 @@
     "priceLabel": "Hulgihind",
     "viewProduct": "Vaata toodet",
     "contactText": "Kas olete huvitatud meie hulgipakkumisest? Võtke meiega otse ühendust, et arutada hindu, saadavust ja koostöötingimusi.",
-    "contactButton": "Võta ühendust"
+    "contactButton": "Võta ühendust",
+    "units": {
+      "bottle": "pudeli kohta",
+      "can": "purgi kohta",
+      "box": "kasti kohta",
+      "liter": "liitri kohta",
+      "keg": "vaadi kohta"
+    }
   }
 }

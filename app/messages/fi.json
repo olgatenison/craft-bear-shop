@@ -403,7 +403,8 @@
   },
   "Contact": {
     "title": "Tehdään yhteistyötä",
-    "subtitle": "Haluaisimme kuulla sinusta! Olipa sinulla kysyttävää tuotteistamme, tarvitset apua tilauksesi kanssa tai haluat jakaa palautetta, tiimimme auttaa mielellään.",
+    "subtitle": "Kiinnostaako yhteistyö kanssamme tai onko sinulla kysyttävää tuotteista ja tilauksista? Lähetä meille viesti, niin keskustelemme mielellämme yksityiskohdista.",
+    "wholesaleLink": "Katso tukkuhintamme",
     "firstname": "Etunimi",
     "lastname": "Sukunimi",
     "emailLabel": "Sähköposti",
@@ -428,6 +429,13 @@
     "priceLabel": "Tukkuhinta",
     "viewProduct": "Näytä tuote",
     "contactText": "Kiinnostuitko tukkutarjouksestamme? Ota meihin suoraan yhteyttä keskustellaksesi hinnoista, saatavuudesta ja yhteistyöstä.",
-    "contactButton": "Ota yhteyttä"
+    "contactButton": "Ota yhteyttä",
+    "units": {
+      "bottle": "per pullo",
+      "can": "per tölkki",
+      "box": "per laatikko",
+      "liter": "per litra",
+      "keg": "per tynnyri"
+    }
   }
 }

@@ -403,7 +403,8 @@
   },
   "Contact": {
     "title": "Let's work together",
-    "subtitle": "We'd love to hear from you! Whether you have questions about our products, need assistance with an order, or just want to share your feedback, our team is here to help.",
+    "subtitle": "Interested in working with us or have questions about our products and orders? Send us a message and we'll be happy to discuss the details.",
+    "wholesaleLink": "View our wholesale prices",
     "firstname": "First name",
     "lastname": "Last name",
     "emailLabel": "Email",
@@ -428,6 +429,13 @@
     "priceLabel": "Wholesale price",
     "viewProduct": "View product",
     "contactText": "Interested in our wholesale offer? Contact us directly to discuss prices, availability and cooperation.",
-    "contactButton": "Contact us"
+    "contactButton": "Contact us",
+    "units": {
+      "bottle": "per bottle",
+      "can": "per can",
+      "box": "per box",
+      "liter": "per liter",
+      "keg": "per keg"
+    }
   }
 }

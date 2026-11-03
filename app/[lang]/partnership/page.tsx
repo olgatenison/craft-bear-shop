@@ -11,5 +11,9 @@ export default async function ContactPage({
   const { lang } = await params;
   const messages = await getMessages(lang);
 
-  return <ContactContent lang={lang} messages={messages} />;
+  return (
+    <main>
+      <ContactContent lang={lang} messages={messages} />
+    </main>
+  );
 }

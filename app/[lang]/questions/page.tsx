@@ -15,10 +15,12 @@ export default async function QuestionsPage({
   const faqs = await getFaq(lang);
 
   return (
-    <FAQ
-      title={messages.Questions?.title ?? "FAQ"}
-      emptyText={messages.Questions?.empty ?? ""}
-      faqs={faqs}
-    />
+    <main>
+      <FAQ
+        title={messages.Questions?.title ?? "FAQ"}
+        emptyText={messages.Questions?.empty ?? ""}
+        faqs={faqs}
+      />
+    </main>
   );
 }

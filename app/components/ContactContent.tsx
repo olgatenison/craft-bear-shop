@@ -1,12 +1,17 @@
+// app/components/ContactContent.tsx
+
 "use client";
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import type { Locale } from "@/app/lib/locale";
 
 type ContactMessages = {
   title: string;
   subtitle: string;
+  wholesaleLink: string;
+
   firstname: string;
   lastname: string;
   emailLabel: string;
@@ -52,9 +57,11 @@ export default function ContactContent({ lang, messages }: Props) {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(
-    null
+    null,
   );
 
   const validateForm = (): boolean => {
@@ -80,6 +87,7 @@ export default function ContactContent({ lang, messages }: Props) {
 
     // Валидация email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     const disposableEmails = [
       "tempmail.com",
       "10minutemail.com",
@@ -95,6 +103,7 @@ export default function ContactContent({ lang, messages }: Props) {
       newErrors.email = "Invalid email format";
     } else {
       const domain = formData.email.split("@")[1]?.toLowerCase();
+
       if (domain && disposableEmails.includes(domain)) {
         newErrors.email = "Please use a valid email address";
       }
@@ -109,13 +118,14 @@ export default function ContactContent({ lang, messages }: Props) {
       newErrors.message = "Message must be 500 characters or less";
     }
 
-    // Валидация телефона (опционально)
+    // Валидация телефона
     if (formData.phone) {
       if (!/^[\d\s\-\+\(\)]+$/.test(formData.phone)) {
         newErrors.phone =
           "Invalid phone format (only digits, spaces, +, -, () allowed)";
       } else {
         const digitsOnly = formData.phone.replace(/\D/g, "");
+
         if (digitsOnly.length < 7) {
           newErrors.phone = "Phone must be at least 7 digits";
         } else if (digitsOnly.length > 15) {
@@ -125,22 +135,31 @@ export default function ContactContent({ lang, messages }: Props) {
     }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
     if (errors[name as keyof FormData]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setSubmitStatus(null);
 
     if (!validateForm()) {
@@ -150,7 +169,6 @@ export default function ContactContent({ lang, messages }: Props) {
     setIsSubmitting(true);
 
     try {
-      // Используем путь с локалью
       const response = await fetch(`/${lang}/api/contact`, {
         method: "POST",
         headers: {
@@ -164,6 +182,7 @@ export default function ContactContent({ lang, messages }: Props) {
       }
 
       setSubmitStatus("success");
+
       setFormData({
         firstName: "",
         lastName: "",
@@ -174,6 +193,7 @@ export default function ContactContent({ lang, messages }: Props) {
       });
     } catch (error) {
       console.error("Error sending message:", error);
+
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -181,7 +201,8 @@ export default function ContactContent({ lang, messages }: Props) {
   };
 
   return (
-    <div className="relative overflow-hidden max-w-7xl mx-auto mt-2 mb-24">
+    <div className="relative mx-auto mt-2 mb-24 max-w-7xl overflow-hidden">
+      {/* Image */}
       <div className="lg:absolute lg:inset-0 lg:left-1/2 lg:pl-4">
         <Image
           width="640"
@@ -191,16 +212,30 @@ export default function ContactContent({ lang, messages }: Props) {
           className="h-64 w-full bg-gray-800 object-cover sm:h-80 lg:absolute lg:h-full"
         />
       </div>
+
       <div className="pt-12 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2">
         <div className="px-6">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
+            {/* Title */}
             <h2 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
               {t.title}
             </h2>
-            <p className="mt-4 text-base/8 text-gray-400">{t.subtitle}</p>
 
-            <form onSubmit={handleSubmit} className="mt-16">
+            {/* Subtitle + wholesale link */}
+            <p className="mt-4 text-base/8 text-gray-400">
+              {t.subtitle}{" "}
+              <Link
+                href={`/${lang}/wholesale`}
+                className="border-b border-gray-400 text-gray-300 transition-colors hover:border-yellow-400 hover:text-yellow-400"
+              >
+                {t.wholesaleLink}
+              </Link>
+            </p>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="mt-12">
               <div className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
+                {/* First name */}
                 <div>
                   <label
                     htmlFor="firstName"
@@ -208,6 +243,7 @@ export default function ContactContent({ lang, messages }: Props) {
                   >
                     {t.firstname}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="firstName"
@@ -220,8 +256,9 @@ export default function ContactContent({ lang, messages }: Props) {
                         errors.firstName
                           ? "border-red-500"
                           : "border-gray-400/50"
-                      } bg-transparent pb-1 outline-none text-white`}
+                      } bg-transparent pb-1 text-white outline-none`}
                     />
+
                     {errors.firstName && (
                       <p className="mt-1 text-sm text-red-400">
                         {errors.firstName}
@@ -230,6 +267,7 @@ export default function ContactContent({ lang, messages }: Props) {
                   </div>
                 </div>
 
+                {/* Last name */}
                 <div>
                   <label
                     htmlFor="lastName"
@@ -237,6 +275,7 @@ export default function ContactContent({ lang, messages }: Props) {
                   >
                     {t.lastname}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="lastName"
@@ -249,8 +288,9 @@ export default function ContactContent({ lang, messages }: Props) {
                         errors.lastName
                           ? "border-red-500"
                           : "border-gray-400/50"
-                      } bg-transparent pb-1 outline-none text-white`}
+                      } bg-transparent pb-1 text-white outline-none`}
                     />
+
                     {errors.lastName && (
                       <p className="mt-1 text-sm text-red-400">
                         {errors.lastName}
@@ -259,6 +299,7 @@ export default function ContactContent({ lang, messages }: Props) {
                   </div>
                 </div>
 
+                {/* Email */}
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="email"
@@ -266,6 +307,7 @@ export default function ContactContent({ lang, messages }: Props) {
                   >
                     {t.emailLabel}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="email"
@@ -276,8 +318,9 @@ export default function ContactContent({ lang, messages }: Props) {
                       onChange={handleChange}
                       className={`w-full border-b ${
                         errors.email ? "border-red-500" : "border-gray-400/50"
-                      } bg-transparent pb-1 outline-none text-white`}
+                      } bg-transparent pb-1 text-white outline-none`}
                     />
+
                     {errors.email && (
                       <p className="mt-1 text-sm text-red-400">
                         {errors.email}
@@ -286,6 +329,7 @@ export default function ContactContent({ lang, messages }: Props) {
                   </div>
                 </div>
 
+                {/* Company */}
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="company"
@@ -293,6 +337,7 @@ export default function ContactContent({ lang, messages }: Props) {
                   >
                     {t.company}
                   </label>
+
                   <div className="mt-2.5">
                     <input
                       id="company"
@@ -301,11 +346,12 @@ export default function ContactContent({ lang, messages }: Props) {
                       autoComplete="organization"
                       value={formData.company}
                       onChange={handleChange}
-                      className="w-full border-b border-gray-400/50 bg-transparent pb-1 outline-none text-white"
+                      className="w-full border-b border-gray-400/50 bg-transparent pb-1 text-white outline-none"
                     />
                   </div>
                 </div>
 
+                {/* Phone */}
                 <div className="sm:col-span-2">
                   <div className="flex justify-between text-sm/6">
                     <label
@@ -314,10 +360,12 @@ export default function ContactContent({ lang, messages }: Props) {
                     >
                       {t.phone}
                     </label>
+
                     <p id="phone-description" className="text-gray-500">
                       {t.optional}
                     </p>
                   </div>
+
                   <div className="mt-2.5">
                     <input
                       id="phone"
@@ -329,8 +377,9 @@ export default function ContactContent({ lang, messages }: Props) {
                       onChange={handleChange}
                       className={`w-full border-b ${
                         errors.phone ? "border-red-500" : "border-gray-400/50"
-                      } bg-transparent pb-1 outline-none text-white`}
+                      } bg-transparent pb-1 text-white outline-none`}
                     />
+
                     {errors.phone && (
                       <p className="mt-1 text-sm text-red-400">
                         {errors.phone}
@@ -339,6 +388,7 @@ export default function ContactContent({ lang, messages }: Props) {
                   </div>
                 </div>
 
+                {/* Message */}
                 <div className="sm:col-span-2">
                   <div className="flex justify-between text-sm/6">
                     <label
@@ -347,10 +397,12 @@ export default function ContactContent({ lang, messages }: Props) {
                     >
                       {t.message}
                     </label>
+
                     <p id="message-description" className="text-gray-500">
                       {t.messageLimit}
                     </p>
                   </div>
+
                   <div className="mt-2.5">
                     <textarea
                       id="message"
@@ -363,6 +415,7 @@ export default function ContactContent({ lang, messages }: Props) {
                         errors.message ? "border-red-500" : "border-gray-400/40"
                       } bg-black/20 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-500`}
                     />
+
                     {errors.message && (
                       <p className="mt-1 text-sm text-red-400">
                         {errors.message}
@@ -372,23 +425,27 @@ export default function ContactContent({ lang, messages }: Props) {
                 </div>
               </div>
 
+              {/* Submit */}
               <div className="mt-10 flex justify-end">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex w-full items-center justify-center     rounded-md border border-gray-300 bg-white px-8 py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed sm:w-auto lg:w-full"
+                  className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-base font-semibold text-gray-900 duration-300 hover:border-yellow-600 hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto lg:w-full"
                 >
                   {isSubmitting ? t.submitting : t.submit}
                 </button>
               </div>
+
+              {/* Success */}
               {submitStatus === "success" && (
-                <div className="mt-8 rounded-md bg-green-500/10 border border-green-500/50 p-4">
+                <div className="mt-8 rounded-md border border-green-500/50 bg-green-500/10 p-4">
                   <p className="text-sm text-green-400">{t.success}</p>
                 </div>
               )}
 
+              {/* Error */}
               {submitStatus === "error" && (
-                <div className="mt-8 rounded-md bg-red-500/10 border border-red-500/50 p-4">
+                <div className="mt-8 rounded-md border border-red-500/50 bg-red-500/10 p-4">
                   <p className="text-sm text-red-400">{t.error}</p>
                 </div>
               )}

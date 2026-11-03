@@ -14,12 +14,12 @@ export default async function Page({
   const ordersMessages = messages.AccountOrders;
 
   return (
-    <div className=" mx-auto my-10 max-w-7xl overflow-hidden px-6">
+    <main className=" mx-auto my-10 max-w-7xl overflow-hidden px-6">
       {" "}
       <AccountOrdersContent
         accountMessages={accountMessages}
         ordersMessages={ordersMessages}
       />
-    </div>
+    </main>
   );
 }
