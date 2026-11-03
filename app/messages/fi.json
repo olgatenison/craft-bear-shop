@@ -437,5 +437,11 @@
       "liter": "per litra",
       "keg": "per tynnyri"
     }
+  },
+  "PartyBanner": {
+    "title": "Suunnitteletko suuria juhlia?",
+    "subtitle": "Isommalle seurueelle voit valita tynnyrin hanaolutta tai kokonaisen laatikon pullotettua olutta. Vähemmän huolta juomista ja enemmän aikaa juhlista nauttimiseen.",
+    "kegsButton": "Katso oluttynnyrit",
+    "boxesButton": "Katso olutlaatikot"
   }
 }

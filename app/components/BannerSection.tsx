@@ -1,63 +1,77 @@
+// app/components/BannerSection.tsx
+
 import Image from "next/image";
 import Link from "next/link";
+import type { Locale } from "@/app/lib/locale";
 
-type BannerSectionProps = {
-  imageSrc: string; // например: "/category/beerbottle22.jpg" (лежит в /public)
-  imageAlt: string; // осмысленный alt
+type PartyBannerMessages = {
   title: string;
   subtitle: string;
-  ctaLabel: string;
-  ctaHref: string;
+  kegsButton: string;
+  boxesButton: string;
+};
+
+type BannerSectionProps = {
+  lang: Locale;
+  messages: {
+    PartyBanner: PartyBannerMessages;
+  };
   priority?: boolean;
 };
 
 export default function BannerSection({
-  imageSrc,
-  imageAlt,
-  title,
-  subtitle,
-  ctaLabel,
-  ctaHref,
+  lang,
+  messages,
   priority = false,
 }: BannerSectionProps) {
-  return (
-    <section
-      className="mx-auto max-w-2xl px-4 pb-16 sm:px-6  lg:max-w-7xl "
-      aria-labelledby="banner-heading"
-    >
-      <div className="relative overflow-hidden rounded-b-xl border-t border-gray-400">
-        {/* контейнер под responsive-картинку */}
-        <div className="relative  w-full lg:h-96 lg:aspect-auto">
-          <Image
-            alt={imageAlt}
-            src={imageSrc}
-            fill
-            sizes="(min-width:1024px) 1120px, (min-width:640px) 640px, 100vw"
-            className="object-cover"
-            priority={priority}
-          />
-          {/* затемнение + градиент для читабельности текста */}
-          {/* <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-black/20" /> */}
-        </div>
+  const t = messages.PartyBanner;
 
-        {/* карточка с текстом/кнопкой */}
-        <div className="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black/60 p-10 backdrop-blur-sm sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-lg lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg">
-          <div className="flex flex-col gap-6">
-            <h2
-              id="banner-heading"
-              className="text-3xl font-bold text-white text-balance"
-            >
-              {title}
-            </h2>
-            <p className=" text-base/7 text-gray-400">{subtitle}</p>
+  return (
+    <section className="mx-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl">
+      <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5">
+        <div className="grid min-h-[420px] grid-cols-1 lg:grid-cols-2">
+          {/* Left content */}
+          <div className="flex flex-col justify-center p-8 sm:p-10 lg:p-14">
+            <div className="max-w-xl">
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                {t.title}
+              </h2>
+
+              <p className="mt-6 text-base leading-8 text-gray-400">
+                {t.subtitle}
+              </p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href={`/${lang}/shop?category=kegs`}
+                  className="inline-flex items-center justify-center rounded-md border border-white/20 bg-white/10 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/20"
+                >
+                  {t.kegsButton}
+                </Link>
+
+                <Link
+                  href={`/${lang}/shop?category=beer-boxes`}
+                  className="inline-flex items-center justify-center rounded-md border border-white/20 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10"
+                >
+                  {t.boxesButton}
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <Link
-            href={ctaHref}
-            className="inline-flex shrink-0 items-center justify-center rounded-md border border-white/25 px-4 py-3 text-base font-medium text-white hover:bg-white/10 sm:ml-8 sm:mt-0 lg:ml-0 lg:w-full"
-          >
-            {ctaLabel}
-          </Link>
+          {/* Right image */}
+          <div className="relative min-h-80 lg:min-h-[420px]">
+            <Image
+              src="/category/baner.png"
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+              priority={priority}
+            />
+
+            <div className="absolute inset-0 bg-linear-to-r from-black/20 via-transparent to-transparent" />
+          </div>
         </div>
       </div>
     </section>

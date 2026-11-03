@@ -53,14 +53,7 @@ export default async function Home({
         add={t.TrendingProducts.add}
         alcohol={t.TrendingProducts.alcohol}
       />
-      <BannerSection
-        imageSrc="/category/golden-beer-bubbles-drop-wet-glass-generated-by-ai.jpg"
-        imageAlt={t.BannerSection.title}
-        title={t.BannerSection.title}
-        subtitle={t.BannerSection.subtitle}
-        ctaLabel={t.BannerSection.cta}
-        ctaHref={`/${lang}/shop`}
-      />
+      <BannerSection lang={lang} messages={t} />
 
       <TextBlockCenter
         title={t.LogoSection.title}

@@ -437,5 +437,11 @@
       "liter": "per liter",
       "keg": "per keg"
     }
+  },
+  "PartyBanner": {
+    "title": "Planning a big party?",
+    "subtitle": "For a larger group, choose a keg of draft beer or a full box of bottled beer. Less time worrying about drinks means more time enjoying the party.",
+    "kegsButton": "View beer kegs",
+    "boxesButton": "View beer boxes"
   }
 }

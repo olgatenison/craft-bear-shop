@@ -438,5 +438,11 @@
       "liter": "liitri kohta",
       "keg": "vaadi kohta"
     }
+  },
+  "PartyBanner": {
+    "title": "Korraldate suure peo?",
+    "subtitle": "Suuremale seltskonnale valige vaaditäis vaadiõlut või terve kast pudeliõlut. Vähem muret jookide pärast tähendab rohkem aega peo nautimiseks.",
+    "kegsButton": "Vaata õllevaate",
+    "boxesButton": "Vaata õllekaste"
   }
 }
