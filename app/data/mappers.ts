@@ -1,5 +1,3 @@
-// app/data/mappers.ts
-
 import type { ProductNode, Metafield } from "./types";
 
 export type FlattenedProduct = Omit<
@@ -25,8 +23,15 @@ export type FlattenedProduct = Omit<
     volume: string;
     box_number: string;
     bottle_in_box: string;
+
+    // Wholesale
     wholesale_price: string;
     wholesale_unit: string;
+    wholesale_quantity_per_box: string;
+
+    // Kegs
+    keg_volume_liters: string;
+    keg_material: string;
   }>;
 
   shopify?: Partial<{
@@ -40,7 +45,7 @@ export type FlattenedProduct = Omit<
 };
 
 function extractMetafieldValue(mf: Metafield): string | null {
-  // список reference-метаобъектов
+  // Список reference-метаобъектов
   if (
     mf.type.includes("list.") &&
     mf.type.includes("reference") &&
@@ -72,7 +77,7 @@ function extractMetafieldValue(mf: Metafield): string | null {
     return names.length > 0 ? names.join(", ") : null;
   }
 
-  // одиночный reference
+  // Одиночный reference
   if (
     mf.type.includes("reference") &&
     !mf.type.includes("list.") &&
@@ -94,7 +99,7 @@ function extractMetafieldValue(mf: Metafield): string | null {
     return null;
   }
 
-  // обычное значение
+  // Обычное значение
   return mf.value;
 }
 
@@ -158,6 +163,8 @@ export function flattenMetafields(p: ProductNode): FlattenedProduct {
 
     variantId,
 
+    // Все метаполя namespace "specs",
+    // включая новые wholesale и keg поля
     specs: grouped["specs"] as FlattenedProduct["specs"],
 
     shopify: grouped["shopify"] as FlattenedProduct["shopify"],
@@ -187,6 +194,9 @@ export function getBeerStyle(product: FlattenedProduct): string | undefined {
   return product.shopify?.["beer-style"];
 }
 
+/**
+ * Возвращает характеристики продукта
+ */
 export function getProductSpecs(product: FlattenedProduct): Array<{
   label: string;
   value: string;
@@ -210,9 +220,14 @@ export function getProductSpecs(product: FlattenedProduct): Array<{
 
       bottle_in_box: "Bottle in box",
 
+      // Wholesale
       wholesale_price: "Wholesale price",
-
       wholesale_unit: "Wholesale unit",
+      wholesale_quantity_per_box: "Quantity per box",
+
+      // Kegs
+      keg_volume_liters: "Keg volume (L)",
+      keg_material: "Keg material",
 
       country: "Country",
 
@@ -249,6 +264,10 @@ export function getProductSpecs(product: FlattenedProduct): Array<{
   return specs;
 }
 
+/**
+ * Преобразует массив Shopify ProductNode
+ * в массив FlattenedProduct
+ */
 export function flattenProducts(products: ProductNode[]): FlattenedProduct[] {
   return products.map((product) => flattenMetafields(product));
 }

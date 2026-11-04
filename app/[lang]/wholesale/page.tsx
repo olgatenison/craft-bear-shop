@@ -1,8 +1,9 @@
-// app/[lang]/wholesale/page.tsx
-
 import WholesaleContent, {
   type WholesaleProduct,
+  type WholesaleUnit,
+  type KegMaterial,
 } from "@/app/components/WholesaleContent";
+
 import ScrollToTopButton from "@/app/components/ui/ScrollToTopButton";
 import { fetchAllProductsFlattened } from "@/app/data/repo";
 import { getMessages } from "../messages";
@@ -14,8 +15,6 @@ function normalizeLocale(raw: string): Locale {
   return LOCALES.includes(raw as Locale) ? (raw as Locale) : "en";
 }
 
-type WholesaleUnit = "bottle" | "can" | "box" | "liter" | "keg";
-
 function isWholesaleUnit(value: string | undefined): value is WholesaleUnit {
   return (
     value === "bottle" ||
@@ -24,6 +23,26 @@ function isWholesaleUnit(value: string | undefined): value is WholesaleUnit {
     value === "liter" ||
     value === "keg"
   );
+}
+
+function isKegMaterial(value: string | undefined): value is KegMaterial {
+  return value === "plastic" || value === "metal";
+}
+
+function parsePositiveNumber(value: string | undefined): number | undefined {
+  if (!value || !value.trim()) return undefined;
+
+  const number = Number(value);
+
+  return Number.isFinite(number) && number > 0 ? number : undefined;
+}
+
+function parsePositiveInteger(value: string | undefined): number | undefined {
+  const number = parsePositiveNumber(value);
+
+  return number !== undefined && Number.isSafeInteger(number)
+    ? number
+    : undefined;
 }
 
 export default async function WholesalePage({
@@ -45,25 +64,32 @@ export default async function WholesalePage({
     .filter((product) => {
       const price = product.specs?.wholesale_price;
 
-      return Boolean(
-        price && !Number.isNaN(Number(price)) && Number(price) > 0,
-      );
+      return parsePositiveNumber(price) !== undefined;
     })
     .map((product) => {
-      const wholesalePrice = product.specs?.wholesale_price ?? "0";
+      const specs = product.specs;
 
-      const wholesaleUnit = product.specs?.wholesale_unit;
+      const wholesaleUnit = specs?.wholesale_unit;
+      const kegMaterial = specs?.keg_material;
 
       return {
         id: product.id,
         title: product.title,
         handle: product.handle,
-        wholesalePrice,
+
+        wholesalePrice: specs?.wholesale_price ?? "0",
+
         currencyCode: product.priceRange.minVariantPrice.currencyCode,
 
         wholesaleUnit: isWholesaleUnit(wholesaleUnit)
           ? wholesaleUnit
           : undefined,
+
+        quantityPerBox: parsePositiveInteger(specs?.wholesale_quantity_per_box),
+
+        kegVolumeLiters: parsePositiveNumber(specs?.keg_volume_liters),
+
+        kegMaterial: isKegMaterial(kegMaterial) ? kegMaterial : undefined,
       };
     });
 
@@ -80,7 +106,9 @@ export default async function WholesalePage({
         contactText={t.WholesalePage.contactText}
         contactLabel={t.WholesalePage.contactButton}
         units={t.WholesalePage.units}
+        table={t.WholesalePage.table}
       />
+
       <ScrollToTopButton />
     </main>
   );

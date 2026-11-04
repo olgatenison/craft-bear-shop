@@ -422,20 +422,36 @@
     "title": "Usein kysytyt kysymykset",
     "empty": "Kysymyksiä ei ole vielä lisätty"
   },
+
   "WholesalePage": {
-    "title": "Tukkuhinnat",
-    "intro": "Tuotteidemme tukkuhinnat. Tilauksia, saatavuutta ja yhteistyötä koskevissa asioissa ota meihin suoraan yhteyttä.",
+    "title": "Tukkumyynti",
+    "intro": "Tuotteidemme tukkuhinnat. Ota meihin suoraan yhteyttä tilauksia, saatavuutta ja yhteistyötä koskevissa asioissa.",
     "productLabel": "Tuote",
     "priceLabel": "Tukkuhinta",
-    "viewProduct": "Näytä tuote",
-    "contactText": "Kiinnostuitko tukkutarjouksestamme? Ota meihin suoraan yhteyttä keskustellaksesi hinnoista, saatavuudesta ja yhteistyöstä.",
+    "viewProduct": "Katso tuote",
+    "contactText": "Oletko kiinnostunut tukkutarjouksestamme? Ota meihin suoraan yhteyttä, niin voimme keskustella hinnoista, saatavuudesta ja yhteistyöehdoista.",
     "contactButton": "Ota yhteyttä",
     "units": {
       "bottle": "per pullo",
       "can": "per tölkki",
       "box": "per laatikko",
       "liter": "per litra",
-      "keg": "per tynnyri"
+      "keg": "per keg"
+    },
+    "table": {
+      "bottles": "Pullot ja tölkit",
+      "kegs": "Kegit",
+      "unitPrice": "Kappalehinta",
+      "quantity": "Kpl/laatikko",
+      "boxPrice": "Laatikon hinta",
+      "vat": "Sis. ALV 24%",
+      "volume": "Tilavuus",
+      "material": "Materiaali",
+      "literPrice": "Litrahinta",
+      "kegPrice": "Kegin hinta",
+      "metal": "Metalli",
+      "plastic": "Muovi",
+      "literSymbol": "l"
     }
   },
   "PartyBanner": {

@@ -423,8 +423,9 @@
     "title": "Korduma kippuvad küsimused",
     "empty": "Küsimusi ei ole veel lisatud"
   },
+
   "WholesalePage": {
-    "title": "Hulgihinnad",
+    "title": "Hulgimüük",
     "intro": "Meie toodete hulgihinnad. Tellimuste, saadavuse ja koostöö küsimustes võtke meiega otse ühendust.",
     "productLabel": "Toode",
     "priceLabel": "Hulgihind",
@@ -436,7 +437,22 @@
       "can": "purgi kohta",
       "box": "kasti kohta",
       "liter": "liitri kohta",
-      "keg": "vaadi kohta"
+      "keg": "kegi kohta"
+    },
+    "table": {
+      "bottles": "Pudelid ja purgid",
+      "kegs": "Kegid",
+      "unitPrice": "Ühiku hind",
+      "quantity": "Tk kastis",
+      "boxPrice": "Kasti hind",
+      "vat": "Koos KM-ga 24%",
+      "volume": "Maht",
+      "material": "Materjal",
+      "literPrice": "Liitri hind",
+      "kegPrice": "Kegi hind",
+      "metal": "Metall",
+      "plastic": "Plast",
+      "literSymbol": "l"
     }
   },
   "PartyBanner": {

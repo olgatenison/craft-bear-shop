@@ -89,6 +89,9 @@ export const PRODUCTS_ALL_WITH_METAFIELDS = /* GraphQL */ `
               { namespace: "specs", key: "bottle_in_box" }
               { namespace: "specs", key: "wholesale_price" }
               { namespace: "specs", key: "wholesale_unit" }
+              { namespace: "specs", key: "wholesale_quantity_per_box" }
+              { namespace: "specs", key: "keg_volume_liters" }
+              { namespace: "specs", key: "keg_material" }
               { namespace: "shopify", key: "beer-style" }
               { namespace: "shopify", key: "package-type" }
               { namespace: "marketing", key: "trending" }
@@ -202,6 +205,9 @@ export const PRODUCT_BY_HANDLE = /* GraphQL */ `
           { namespace: "specs", key: "bottle_in_box" }
           { namespace: "specs", key: "wholesale_price" }
           { namespace: "specs", key: "wholesale_unit" }
+          { namespace: "specs", key: "wholesale_quantity_per_box" }
+          { namespace: "specs", key: "keg_volume_liters" }
+          { namespace: "specs", key: "keg_material" }
           { namespace: "shopify", key: "beer-style" }
           { namespace: "shopify", key: "package-type" }
           { namespace: "shopify", key: "allergen-information" }
@@ -344,6 +350,9 @@ export const PRODUCTS_BY_COLLECTION = /* GraphQL */ `
                 { namespace: "specs", key: "bottle_in_box" }
                 { namespace: "specs", key: "wholesale_price" }
                 { namespace: "specs", key: "wholesale_unit" }
+                { namespace: "specs", key: "wholesale_quantity_per_box" }
+                { namespace: "specs", key: "keg_volume_liters" }
+                { namespace: "specs", key: "keg_material" }
                 { namespace: "shopify", key: "beer-style" }
                 { namespace: "shopify", key: "package-type" }
                 { namespace: "marketing", key: "trending" }
@@ -455,6 +464,9 @@ export const PRODUCT_BY_ID = /* GraphQL */ `
           { namespace: "specs", key: "bottle_in_box" }
           { namespace: "specs", key: "wholesale_price" }
           { namespace: "specs", key: "wholesale_unit" }
+          { namespace: "specs", key: "wholesale_quantity_per_box" }
+          { namespace: "specs", key: "keg_volume_liters" }
+          { namespace: "specs", key: "keg_material" }
           { namespace: "shopify", key: "beer-style" }
           { namespace: "shopify", key: "package-type" }
           { namespace: "marketing", key: "trending" }

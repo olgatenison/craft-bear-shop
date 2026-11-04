@@ -422,6 +422,7 @@
     "title": "Frequently asked questions",
     "empty": "No questions yet"
   },
+
   "WholesalePage": {
     "title": "Wholesale",
     "intro": "Wholesale prices for our products. For orders, availability and cooperation, please contact us directly.",
@@ -436,6 +437,21 @@
       "box": "per box",
       "liter": "per liter",
       "keg": "per keg"
+    },
+    "table": {
+      "bottles": "Bottles and cans",
+      "kegs": "Kegs",
+      "unitPrice": "Unit price",
+      "quantity": "Qty per box",
+      "boxPrice": "Box price",
+      "vat": "Incl. VAT 24%",
+      "volume": "Volume",
+      "material": "Material",
+      "literPrice": "Price per liter",
+      "kegPrice": "Keg price",
+      "metal": "Metal",
+      "plastic": "Plastic",
+      "literSymbol": "l"
     }
   },
   "PartyBanner": {
