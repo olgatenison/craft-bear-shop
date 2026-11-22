@@ -1,5 +1,3 @@
-// app/components/AllProducts.tsx
-
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
@@ -117,7 +115,6 @@ export default function AllProducts({
             pv.variants?.edges?.map((edge) => edge.node) ?? [];
 
           const isBoxCategory = category === "beer-boxes";
-
           const isKegCategory = category === "kegs";
 
           /*
@@ -323,16 +320,11 @@ export default function AllProducts({
                     />
                   )}
 
+                  {/* Alcohol-free badge */}
                   {isAlcoholFree && (
-                    <span
-                      className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/95 px-2 py-1 text-[10px] font-semibold uppercase text-white shadow-lg ring-1 ring-black/10"
-                      aria-label={alcohol}
-                    >
+                    <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/95 px-2 py-1 text-[10px] font-semibold uppercase text-white shadow-lg ring-1 ring-black/10">
                       <WineOff className="h-3.5 w-3.5" aria-hidden="true" />
-
                       {alcohol}
-
-                      <span className="sr-only">{alcohol}</span>
                     </span>
                   )}
                 </div>

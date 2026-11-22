@@ -492,5 +492,36 @@
     "subtitle": "For a larger group, choose a keg of draft beer or a full box of bottled beer. Less time worrying about drinks means more time enjoying the party.",
     "kegsButton": "View beer kegs",
     "boxesButton": "View beer boxes"
+  },
+  "ContactPage": {
+    "title": "Our Store",
+    "description": "Visit Craft Bear in Tallinn to explore our selection, discover something new, or collect your order.",
+    "addressTitle": "Address",
+    "viewOnMap": "View on Google Maps",
+    "workingHoursTitle": "Opening Hours",
+    "weekdays": "Mon–Fri",
+    "weekends": "Sat–Sun",
+    "hoursPending": "To be confirmed",
+    "visitTitle": "We Look Forward to Seeing You",
+    "visitDescription": "Come and explore our selection of beer and cider, discover your new favourite flavour, or find the perfect drinks for an evening, a gathering, or a gift.",
+    "collaborationDescription": "If you are interested in working with Craft Bear, have a supply or partnership proposal, or simply have a question, please fill out the form and we will get back to you.",
+    "contactButton": "Fill Out the Form"
+  },
+
+  "validation": {
+    "firstNameRequired": "First name is required",
+    "firstNameMin": "First name must contain at least 2 letters",
+    "lastNameRequired": "Last name is required",
+    "lastNameMin": "Last name must contain at least 2 letters",
+    "nameInvalid": "Only letters, spaces, hyphens and apostrophes are allowed",
+    "emailRequired": "Email address is required",
+    "emailInvalid": "Please enter a valid email address",
+    "emailDisposable": "Please use a permanent email address",
+    "messageRequired": "Message is required",
+    "messageMin": "Message must contain at least 10 characters",
+    "messageMax": "Message must not exceed 500 characters",
+    "phoneInvalid": "Invalid phone number. Only digits, spaces, +, -, (, ) are allowed",
+    "phoneMin": "Phone number must contain at least 7 digits",
+    "phoneMax": "Phone number must not contain more than 15 digits"
   }
 }

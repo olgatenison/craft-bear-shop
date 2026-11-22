@@ -492,5 +492,36 @@
     "subtitle": "Isommalle seurueelle voit valita tynnyrin hanaolutta tai kokonaisen laatikon pullotettua olutta. Vähemmän huolta juomista ja enemmän aikaa juhlista nauttimiseen.",
     "kegsButton": "Katso oluttynnyrit",
     "boxesButton": "Katso olutlaatikot"
+  },
+  "ContactPage": {
+    "title": "Myymälämme",
+    "description": "Tervetuloa Craft Beariin Tallinnaan tutustumaan valikoimaamme, löytämään jotain uutta tai noutamaan tilauksesi.",
+    "addressTitle": "Osoite",
+    "viewOnMap": "Katso Google Mapsista",
+    "workingHoursTitle": "Aukioloajat",
+    "weekdays": "Ma–Pe",
+    "weekends": "La–Su",
+    "hoursPending": "Vahvistetaan myöhemmin",
+    "visitTitle": "Tervetuloa käymään",
+    "visitDescription": "Tule tutustumaan olut- ja siiderivalikoimaamme, löytämään uusi suosikkimakusi tai valitsemaan sopivat juomat illanviettoon, tapaamiseen tai lahjaksi.",
+    "collaborationDescription": "Jos olet kiinnostunut yhteistyöstä Craft Bearin kanssa, haluat ehdottaa tavarantoimituksia tai kumppanuutta tai sinulla on muita kysymyksiä, täytä lomake, niin otamme sinuun yhteyttä.",
+    "contactButton": "Täytä lomake"
+  },
+
+  "validation": {
+    "firstNameRequired": "Anna etunimi",
+    "firstNameMin": "Etunimessä on oltava vähintään 2 kirjainta",
+    "lastNameRequired": "Anna sukunimi",
+    "lastNameMin": "Sukunimessä on oltava vähintään 2 kirjainta",
+    "nameInvalid": "Vain kirjaimet, välilyönnit, yhdysmerkit ja heittomerkit ovat sallittuja",
+    "emailRequired": "Anna sähköpostiosoite",
+    "emailInvalid": "Anna kelvollinen sähköpostiosoite",
+    "emailDisposable": "Käytä pysyvää sähköpostiosoitetta",
+    "messageRequired": "Kirjoita viesti",
+    "messageMin": "Viestissä on oltava vähintään 10 merkkiä",
+    "messageMax": "Viesti saa sisältää enintään 500 merkkiä",
+    "phoneInvalid": "Virheellinen puhelinnumero. Vain numerot, välilyönnit, +, -, (, ) ovat sallittuja",
+    "phoneMin": "Puhelinnumerossa on oltava vähintään 7 numeroa",
+    "phoneMax": "Puhelinnumerossa saa olla enintään 15 numeroa"
   }
 }

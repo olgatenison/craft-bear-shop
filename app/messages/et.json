@@ -492,5 +492,36 @@
     "subtitle": "Suuremale seltskonnale valige vaaditäis vaadiõlut või terve kast pudeliõlut. Vähem muret jookide pärast tähendab rohkem aega peo nautimiseks.",
     "kegsButton": "Vaata õllevaate",
     "boxesButton": "Vaata õllekaste"
+  },
+  "ContactPage": {
+    "title": "Meie kauplus",
+    "description": "Külasta Craft Beari Tallinnas, et tutvuda meie valikuga, avastada midagi uut või tulla oma tellimusele järele.",
+    "addressTitle": "Aadress",
+    "viewOnMap": "Vaata Google Mapsis",
+    "workingHoursTitle": "Lahtiolekuajad",
+    "weekdays": "E–R",
+    "weekends": "L–P",
+    "hoursPending": "Täpsustamisel",
+    "visitTitle": "Ootame sind külla",
+    "visitDescription": "Tule tutvuma meie õlle- ja siidrivalikuga, avasta oma uus lemmikmaitse või leia sobivad joogid õhtuks, koosviibimiseks või kingituseks.",
+    "collaborationDescription": "Kui oled huvitatud koostööst Craft Beariga, soovid teha tarne- või koostööettepaneku või sul on mõni muu küsimus, täida vorm ja võtame sinuga ühendust.",
+    "contactButton": "Täida vorm"
+  },
+
+  "validation": {
+    "firstNameRequired": "Palun sisesta eesnimi",
+    "firstNameMin": "Eesnimi peab sisaldama vähemalt 2 tähte",
+    "lastNameRequired": "Palun sisesta perekonnanimi",
+    "lastNameMin": "Perekonnanimi peab sisaldama vähemalt 2 tähte",
+    "nameInvalid": "Lubatud on ainult tähed, tühikud, sidekriipsud ja ülakomad",
+    "emailRequired": "Palun sisesta e-posti aadress",
+    "emailInvalid": "Palun sisesta korrektne e-posti aadress",
+    "emailDisposable": "Palun kasuta püsivat e-posti aadressi",
+    "messageRequired": "Palun sisesta sõnum",
+    "messageMin": "Sõnum peab sisaldama vähemalt 10 tähemärki",
+    "messageMax": "Sõnum ei tohi olla pikem kui 500 tähemärki",
+    "phoneInvalid": "Vigane telefoninumber. Lubatud on numbrid, tühikud, +, -, (, )",
+    "phoneMin": "Telefoninumber peab sisaldama vähemalt 7 numbrit",
+    "phoneMax": "Telefoninumber ei tohi sisaldada rohkem kui 15 numbrit"
   }
 }

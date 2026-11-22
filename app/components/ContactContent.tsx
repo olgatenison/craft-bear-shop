@@ -1,17 +1,32 @@
-// app/components/ContactContent.tsx
-
 "use client";
 
 import { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/app/lib/locale";
+
+type ValidationMessages = {
+  firstNameRequired: string;
+  firstNameMin: string;
+  lastNameRequired: string;
+  lastNameMin: string;
+  nameInvalid: string;
+  emailRequired: string;
+  emailInvalid: string;
+  emailDisposable: string;
+  messageRequired: string;
+  messageMin: string;
+  messageMax: string;
+  phoneInvalid: string;
+  phoneMin: string;
+  phoneMax: string;
+};
 
 type ContactMessages = {
   title: string;
   subtitle: string;
   wholesaleLink: string;
-
   firstname: string;
   lastname: string;
   emailLabel: string;
@@ -30,10 +45,11 @@ type Props = {
   lang: Locale;
   messages: {
     Contact: ContactMessages;
+    validation: ValidationMessages;
   };
 };
 
-type FormData = {
+type ContactFormData = {
   firstName: string;
   lastName: string;
   email: string;
@@ -42,18 +58,59 @@ type FormData = {
   message: string;
 };
 
-type FormErrors = Partial<Record<keyof FormData, string>>;
+type FormErrors = Partial<Record<keyof ContactFormData, string>>;
+
+const initialFormData: ContactFormData = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  company: "",
+  phone: "",
+  message: "",
+};
+
+/*
+ * --------------------------------------------------
+ * UNICODE NAME VALIDATION
+ * --------------------------------------------------
+ *
+ * Поддерживаются буквы всех языков:
+ * украинский, русский, эстонский,
+ * финский, английский и другие.
+ *
+ * Разрешены пробелы, дефисы и апострофы
+ * между частями имени.
+ */
+
+const nameRegex = /^[\p{L}\p{M}]+(?:[ '\u2019-][\p{L}\p{M}]+)*$/u;
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const phoneRegex = /^[\d\s\-+()]+$/;
+
+const disposableEmails = [
+  "tempmail.com",
+  "10minutemail.com",
+  "guerrillamail.com",
+  "mailinator.com",
+  "throwaway.email",
+  "temp-mail.org",
+];
+
+function countLetters(value: string): number {
+  return Array.from(value.matchAll(/\p{L}/gu)).length;
+}
 
 export default function ContactContent({ lang, messages }: Props) {
+  // Основные переводы формы
   const t = messages.Contact;
 
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    company: "",
-    phone: "",
-    message: "",
+  // Переводы ошибок — отдельный объект
+  // в корне messages.json
+  const v = messages.validation;
+
+  const [formData, setFormData] = useState<ContactFormData>({
+    ...initialFormData,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -64,72 +121,89 @@ export default function ContactContent({ lang, messages }: Props) {
     null,
   );
 
+  /*
+   * --------------------------------------------------
+   * VALIDATION
+   * --------------------------------------------------
+   */
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    // Валидация имени
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
-    } else if (formData.firstName.trim().length < 2) {
-      newErrors.firstName = "First name must be at least 2 characters";
-    } else if (!/^[a-zA-Zа-яА-ЯёЁ\s\-']+$/.test(formData.firstName)) {
-      newErrors.firstName = "Only letters, spaces and hyphens allowed";
+    const firstName = formData.firstName.trim().normalize("NFC");
+
+    const lastName = formData.lastName.trim().normalize("NFC");
+
+    const email = formData.email.trim();
+    const message = formData.message.trim();
+    const phone = formData.phone.trim();
+
+    /*
+     * FIRST NAME
+     */
+
+    if (!firstName) {
+      newErrors.firstName = v.firstNameRequired;
+    } else if (countLetters(firstName) < 2) {
+      newErrors.firstName = v.firstNameMin;
+    } else if (!nameRegex.test(firstName)) {
+      newErrors.firstName = v.nameInvalid;
     }
 
-    // Валидация фамилии
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
-    } else if (formData.lastName.trim().length < 2) {
-      newErrors.lastName = "Last name must be at least 2 characters";
-    } else if (!/^[a-zA-Zа-яА-ЯёЁ\s\-']+$/.test(formData.lastName)) {
-      newErrors.lastName = "Only letters, spaces and hyphens allowed";
+    /*
+     * LAST NAME
+     */
+
+    if (!lastName) {
+      newErrors.lastName = v.lastNameRequired;
+    } else if (countLetters(lastName) < 2) {
+      newErrors.lastName = v.lastNameMin;
+    } else if (!nameRegex.test(lastName)) {
+      newErrors.lastName = v.nameInvalid;
     }
 
-    // Валидация email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    /*
+     * EMAIL
+     */
 
-    const disposableEmails = [
-      "tempmail.com",
-      "10minutemail.com",
-      "guerrillamail.com",
-      "mailinator.com",
-      "throwaway.email",
-      "temp-mail.org",
-    ];
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+    if (!email) {
+      newErrors.email = v.emailRequired;
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = v.emailInvalid;
     } else {
-      const domain = formData.email.split("@")[1]?.toLowerCase();
+      const domain = email.split("@")[1]?.toLowerCase();
 
       if (domain && disposableEmails.includes(domain)) {
-        newErrors.email = "Please use a valid email address";
+        newErrors.email = v.emailDisposable;
       }
     }
 
-    // Валидация сообщения
-    if (!formData.message.trim()) {
-      newErrors.message = "Message is required";
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters";
-    } else if (formData.message.length > 500) {
-      newErrors.message = "Message must be 500 characters or less";
+    /*
+     * MESSAGE
+     */
+
+    if (!message) {
+      newErrors.message = v.messageRequired;
+    } else if (Array.from(message).length < 10) {
+      newErrors.message = v.messageMin;
+    } else if (Array.from(formData.message).length > 500) {
+      newErrors.message = v.messageMax;
     }
 
-    // Валидация телефона
-    if (formData.phone) {
-      if (!/^[\d\s\-\+\(\)]+$/.test(formData.phone)) {
-        newErrors.phone =
-          "Invalid phone format (only digits, spaces, +, -, () allowed)";
+    /*
+     * PHONE (OPTIONAL)
+     */
+
+    if (phone) {
+      if (!phoneRegex.test(phone)) {
+        newErrors.phone = v.phoneInvalid;
       } else {
-        const digitsOnly = formData.phone.replace(/\D/g, "");
+        const digitsOnly = phone.replace(/\D/g, "");
 
         if (digitsOnly.length < 7) {
-          newErrors.phone = "Phone must be at least 7 digits";
+          newErrors.phone = v.phoneMin;
         } else if (digitsOnly.length > 15) {
-          newErrors.phone = "Phone must be no more than 15 digits";
+          newErrors.phone = v.phoneMax;
         }
       }
     }
@@ -139,8 +213,14 @@ export default function ContactContent({ lang, messages }: Props) {
     return Object.keys(newErrors).length === 0;
   };
 
+  /*
+   * --------------------------------------------------
+   * HANDLE CHANGE
+   * --------------------------------------------------
+   */
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
 
@@ -149,16 +229,28 @@ export default function ContactContent({ lang, messages }: Props) {
       [name]: value,
     }));
 
-    if (errors[name as keyof FormData]) {
+    if (errors[name as keyof ContactFormData]) {
       setErrors((prev) => ({
         ...prev,
         [name]: undefined,
       }));
     }
+
+    if (submitStatus) {
+      setSubmitStatus(null);
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  /*
+   * --------------------------------------------------
+   * HANDLE SUBMIT
+   * --------------------------------------------------
+   */
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (isSubmitting) return;
 
     setSubmitStatus(null);
 
@@ -174,7 +266,14 @@ export default function ContactContent({ lang, messages }: Props) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          firstName: formData.firstName.trim().normalize("NFC"),
+          lastName: formData.lastName.trim().normalize("NFC"),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          message: formData.message.trim(),
+        }),
       });
 
       if (!response.ok) {
@@ -182,31 +281,29 @@ export default function ContactContent({ lang, messages }: Props) {
       }
 
       setSubmitStatus("success");
-
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        company: "",
-        phone: "",
-        message: "",
-      });
+      setErrors({});
+      setFormData({ ...initialFormData });
     } catch (error) {
       console.error("Error sending message:", error);
-
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  /*
+   * --------------------------------------------------
+   * RENDER
+   * --------------------------------------------------
+   */
+
   return (
     <div className="relative mx-auto mt-2 mb-24 max-w-7xl overflow-hidden">
       {/* Image */}
       <div className="lg:absolute lg:inset-0 lg:left-1/2 lg:pl-4">
         <Image
-          width="640"
-          height="850"
+          width={640}
+          height={850}
           alt=""
           src="/category/pouring-beer-into-mug.webp"
           className="h-64 w-full bg-gray-800 object-cover sm:h-80 lg:absolute lg:h-full"
@@ -216,10 +313,10 @@ export default function ContactContent({ lang, messages }: Props) {
       <div className="pt-12 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2">
         <div className="px-6">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-            {/* Title */}
-            <h2 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+            {/* Main title */}
+            <h1 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl">
               {t.title}
-            </h2>
+            </h1>
 
             {/* Subtitle + wholesale link */}
             <p className="mt-4 text-base/8 text-gray-400">
@@ -233,7 +330,7 @@ export default function ContactContent({ lang, messages }: Props) {
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="mt-12">
+            <form onSubmit={handleSubmit} noValidate className="mt-12">
               <div className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
                 {/* First name */}
                 <div>
@@ -252,6 +349,11 @@ export default function ContactContent({ lang, messages }: Props) {
                       autoComplete="given-name"
                       value={formData.firstName}
                       onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.firstName}
+                      aria-describedby={
+                        errors.firstName ? "firstName-error" : undefined
+                      }
                       className={`w-full border-b ${
                         errors.firstName
                           ? "border-red-500"
@@ -260,7 +362,10 @@ export default function ContactContent({ lang, messages }: Props) {
                     />
 
                     {errors.firstName && (
-                      <p className="mt-1 text-sm text-red-400">
+                      <p
+                        id="firstName-error"
+                        className="mt-1 text-sm text-red-400"
+                      >
                         {errors.firstName}
                       </p>
                     )}
@@ -284,6 +389,11 @@ export default function ContactContent({ lang, messages }: Props) {
                       autoComplete="family-name"
                       value={formData.lastName}
                       onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.lastName}
+                      aria-describedby={
+                        errors.lastName ? "lastName-error" : undefined
+                      }
                       className={`w-full border-b ${
                         errors.lastName
                           ? "border-red-500"
@@ -292,7 +402,10 @@ export default function ContactContent({ lang, messages }: Props) {
                     />
 
                     {errors.lastName && (
-                      <p className="mt-1 text-sm text-red-400">
+                      <p
+                        id="lastName-error"
+                        className="mt-1 text-sm text-red-400"
+                      >
                         {errors.lastName}
                       </p>
                     )}
@@ -316,13 +429,18 @@ export default function ContactContent({ lang, messages }: Props) {
                       autoComplete="email"
                       value={formData.email}
                       onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.email}
+                      aria-describedby={
+                        errors.email ? "email-error" : undefined
+                      }
                       className={`w-full border-b ${
                         errors.email ? "border-red-500" : "border-gray-400/50"
                       } bg-transparent pb-1 text-white outline-none`}
                     />
 
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-400">
+                      <p id="email-error" className="mt-1 text-sm text-red-400">
                         {errors.email}
                       </p>
                     )}
@@ -372,16 +490,21 @@ export default function ContactContent({ lang, messages }: Props) {
                       name="phone"
                       type="tel"
                       autoComplete="tel"
-                      aria-describedby="phone-description"
                       value={formData.phone}
                       onChange={handleChange}
+                      aria-invalid={!!errors.phone}
+                      aria-describedby={
+                        errors.phone
+                          ? "phone-description phone-error"
+                          : "phone-description"
+                      }
                       className={`w-full border-b ${
                         errors.phone ? "border-red-500" : "border-gray-400/50"
                       } bg-transparent pb-1 text-white outline-none`}
                     />
 
                     {errors.phone && (
-                      <p className="mt-1 text-sm text-red-400">
+                      <p id="phone-error" className="mt-1 text-sm text-red-400">
                         {errors.phone}
                       </p>
                     )}
@@ -408,16 +531,26 @@ export default function ContactContent({ lang, messages }: Props) {
                       id="message"
                       name="message"
                       rows={6}
-                      aria-describedby="message-description"
+                      maxLength={500}
+                      required
                       value={formData.message}
                       onChange={handleChange}
+                      aria-invalid={!!errors.message}
+                      aria-describedby={
+                        errors.message
+                          ? "message-description message-error"
+                          : "message-description"
+                      }
                       className={`mt-2 w-full rounded-md border ${
                         errors.message ? "border-red-500" : "border-gray-400/40"
                       } bg-black/20 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-500`}
                     />
 
                     {errors.message && (
-                      <p className="mt-1 text-sm text-red-400">
+                      <p
+                        id="message-error"
+                        className="mt-1 text-sm text-red-400"
+                      >
                         {errors.message}
                       </p>
                     )}
@@ -438,14 +571,20 @@ export default function ContactContent({ lang, messages }: Props) {
 
               {/* Success */}
               {submitStatus === "success" && (
-                <div className="mt-8 rounded-md border border-green-500/50 bg-green-500/10 p-4">
+                <div
+                  role="status"
+                  className="mt-8 rounded-md border border-green-500/50 bg-green-500/10 p-4"
+                >
                   <p className="text-sm text-green-400">{t.success}</p>
                 </div>
               )}
 
               {/* Error */}
               {submitStatus === "error" && (
-                <div className="mt-8 rounded-md border border-red-500/50 bg-red-500/10 p-4">
+                <div
+                  role="alert"
+                  className="mt-8 rounded-md border border-red-500/50 bg-red-500/10 p-4"
+                >
                   <p className="text-sm text-red-400">{t.error}</p>
                 </div>
               )}

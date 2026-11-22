@@ -155,6 +155,7 @@ export default function ShopContent({
 
   return (
     <>
+      <h1 className="sr-only">{translations.title}</h1>
       <Tabs
         activeTab={activeTab}
         onTabChange={(tab) => handleTabChange(tab as TabId)}
