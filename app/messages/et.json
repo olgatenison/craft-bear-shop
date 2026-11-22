@@ -430,7 +430,9 @@
 
     "shippingDraftSubmit": "Saada tellimuspäring",
     "shippingDraftSuccess": "Teie tellimuspäring on kätte saadud. Meie töötaja võtab teiega ühendust, et tarnekulu kokku leppida.",
-    "shippingDraftError": "Tellimuspäringu saatmine ebaõnnestus. Palun proovige uuesti."
+    "shippingDraftError": "Tellimuspäringu saatmine ebaõnnestus. Palun proovige uuesti.",
+    "shippingActiveDraftTitle": "Teil on juba aktiivne tellimustaotlus {orderNumber}",
+    "shippingActiveDraftDescription": "Oleme teie tellimustaotluse kätte saanud ja see ootab töötlemist. Võtame teiega ühendust tarnekulu kooskõlastamiseks. Tellimustaotlust ei ole vaja uuesti saata."
   },
   "Contact": {
     "title": "Teeme koostööd",

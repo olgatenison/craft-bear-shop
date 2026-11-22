@@ -430,7 +430,9 @@
 
     "shippingDraftSubmit": "Lähetä tilaustiedustelu",
     "shippingDraftSuccess": "Tilaustiedustelusi on vastaanotettu. Asiakaspalvelijamme ottaa sinuun yhteyttä toimituskulujen vahvistamiseksi.",
-    "shippingDraftError": "Tilaustiedustelun lähettäminen epäonnistui. Yritä uudelleen."
+    "shippingDraftError": "Tilaustiedustelun lähettäminen epäonnistui. Yritä uudelleen.",
+    "shippingActiveDraftTitle": "Sinulla on jo avoin tilaustiedustelu {orderNumber}",
+    "shippingActiveDraftDescription": "Olemme vastaanottaneet tilaustiedustelusi, ja se odottaa käsittelyä. Otamme sinuun yhteyttä toimituskulujen vahvistamiseksi. Tilaustiedustelua ei tarvitse lähettää uudelleen."
   },
   "Contact": {
     "title": "Tehdään yhteistyötä",

@@ -430,7 +430,9 @@
 
     "shippingDraftSubmit": "Submit order request",
     "shippingDraftSuccess": "Your order request has been received. Our team will contact you to confirm the shipping cost.",
-    "shippingDraftError": "Unable to submit your order request. Please try again."
+    "shippingDraftError": "Unable to submit your order request. Please try again.",
+    "shippingActiveDraftTitle": "You already have an active order request {orderNumber}",
+    "shippingActiveDraftDescription": "We have received your order request and it is awaiting processing. Our team will contact you to confirm the shipping cost. There is no need to submit another request."
   },
   "Contact": {
     "title": "Let's work together",

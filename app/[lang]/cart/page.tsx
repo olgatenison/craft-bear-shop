@@ -55,6 +55,8 @@ export default async function CartPage({
         shippingDraftSubmit={cart.shippingDraftSubmit}
         shippingDraftSuccess={cart.shippingDraftSuccess}
         shippingDraftError={cart.shippingDraftError}
+        shippingActiveDraftTitle={cart.shippingActiveDraftTitle}
+        shippingActiveDraftDescription={cart.shippingActiveDraftDescription}
       />
     </main>
   );

@@ -15,6 +15,10 @@ import {
 import { useCart } from "@/app/context/CartContext";
 import type { Locale } from "../lib/locale";
 
+// -------------------------------------------
+// TYPES
+// -------------------------------------------
+
 type ShoppingCardOverviewsProps = {
   shoppingCart: string;
   description: string;
@@ -61,6 +65,9 @@ type ShoppingCardOverviewsProps = {
   shippingDraftSubmit: string;
   shippingDraftSuccess: string;
   shippingDraftError: string;
+
+  shippingActiveDraftTitle: string;
+  shippingActiveDraftDescription: string;
 };
 
 type ShippingAddress = {
@@ -73,6 +80,20 @@ type ShippingAddress = {
   phone: string;
 };
 
+type DraftOrderResponse = {
+  success?: boolean;
+  error?: string;
+  message?: string;
+  draftOrderName?: string;
+  draftOrderStatus?: string;
+  orderNumber?: string;
+};
+
+type CheckoutResponse = {
+  checkoutUrl?: string;
+  error?: string;
+};
+
 const initialAddress: ShippingAddress = {
   firstName: "",
   lastName: "",
@@ -82,6 +103,10 @@ const initialAddress: ShippingAddress = {
   zip: "",
   phone: "",
 };
+
+// -------------------------------------------
+// COMPONENT
+// -------------------------------------------
 
 export default function ShoppingCardOverviews({
   shoppingCart,
@@ -126,6 +151,9 @@ export default function ShoppingCardOverviews({
   shippingDraftSubmit,
   shippingDraftSuccess,
   shippingDraftError,
+
+  shippingActiveDraftTitle,
+  shippingActiveDraftDescription,
 }: ShoppingCardOverviewsProps) {
   const router = useRouter();
   const { isSignedIn } = useUser();
@@ -149,6 +177,8 @@ export default function ShoppingCardOverviews({
 
   const [draftError, setDraftError] = useState<string | null>(null);
 
+  const [activeDraftOrder, setActiveDraftOrder] = useState<string | null>(null);
+
   const [shippingAddress, setShippingAddress] =
     useState<ShippingAddress>(initialAddress);
 
@@ -169,26 +199,33 @@ export default function ShoppingCardOverviews({
   };
 
   // -------------------------------------------
-  // SHIPPING CALCULATION
+  // SHIPPING AND TOTAL
   // -------------------------------------------
 
   const hasItems = items.length > 0;
 
-  // Estonia up to 50 EUR: standard checkout.
-  // Estonia over 50 EUR: shipping quote.
-  // Other countries: shipping quote.
+  // Estonia:
+  // Up to 50 EUR -> standard Shopify Checkout.
+  // Over 50 EUR -> Draft Order.
+  //
+  // Other countries:
+  // Any order amount -> Draft Order.
 
   const requiresShippingQuote = countryCode !== "EE" || totalPrice > 50;
 
+  // Standard shipping within Estonia:
+  // 6 EUR for orders up to 50 EUR.
+
   const shippingCost = hasItems && !requiresShippingQuote ? 6 : 0;
 
-  // Existing estimated tax calculation.
-  // The final tax amount is determined by Shopify.
-  const taxRate = 0.084;
+  // IMPORTANT:
+  // Shopify prices already include VAT.
+  // Do not add another 8.4% or 24%.
+  //
+  // Shopify is responsible for calculating
+  // the final tax treatment at checkout.
 
-  const taxAmount = hasItems ? totalPrice * taxRate : 0;
-
-  const orderTotal = totalPrice + shippingCost + taxAmount;
+  const orderTotal = totalPrice + shippingCost;
 
   // -------------------------------------------
   // MODAL EFFECTS
@@ -241,9 +278,6 @@ export default function ShoppingCardOverviews({
       return;
     }
 
-    // Standard checkout is only for Estonia
-    // with product subtotal <= 50 EUR.
-
     if (requiresShippingQuote) {
       setShowShippingModal(true);
       return;
@@ -267,15 +301,18 @@ export default function ShoppingCardOverviews({
         }),
       });
 
-      const result = await response.json();
+      const result = (await response.json()) as CheckoutResponse;
 
       if (!response.ok || !result.checkoutUrl) {
         console.error("Checkout error:", result);
+
         alert(checkoutError);
         return;
       }
 
-      // Do not clear cart before payment.
+      // Do not clear the cart before payment.
+      // The user may return without paying.
+
       window.location.assign(result.checkoutUrl);
     } catch (error) {
       console.error("Checkout request failed:", error);
@@ -295,8 +332,6 @@ export default function ShoppingCardOverviews({
 
     setDraftError(null);
     setDraftSuccess(null);
-
-    // Validate manually entered country code.
 
     if (countrySelection === "OTHER" && !/^[A-Z]{2}$/.test(countryCode)) {
       setDraftError(shippingDraftError);
@@ -323,7 +358,9 @@ export default function ShoppingCardOverviews({
   const submitDraftOrder = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!items.length || isCheckingOut) return;
+    if (!items.length || isCheckingOut || activeDraftOrder) {
+      return;
+    }
 
     if (!isSignedIn) {
       redirectToAccount();
@@ -349,7 +386,6 @@ export default function ShoppingCardOverviews({
             id: item.id,
             quantity: item.quantity,
           })),
-
           shippingAddress: {
             ...shippingAddress,
             countryCode,
@@ -357,7 +393,33 @@ export default function ShoppingCardOverviews({
         }),
       });
 
-      const result = await response.json();
+      const result = (await response.json()) as DraftOrderResponse;
+
+      // ---------------------------------------
+      // EXISTING ACTIVE DRAFT ORDER
+      // ---------------------------------------
+
+      if (
+        response.status === 409 &&
+        result.error === "ACTIVE_DRAFT_ORDER_EXISTS"
+      ) {
+        const orderNumber =
+          typeof result.draftOrderName === "string"
+            ? result.draftOrderName
+            : "";
+
+        setActiveDraftOrder(orderNumber);
+
+        // This is not a technical error.
+        // The request has already been received.
+
+        setDraftError(null);
+        return;
+      }
+
+      // ---------------------------------------
+      // OTHER ERRORS
+      // ---------------------------------------
 
       if (!response.ok || !result.success) {
         console.error("Draft Order error:", result);
@@ -366,13 +428,20 @@ export default function ShoppingCardOverviews({
         return;
       }
 
-      // Draft Order successfully created.
+      // ---------------------------------------
+      // SUCCESS
+      // ---------------------------------------
+
       // No payment has been collected.
+      // Manager will confirm shipping later.
 
       setShowShippingModal(false);
       setDraftSuccess(shippingDraftSuccess);
+      setDraftError(null);
 
-      // Clear cart only after successful creation.
+      // Clear the cart only after Shopify
+      // confirms the Draft Order was created.
+
       clearCart();
     } catch (error) {
       console.error("Draft Order request failed:", error);
@@ -382,6 +451,15 @@ export default function ShoppingCardOverviews({
       setIsCheckingOut(false);
     }
   };
+
+  // -------------------------------------------
+  // ACTIVE DRAFT ORDER MESSAGE
+  // -------------------------------------------
+
+  const activeDraftTitle = shippingActiveDraftTitle.replace(
+    "{orderNumber}",
+    activeDraftOrder ?? "",
+  );
 
   // -------------------------------------------
   // RENDER
@@ -426,7 +504,7 @@ export default function ShoppingCardOverviews({
                   {items.map((product) => {
                     const lineTotal = product.price * product.quantity;
 
-                    const href = `/${lang}/product/${product.handle}`;
+                    const href = `/${lang}/product/` + product.handle;
 
                     return (
                       <li key={product.id} className="flex py-6 sm:py-10">
@@ -451,22 +529,20 @@ export default function ShoppingCardOverviews({
                         <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
                           <div className="relative pr-0 xs:pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                             <div>
-                              <div className="flex justify-between">
-                                <h3 className="pr-6 text-lg font-medium text-white">
-                                  <Link
-                                    href={href}
-                                    className="font-medium text-yellow-400 transition-colors hover:text-yellow-300"
-                                  >
-                                    {product.name}
-                                  </Link>
+                              <h3 className="pr-6 text-lg font-medium text-white">
+                                <Link
+                                  href={href}
+                                  className="font-medium text-yellow-400 transition-colors hover:text-yellow-300"
+                                >
+                                  {product.name}
+                                </Link>
 
-                                  {product.size && (
-                                    <span className="block text-sm text-gray-300">
-                                      ({product.size})
-                                    </span>
-                                  )}
-                                </h3>
-                              </div>
+                                {product.size && (
+                                  <span className="block text-sm text-gray-300">
+                                    ({product.size})
+                                  </span>
+                                )}
+                              </h3>
 
                               <div className="mt-1 flex flex-wrap gap-x-4 text-base text-gray-200">
                                 {product.country && (
@@ -524,7 +600,6 @@ export default function ShoppingCardOverviews({
                                   <span className="sr-only">
                                     Decrease quantity
                                   </span>
-
                                   <span className="text-lg font-medium">−</span>
                                 </button>
 
@@ -545,7 +620,6 @@ export default function ShoppingCardOverviews({
                                   <span className="sr-only">
                                     Increase quantity
                                   </span>
-
                                   <span className="text-lg font-medium">+</span>
                                 </button>
                               </div>
@@ -602,6 +676,7 @@ export default function ShoppingCardOverviews({
                   value={countrySelection}
                   onChange={(event) => {
                     setCountrySelection(event.target.value);
+
                     setDraftError(null);
                     setDraftSuccess(null);
                   }}
@@ -679,7 +754,7 @@ export default function ShoppingCardOverviews({
                   </dd>
                 </div>
 
-                {/* TOTAL */}
+                {/* TOTAL - VAT ALREADY INCLUDED */}
 
                 <div className="flex items-center justify-between gap-4 border-t border-gray-200 pt-4">
                   <dt className="text-base font-medium text-yellow-400">
@@ -706,8 +781,27 @@ export default function ShoppingCardOverviews({
                 )}
               </dl>
 
+              {/* ACTIVE DRAFT NOTICE */}
+
+              {activeDraftOrder && requiresShippingQuote && (
+                <div
+                  role="status"
+                  className="rounded-md border border-yellow-400/30 bg-yellow-400/10 p-4"
+                >
+                  <p className="font-semibold text-yellow-300">
+                    {activeDraftTitle}
+                  </p>
+
+                  <p className="mt-2 text-sm leading-6 text-yellow-100/80">
+                    {shippingActiveDraftDescription}
+                  </p>
+                </div>
+              )}
+
+              {/* GENERAL ERROR */}
+
               {draftError && !showShippingModal && (
-                <p role="alert" className="text-sm text-red-400">
+                <p role="alert" className="mt-3 text-sm text-red-400">
                   {draftError}
                 </p>
               )}
@@ -718,7 +812,10 @@ export default function ShoppingCardOverviews({
                 <button
                   type="button"
                   onClick={handleCheckout}
-                  disabled={isCheckingOut}
+                  disabled={
+                    isCheckingOut ||
+                    (requiresShippingQuote && activeDraftOrder !== null)
+                  }
                   className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-semibold text-gray-900 transition-colors duration-300 hover:border-yellow-600 hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto lg:w-full"
                 >
                   {checkout}
@@ -761,7 +858,7 @@ export default function ShoppingCardOverviews({
             aria-labelledby="shipping-modal-title"
             className="relative my-auto w-full max-w-lg rounded-xl border border-white/10 bg-neutral-900 p-6 text-white shadow-2xl sm:p-8"
           >
-            {/* CLOSE BUTTON */}
+            {/* CLOSE */}
 
             <button
               type="button"
@@ -772,128 +869,155 @@ export default function ShoppingCardOverviews({
               <XMarkIconMini className="size-6" />
             </button>
 
-            {/* TITLE */}
+            {/* ACTIVE DRAFT MESSAGE */}
 
-            <h2
-              id="shipping-modal-title"
-              className="pr-6 text-xl font-semibold text-yellow-400"
-            >
-              {shippingModalTitle}
-            </h2>
+            {activeDraftOrder ? (
+              <div className="pr-5">
+                <h2
+                  id="shipping-modal-title"
+                  className="text-xl font-semibold text-yellow-400"
+                >
+                  {activeDraftTitle}
+                </h2>
 
-            {/* DESCRIPTION */}
-
-            <p className="mt-3 text-sm leading-6 text-gray-300">
-              {shippingModalDescription}
-            </p>
-
-            <p className="mt-2 text-xs leading-5 text-gray-400">
-              {shippingModalNotice}
-            </p>
-
-            {/* ADDRESS TITLE */}
-
-            <h3 className="mt-5 text-base font-semibold text-white">
-              {shippingAddressTitle}
-            </h3>
-
-            {/* ADDRESS FORM */}
-
-            <form onSubmit={submitDraftOrder} className="mt-3 space-y-3">
-              <div className="grid gap-3 sm:grid-cols-2">
-                {(
-                  [
-                    ["firstName", shippingFirstName],
-                    ["lastName", shippingLastName],
-                    ["address1", shippingAddress1],
-                    ["address2", shippingAddress2],
-                    ["city", shippingCity],
-                    ["zip", shippingPostalCode],
-                    ["phone", shippingPhone],
-                  ] as const
-                ).map(([key, label]) => (
-                  <label key={key} className="block text-xs text-gray-300">
-                    {label}
-
-                    <input
-                      type={key === "phone" ? "tel" : "text"}
-                      value={shippingAddress[key]}
-                      required={key !== "address2" && key !== "phone"}
-                      onChange={(event) =>
-                        updateAddress(key, event.target.value)
-                      }
-                      autoComplete={
-                        key === "firstName"
-                          ? "given-name"
-                          : key === "lastName"
-                            ? "family-name"
-                            : key === "address1"
-                              ? "address-line1"
-                              : key === "address2"
-                                ? "address-line2"
-                                : key === "city"
-                                  ? "address-level2"
-                                  : key === "zip"
-                                    ? "postal-code"
-                                    : "tel"
-                      }
-                      className="mt-1 w-full rounded-md border border-white/20 bg-neutral-800 px-3 py-2 text-sm text-white focus:border-yellow-400 focus:outline-none"
-                    />
-                  </label>
-                ))}
-              </div>
-
-              {/* OTHER COUNTRY CODE */}
-
-              {countrySelection === "OTHER" && (
-                <label className="block text-xs text-gray-300">
-                  {shippingCountryCodeLabel}
-
-                  <input
-                    value={otherCountryCode}
-                    maxLength={2}
-                    required
-                    onChange={(event) =>
-                      setOtherCountryCode(
-                        event.target.value
-                          .replace(/[^a-z]/gi, "")
-                          .slice(0, 2)
-                          .toUpperCase(),
-                      )
-                    }
-                    className="mt-1 w-full rounded-md border border-white/20 bg-neutral-800 px-3 py-2 text-sm text-white"
-                  />
-                </label>
-              )}
-
-              {/* ERROR */}
-
-              {draftError && (
-                <p role="alert" className="text-sm text-red-400">
-                  {draftError}
+                <p className="mt-4 text-sm leading-6 text-gray-300">
+                  {shippingActiveDraftDescription}
                 </p>
-              )}
 
-              {/* SUBMIT */}
+                <button
+                  type="button"
+                  onClick={() => setShowShippingModal(false)}
+                  className="mt-6 w-full rounded-md bg-yellow-400 px-5 py-3 text-sm font-semibold text-neutral-900 hover:bg-yellow-300"
+                >
+                  {shippingModalCancel}
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* TITLE */}
 
-              <button
-                type="submit"
-                disabled={isCheckingOut}
-                className="w-full rounded-md bg-yellow-400 px-5 py-3 text-sm font-semibold text-neutral-900 hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isCheckingOut ? "…" : shippingDraftSubmit}
-              </button>
+                <h2
+                  id="shipping-modal-title"
+                  className="pr-6 text-xl font-semibold text-yellow-400"
+                >
+                  {shippingModalTitle}
+                </h2>
 
-              {/* CANCEL */}
+                {/* DESCRIPTION */}
 
-              <button
-                type="button"
-                onClick={() => setShowShippingModal(false)}
-                className="w-full text-center text-sm text-gray-400 hover:text-white"
-              >
-                {shippingModalCancel}
-              </button>
-            </form>
+                <p className="mt-3 text-sm leading-6 text-gray-300">
+                  {shippingModalDescription}
+                </p>
+
+                <p className="mt-2 text-xs leading-5 text-gray-400">
+                  {shippingModalNotice}
+                </p>
+
+                {/* ADDRESS TITLE */}
+
+                <h3 className="mt-5 text-base font-semibold text-white">
+                  {shippingAddressTitle}
+                </h3>
+
+                {/* ADDRESS FORM */}
+
+                <form onSubmit={submitDraftOrder} className="mt-3 space-y-3">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {(
+                      [
+                        ["firstName", shippingFirstName],
+                        ["lastName", shippingLastName],
+                        ["address1", shippingAddress1],
+                        ["address2", shippingAddress2],
+                        ["city", shippingCity],
+                        ["zip", shippingPostalCode],
+                        ["phone", shippingPhone],
+                      ] as const
+                    ).map(([key, label]) => (
+                      <label key={key} className="block text-xs text-gray-300">
+                        {label}
+
+                        <input
+                          type={key === "phone" ? "tel" : "text"}
+                          value={shippingAddress[key]}
+                          required={key !== "address2" && key !== "phone"}
+                          onChange={(event) =>
+                            updateAddress(key, event.target.value)
+                          }
+                          autoComplete={
+                            key === "firstName"
+                              ? "given-name"
+                              : key === "lastName"
+                                ? "family-name"
+                                : key === "address1"
+                                  ? "address-line1"
+                                  : key === "address2"
+                                    ? "address-line2"
+                                    : key === "city"
+                                      ? "address-level2"
+                                      : key === "zip"
+                                        ? "postal-code"
+                                        : "tel"
+                          }
+                          className="mt-1 w-full rounded-md border border-white/20 bg-neutral-800 px-3 py-2 text-sm text-white focus:border-yellow-400 focus:outline-none"
+                        />
+                      </label>
+                    ))}
+                  </div>
+
+                  {/* OTHER COUNTRY CODE */}
+
+                  {countrySelection === "OTHER" && (
+                    <label className="block text-xs text-gray-300">
+                      {shippingCountryCodeLabel}
+
+                      <input
+                        value={otherCountryCode}
+                        maxLength={2}
+                        required
+                        onChange={(event) =>
+                          setOtherCountryCode(
+                            event.target.value
+                              .replace(/[^a-z]/gi, "")
+                              .slice(0, 2)
+                              .toUpperCase(),
+                          )
+                        }
+                        className="mt-1 w-full rounded-md border border-white/20 bg-neutral-800 px-3 py-2 text-sm text-white"
+                      />
+                    </label>
+                  )}
+
+                  {/* ERROR */}
+
+                  {draftError && (
+                    <p role="alert" className="text-sm text-red-400">
+                      {draftError}
+                    </p>
+                  )}
+
+                  {/* SUBMIT */}
+
+                  <button
+                    type="submit"
+                    disabled={isCheckingOut}
+                    className="w-full rounded-md bg-yellow-400 px-5 py-3 text-sm font-semibold text-neutral-900 hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isCheckingOut ? "…" : shippingDraftSubmit}
+                  </button>
+
+                  {/* CANCEL */}
+
+                  <button
+                    type="button"
+                    onClick={() => setShowShippingModal(false)}
+                    className="w-full text-center text-sm text-gray-400 hover:text-white"
+                  >
+                    {shippingModalCancel}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       )}

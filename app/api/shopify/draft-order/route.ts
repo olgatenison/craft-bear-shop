@@ -4,6 +4,10 @@ import { shopifyAdminFetch } from "@/app/lib/shopify/admin";
 
 export const runtime = "nodejs";
 
+// ------------------------------------------
+// TYPES
+// ------------------------------------------
+
 type CheckoutItem = {
   id: string;
   quantity: number;
@@ -21,16 +25,16 @@ type ShippingAddress = {
   phone?: string;
 };
 
-type DraftOrderRequest = {
-  items: CheckoutItem[];
-  shippingAddress: ShippingAddress;
-};
-
 type ShopifyVariant = {
   id: string;
   price: string;
   inventoryQuantity: number | null;
   inventoryPolicy: string;
+
+  inventoryItem: {
+    tracked: boolean;
+  } | null;
+
   product: {
     status: string;
   };
@@ -40,6 +44,7 @@ type VariantsResponse = {
   shop: {
     currencyCode: string;
   };
+
   nodes: Array<ShopifyVariant | null>;
 };
 
@@ -50,10 +55,29 @@ type DraftOrderCreateResponse = {
       name: string;
       status: string;
     } | null;
+
     userErrors: Array<{
       field: string[] | null;
       message: string;
     }>;
+  };
+};
+
+type ActiveDraftOrder = {
+  id: string;
+  name: string;
+  status: string;
+  note2: string | null;
+};
+
+type DraftOrdersResponse = {
+  draftOrders: {
+    nodes: ActiveDraftOrder[];
+
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
   };
 };
 
@@ -74,9 +98,38 @@ const GET_VARIANTS = `
         inventoryQuantity
         inventoryPolicy
 
+        inventoryItem {
+          tracked
+        }
+
         product {
           status
         }
+      }
+    }
+  }
+`;
+
+const GET_ACTIVE_DRAFT_ORDERS = `
+  query GetActiveDraftOrders(
+    $cursor: String
+    $search: String!
+  ) {
+    draftOrders(
+      first: 100
+      after: $cursor
+      query: $search
+    ) {
+      nodes {
+        id
+        name
+        status
+        note2
+      }
+
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
@@ -111,8 +164,14 @@ function cleanText(value: unknown, maxLength = 150): string {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
+// ------------------------------------------
+// VALIDATE CART ITEMS
+// ------------------------------------------
+
 function parseItems(value: unknown): CheckoutItem[] | null {
-  if (!Array.isArray(value)) return null;
+  if (!Array.isArray(value)) {
+    return null;
+  }
 
   if (value.length === 0 || value.length > 40) {
     return null;
@@ -121,7 +180,9 @@ function parseItems(value: unknown): CheckoutItem[] | null {
   const quantities = new Map<string, number>();
 
   for (const rawItem of value) {
-    if (!isRecord(rawItem)) return null;
+    if (!isRecord(rawItem)) {
+      return null;
+    }
 
     const id = rawItem.id;
     const quantity = rawItem.quantity;
@@ -139,7 +200,9 @@ function parseItems(value: unknown): CheckoutItem[] | null {
 
     const nextQuantity = (quantities.get(id) ?? 0) + quantity;
 
-    if (nextQuantity > 100) return null;
+    if (nextQuantity > 100) {
+      return null;
+    }
 
     quantities.set(id, nextQuantity);
   }
@@ -150,8 +213,14 @@ function parseItems(value: unknown): CheckoutItem[] | null {
   }));
 }
 
+// ------------------------------------------
+// VALIDATE SHIPPING ADDRESS
+// ------------------------------------------
+
 function parseAddress(value: unknown): ShippingAddress | null {
-  if (!isRecord(value)) return null;
+  if (!isRecord(value)) {
+    return null;
+  }
 
   const address: ShippingAddress = {
     firstName: cleanText(value.firstName),
@@ -180,52 +249,157 @@ function parseAddress(value: unknown): ShippingAddress | null {
 }
 
 // ------------------------------------------
+// CHECK EXISTING ACTIVE DRAFT ORDER
+// ------------------------------------------
+
+async function findActiveDraftOrder(
+  userId: string,
+): Promise<ActiveDraftOrder | null> {
+  let cursor: string | null = null;
+
+  // Search Draft Orders created by our app.
+  // Match the Clerk user ID stored in Notes.
+  //
+  // OPEN and INVOICE_SENT are considered
+  // active. COMPLETED does not block.
+  //
+  // Scan up to 20 pages. If the search
+  // exceeds this limit, fail safely.
+
+  for (let page = 0; page < 20; page++) {
+    const data: DraftOrdersResponse =
+      await shopifyAdminFetch<DraftOrdersResponse>(GET_ACTIVE_DRAFT_ORDERS, {
+        cursor,
+        search: "tag:SHIPPING_QUOTE_REQUIRED",
+      });
+
+    const connection = data.draftOrders;
+
+    for (const draft of connection.nodes) {
+      const isActive =
+        draft.status === "OPEN" || draft.status === "INVOICE_SENT";
+
+      // Shopify uses "note2" when reading
+      // Draft Order notes via GraphQL.
+
+      const belongsToUser =
+        draft.note2
+          ?.split("\n")
+          .some((line: string) => line.trim() === `Clerk user ID: ${userId}`) ??
+        false;
+
+      if (isActive && belongsToUser) {
+        return draft;
+      }
+    }
+
+    if (!connection.pageInfo.hasNextPage) {
+      return null;
+    }
+
+    if (!connection.pageInfo.endCursor) {
+      throw new Error("Draft Order pagination cursor is missing");
+    }
+
+    cursor = connection.pageInfo.endCursor;
+  }
+
+  throw new Error("Draft Order search limit exceeded");
+}
+
+// ------------------------------------------
 // CREATE DRAFT ORDER
 // ------------------------------------------
 
 export async function POST(req: NextRequest) {
   try {
-    // 1. AUTHENTICATION
+    // --------------------------------------
+    // 1. CLERK AUTHENTICATION
+    // --------------------------------------
 
     const { userId } = await auth();
 
     if (!userId) {
       return NextResponse.json(
-        { error: "User not authenticated" },
+        {
+          error: "User not authenticated",
+        },
         { status: 401 },
       );
     }
 
-    // 2. REQUEST VALIDATION
+    // --------------------------------------
+    // 2. VALIDATE REQUEST
+    // --------------------------------------
 
-    let body: DraftOrderRequest;
+    let body: unknown;
 
     try {
       body = await req.json();
     } catch {
-      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: "Invalid JSON",
+        },
+        { status: 400 },
+      );
     }
 
-    const items = parseItems(body?.items);
-    const shippingAddress = parseAddress(body?.shippingAddress);
+    if (!isRecord(body)) {
+      return NextResponse.json(
+        {
+          error: "Invalid request body",
+        },
+        { status: 400 },
+      );
+    }
+
+    const items = parseItems(body.items);
+
+    const shippingAddress = parseAddress(body.shippingAddress);
 
     if (!items) {
       return NextResponse.json(
-        { error: "Invalid cart items" },
+        {
+          error: "Invalid cart items",
+        },
         { status: 400 },
       );
     }
 
     if (!shippingAddress) {
       return NextResponse.json(
-        { error: "Valid shipping address is required" },
+        {
+          error: "Valid shipping address is required",
+        },
         { status: 400 },
       );
     }
 
-    // 3. GET CLERK USER
+    // --------------------------------------
+    // 3. BLOCK DUPLICATE DRAFT ORDERS
+    // --------------------------------------
+
+    const existingDraft = await findActiveDraftOrder(userId);
+
+    if (existingDraft) {
+      return NextResponse.json(
+        {
+          error: "ACTIVE_DRAFT_ORDER_EXISTS",
+          message: "You already have an active order request.",
+          draftOrderName: existingDraft.name,
+          draftOrderStatus: existingDraft.status,
+        },
+        { status: 409 },
+      );
+    }
+
+    // --------------------------------------
+    // 4. GET CLERK USER
+    // --------------------------------------
 
     const client = await clerkClient();
+
     const user = await client.users.getUser(userId);
 
     const email =
@@ -235,12 +409,16 @@ export async function POST(req: NextRequest) {
 
     if (!email) {
       return NextResponse.json(
-        { error: "User email not found" },
+        {
+          error: "User email not found",
+        },
         { status: 400 },
       );
     }
 
-    // 4. VERIFY PRODUCTS AND PRICES
+    // --------------------------------------
+    // 5. VERIFY PRODUCTS AND PRICES
+    // --------------------------------------
 
     const ids = items.map((item) => item.id);
 
@@ -251,7 +429,9 @@ export async function POST(req: NextRequest) {
 
     if (variantsData.shop.currencyCode !== "EUR") {
       return NextResponse.json(
-        { error: "Unsupported shop currency" },
+        {
+          error: "Unsupported shop currency",
+        },
         { status: 409 },
       );
     }
@@ -272,14 +452,18 @@ export async function POST(req: NextRequest) {
 
       if (!variant) {
         return NextResponse.json(
-          { error: "Product variant not found" },
+          {
+            error: "Product variant not found",
+          },
           { status: 400 },
         );
       }
 
       if (variant.product.status !== "ACTIVE") {
         return NextResponse.json(
-          { error: "Product is not active" },
+          {
+            error: "Product is not active",
+          },
           { status: 409 },
         );
       }
@@ -288,22 +472,39 @@ export async function POST(req: NextRequest) {
 
       if (!Number.isFinite(price) || price < 0) {
         return NextResponse.json(
-          { error: "Invalid product price" },
+          {
+            error: "Invalid product price",
+          },
           { status: 409 },
         );
       }
 
-      // Basic inventory check.
-      if (
-        variant.inventoryPolicy === "DENY" &&
+      // ----------------------------------
+      // INVENTORY CHECK
+      // ----------------------------------
+
+      const inventoryIsTracked = variant.inventoryItem?.tracked === true;
+
+      const oversellingIsForbidden = variant.inventoryPolicy === "DENY";
+
+      const insufficientInventory =
         variant.inventoryQuantity !== null &&
-        variant.inventoryQuantity < item.quantity
+        variant.inventoryQuantity < item.quantity;
+
+      if (
+        inventoryIsTracked &&
+        oversellingIsForbidden &&
+        insufficientInventory
       ) {
         return NextResponse.json(
-          { error: "Insufficient product inventory" },
+          {
+            error: "Insufficient product inventory",
+          },
           { status: 409 },
         );
       }
+
+      // Calculate subtotal in cents.
 
       const unitPriceCents = Math.round(price * 100);
 
@@ -312,18 +513,24 @@ export async function POST(req: NextRequest) {
 
     if (!Number.isSafeInteger(subtotalCents)) {
       return NextResponse.json(
-        { error: "Invalid order amount" },
+        {
+          error: "Invalid order amount",
+        },
         { status: 400 },
       );
     }
 
-    // 5. SHIPPING RULES
+    // --------------------------------------
+    // 6. SHIPPING RULES
+    // --------------------------------------
 
     const isEstonia = shippingAddress.countryCode === "EE";
 
     const requiresShippingQuote = !isEstonia || subtotalCents > 5000;
 
-    // Standard orders go through Shopify Checkout.
+    // Estonia up to 50 EUR:
+    // use standard Shopify Checkout.
+
     if (!requiresShippingQuote) {
       return NextResponse.json(
         {
@@ -338,7 +545,9 @@ export async function POST(req: NextRequest) {
       ? "INTERNATIONAL_DELIVERY"
       : "ORDER_OVER_50_EUR";
 
-    // 6. PREPARE DRAFT ORDER
+    // --------------------------------------
+    // 7. PREPARE DRAFT ORDER
+    // --------------------------------------
 
     const draftInput = {
       email,
@@ -356,13 +565,23 @@ export async function POST(req: NextRequest) {
         city: shippingAddress.city,
         zip: shippingAddress.zip,
         countryCode: shippingAddress.countryCode,
+
         ...(shippingAddress.provinceCode
           ? {
               provinceCode: shippingAddress.provinceCode,
             }
           : {}),
-        ...(shippingAddress.phone ? { phone: shippingAddress.phone } : {}),
+
+        ...(shippingAddress.phone
+          ? {
+              phone: shippingAddress.phone,
+            }
+          : {}),
       },
+
+      // Important:
+      // Use "note" when CREATING a Draft Order.
+      // Use "note2" when READING it.
 
       note: [
         "Craft Bear Store",
@@ -397,19 +616,23 @@ export async function POST(req: NextRequest) {
       ],
     };
 
-    // 7. CREATE SHOPIFY DRAFT ORDER
+    // --------------------------------------
+    // 8. CREATE SHOPIFY DRAFT ORDER
+    // --------------------------------------
 
     const data = await shopifyAdminFetch<DraftOrderCreateResponse>(
       CREATE_DRAFT_ORDER,
-      { input: draftInput },
+      {
+        input: draftInput,
+      },
     );
 
-    const { draftOrder, userErrors } = data.draftOrderCreate;
+    const result = data.draftOrderCreate;
 
-    if (userErrors.length > 0) {
+    if (result.userErrors.length > 0) {
       console.error(
         "Draft Order validation failed:",
-        userErrors.map((error) => error.message),
+        result.userErrors.map((error) => error.message),
       );
 
       return NextResponse.json(
@@ -420,24 +643,28 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!draftOrder) {
+    if (!result.draftOrder) {
       return NextResponse.json(
-        { error: "Draft order was not created" },
+        {
+          error: "Draft order was not created",
+        },
         { status: 500 },
       );
     }
 
-    // 8. SUCCESS
+    // --------------------------------------
+    // 9. SUCCESS
+    // --------------------------------------
 
-    // No invoice is sent.
+    // No invoice is sent automatically.
     // No payment is collected.
     // Shipping must be confirmed manually.
 
     return NextResponse.json(
       {
         success: true,
-        draftOrderId: draftOrder.id,
-        orderNumber: draftOrder.name,
+        draftOrderId: result.draftOrder.id,
+        orderNumber: result.draftOrder.name,
         shippingStatus: "pending_quote",
         paymentRequiredNow: false,
       },
@@ -450,7 +677,9 @@ export async function POST(req: NextRequest) {
     );
 
     return NextResponse.json(
-      { error: "Unable to create draft order" },
+      {
+        error: "Unable to create draft order",
+      },
       { status: 500 },
     );
   }
