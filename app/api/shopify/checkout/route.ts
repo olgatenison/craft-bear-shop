@@ -1,12 +1,24 @@
-// app/api/shopify/checkout/route.ts
+// app\api\shopify\checkout\route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { shopifyFetchWithLocale } from "@/app/lib/shopify/client";
 import type { Locale } from "@/app/[lang]/messages";
 
+export const runtime = "nodejs";
+
+// -------------------------------------------
+// TYPES
+// -------------------------------------------
+
 type CheckoutItem = {
   id: string;
   quantity: number;
+};
+
+type CheckoutRequest = {
+  items?: unknown;
+  lang?: unknown;
+  countryCode?: unknown;
 };
 
 type CartCreateResponse = {
@@ -14,40 +26,32 @@ type CartCreateResponse = {
     cart: {
       id: string;
       checkoutUrl: string;
+      buyerIdentity: {
+        countryCode: string | null;
+      };
+      cost: {
+        subtotalAmount: {
+          amount: string;
+          currencyCode: string;
+        };
+      };
     } | null;
     userErrors: Array<{
-      field: string[];
+      field: string[] | null;
       message: string;
     }>;
   };
 };
 
-type AddressMetadata = {
-  address1?: string;
-  address2?: string;
-  city?: string;
-  provinceCode?: string;
-  countryCode?: string;
-  zip?: string;
-};
-
 type BuyerIdentity = {
   email: string;
+  countryCode: "EE";
   phone?: string;
-  deliveryAddressPreferences?: Array<{
-    deliveryAddress: {
-      address1: string;
-      address2: string;
-      city: string;
-      provinceCode: string;
-      countryCode: string;
-      zip: string;
-      firstName: string;
-      lastName: string;
-      phone: string;
-    };
-  }>;
 };
+
+// -------------------------------------------
+// SHOPIFY CART CREATE MUTATION
+// -------------------------------------------
 
 const CART_CREATE = `
   mutation CartCreate(
@@ -55,12 +59,32 @@ const CART_CREATE = `
     $language: LanguageCode
     $country: CountryCode
     $buyerIdentity: CartBuyerIdentityInput
-  ) @inContext(language: $language, country: $country) {
-    cartCreate(input: { lines: $lines, buyerIdentity: $buyerIdentity }) {
+  ) @inContext(
+    language: $language,
+    country: $country
+  ) {
+    cartCreate(
+      input: {
+        lines: $lines
+        buyerIdentity: $buyerIdentity
+      }
+    ) {
       cart {
         id
         checkoutUrl
+
+        buyerIdentity {
+          countryCode
+        }
+
+        cost {
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+        }
       }
+
       userErrors {
         field
         message
@@ -69,97 +93,197 @@ const CART_CREATE = `
   }
 `;
 
+// -------------------------------------------
+// VALIDATION HELPERS
+// -------------------------------------------
+
+const supportedLocales = ["en", "et", "fi", "ru", "uk"] as const;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isLocale(value: unknown): value is Locale {
+  return (
+    typeof value === "string" &&
+    supportedLocales.some((locale) => locale === value)
+  );
+}
+
+function parseItems(value: unknown): CheckoutItem[] | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+
+  if (value.length === 0 || value.length > 40) {
+    return null;
+  }
+
+  const quantities = new Map<string, number>();
+
+  for (const rawItem of value) {
+    if (!isRecord(rawItem)) {
+      return null;
+    }
+
+    const id = rawItem.id;
+    const quantity = rawItem.quantity;
+
+    if (
+      typeof id !== "string" ||
+      !/^gid:\/\/shopify\/ProductVariant\/\d+$/.test(id) ||
+      typeof quantity !== "number" ||
+      !Number.isSafeInteger(quantity) ||
+      quantity < 1 ||
+      quantity > 100
+    ) {
+      return null;
+    }
+
+    const totalQuantity = (quantities.get(id) ?? 0) + quantity;
+
+    if (totalQuantity > 100) {
+      return null;
+    }
+
+    quantities.set(id, totalQuantity);
+  }
+
+  return Array.from(quantities, ([id, quantity]) => ({
+    id,
+    quantity,
+  }));
+}
+
+// -------------------------------------------
+// CHECKOUT API
+// -------------------------------------------
+
 export async function POST(req: NextRequest) {
   try {
-    const { items, lang } = await req.json();
+    // 1. CHECK CLERK AUTHENTICATION
 
-    console.log("=== Checkout API Start ===");
-    console.log("Items:", items);
-    console.log("Language:", lang);
-
-    // Валидация входных данных
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
-    }
-
-    if (!lang) {
-      return NextResponse.json(
-        { error: "Language parameter is required" },
-        { status: 400 }
-      );
-    }
-
-    // Получаем userId из Clerk
     const { userId } = await auth();
-
-    console.log("User ID:", userId);
 
     if (!userId) {
       return NextResponse.json(
-        { error: "User not authenticated" },
-        { status: 401 }
+        {
+          error: "User not authenticated",
+        },
+        { status: 401 },
       );
     }
 
-    // Получаем данные пользователя
+    // 2. READ REQUEST BODY
+
+    let body: CheckoutRequest;
+
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        {
+          error: "Invalid request JSON",
+        },
+        { status: 400 },
+      );
+    }
+
+    // 3. VALIDATE LANGUAGE
+
+    if (!isLocale(body?.lang)) {
+      return NextResponse.json(
+        {
+          error: "Invalid language",
+        },
+        { status: 400 },
+      );
+    }
+
+    const locale = body.lang;
+
+    // 4. VALIDATE COUNTRY
+
+    // Standard checkout is allowed only
+    // for delivery within Estonia.
+
+    if (body.countryCode !== "EE") {
+      return NextResponse.json(
+        {
+          error: "Standard checkout is available only for Estonia",
+          checkoutType: "draft_order",
+          requiresShippingQuote: true,
+        },
+        { status: 409 },
+      );
+    }
+
+    // 5. VALIDATE CART ITEMS
+
+    const items = parseItems(body.items);
+
+    if (!items) {
+      return NextResponse.json(
+        {
+          error: "Invalid cart items",
+        },
+        { status: 400 },
+      );
+    }
+
+    // 6. GET CLERK USER DATA
+
     const client = await clerkClient();
+
     const user = await client.users.getUser(userId);
 
-    console.log("User email:", user.emailAddresses[0]?.emailAddress);
-    console.log("User name:", user.firstName, user.lastName);
-
-    const userEmail = user.emailAddresses[0]?.emailAddress;
+    const userEmail =
+      user.emailAddresses.find(
+        (email) => email.id === user.primaryEmailAddressId,
+      )?.emailAddress ?? user.emailAddresses[0]?.emailAddress;
 
     if (!userEmail) {
       return NextResponse.json(
-        { error: "User email not found" },
-        { status: 400 }
+        {
+          error: "User email not found",
+        },
+        { status: 400 },
       );
     }
 
-    const locale = lang as Locale;
+    // 7. BUILD SHOPIFY CART LINES
 
-    // Формируем линии для корзины
-    const lines = (items as CheckoutItem[]).map((item) => ({
+    // Do not accept product prices from
+    // the browser. Shopify calculates them.
+
+    const lines = items.map((item) => ({
       merchandiseId: item.id,
       quantity: item.quantity,
     }));
 
-    console.log("Cart lines:", lines);
+    // 8. BUILD BUYER IDENTITY
 
-    // ✅ Собираем buyerIdentity БЕЗ поля customer
+    // We no longer use the address stored
+    // in Clerk publicMetadata.
+    //
+    // The buyer enters the full delivery
+    // address in Shopify Checkout.
+
     const buyerIdentity: BuyerIdentity = {
       email: userEmail,
+      countryCode: "EE",
     };
 
-    // Добавляем телефон, если есть
-    if (user.phoneNumbers && user.phoneNumbers.length > 0) {
-      buyerIdentity.phone = user.phoneNumbers[0].phoneNumber;
+    const primaryPhone =
+      user.phoneNumbers.find((phone) => phone.id === user.primaryPhoneNumberId)
+        ?.phoneNumber ?? user.phoneNumbers[0]?.phoneNumber;
+
+    if (primaryPhone) {
+      buyerIdentity.phone = primaryPhone;
     }
 
-    // Если у пользователя есть адрес в метаданных Clerk
-    const address = user.publicMetadata?.address as AddressMetadata | undefined;
-    if (address) {
-      buyerIdentity.deliveryAddressPreferences = [
-        {
-          deliveryAddress: {
-            address1: address.address1 || "",
-            address2: address.address2 || "",
-            city: address.city || "",
-            provinceCode: address.provinceCode || "",
-            countryCode: address.countryCode || "EE",
-            zip: address.zip || "",
-            firstName: user.firstName || "",
-            lastName: user.lastName || "",
-            phone: user.phoneNumbers?.[0]?.phoneNumber || "",
-          },
-        },
-      ];
-    }
+    // 9. CREATE SHOPIFY CART
 
-    console.log("Buyer identity:", JSON.stringify(buyerIdentity, null, 2));
-
-    // Создаём корзину в Shopify
     const data = await shopifyFetchWithLocale<CartCreateResponse>(
       CART_CREATE,
       {
@@ -167,50 +291,179 @@ export async function POST(req: NextRequest) {
         buyerIdentity,
       },
       locale,
-      0
+      0,
     );
 
-    console.log("Shopify response:", JSON.stringify(data, null, 2));
+    const result = data.cartCreate;
 
-    const { cart, userErrors } = data.cartCreate;
-
-    if (userErrors && userErrors.length > 0) {
-      console.error("cartCreate userErrors:", userErrors);
+    if (!result) {
       return NextResponse.json(
         {
-          error: "Cart create failed",
-          details: userErrors.map((e) => e.message).join(", "),
+          error: "Invalid Shopify response",
         },
-        { status: 400 }
+        { status: 502 },
+      );
+    }
+
+    const { cart, userErrors } = result;
+
+    if (userErrors?.length) {
+      console.error(
+        "Shopify cartCreate errors:",
+        userErrors.map((error) => error.message),
+      );
+
+      return NextResponse.json(
+        {
+          error: "Unable to create Shopify cart",
+        },
+        { status: 400 },
       );
     }
 
     if (!cart || !cart.checkoutUrl) {
-      console.error("No cart or checkoutUrl in response");
       return NextResponse.json(
-        { error: "Failed to create cart / checkoutUrl" },
-        { status: 500 }
+        {
+          error: "Shopify checkout URL not found",
+        },
+        { status: 502 },
       );
     }
 
-    console.log("Checkout URL:", cart.checkoutUrl);
-    console.log("=== Checkout API Success ===");
+    // 10. VERIFY SHOPIFY COUNTRY
 
-    return NextResponse.json({
-      checkoutUrl: cart.checkoutUrl,
-    });
+    if (cart.buyerIdentity?.countryCode !== "EE") {
+      return NextResponse.json(
+        {
+          error: "Invalid Shopify cart country",
+        },
+        { status: 409 },
+      );
+    }
+
+    // 11. VERIFY SHOPIFY SUBTOTAL
+
+    // Use Shopify's real cart subtotal,
+    // not totalPrice from the browser.
+    //
+    // Shipping and tax are not added to
+    // the 50 EUR threshold.
+
+    const subtotalAmount = cart.cost?.subtotalAmount;
+
+    if (subtotalAmount?.currencyCode !== "EUR") {
+      return NextResponse.json(
+        {
+          error: "Unsupported checkout currency",
+        },
+        { status: 409 },
+      );
+    }
+
+    const amount = subtotalAmount.amount;
+
+    // Accept decimal money values, e.g.
+    // 24, 24.5 or 24.50.
+
+    if (!/^\d+(\.\d{1,2})?$/.test(amount)) {
+      return NextResponse.json(
+        {
+          error: "Invalid Shopify subtotal",
+        },
+        { status: 502 },
+      );
+    }
+
+    const [euros, cents = ""] = amount.split(".");
+
+    const subtotalCents = Number(euros) * 100 + Number(cents.padEnd(2, "0"));
+
+    if (!Number.isSafeInteger(subtotalCents)) {
+      return NextResponse.json(
+        {
+          error: "Invalid checkout amount",
+        },
+        { status: 502 },
+      );
+    }
+
+    // ESTONIA OVER 50 EUR:
+    // DO NOT RETURN CHECKOUT URL.
+    // CUSTOMER MUST USE DRAFT ORDER FLOW.
+
+    if (subtotalCents > 5000) {
+      return NextResponse.json(
+        {
+          error: "Shipping quote is required",
+          checkoutType: "draft_order",
+          requiresShippingQuote: true,
+        },
+        { status: 409 },
+      );
+    }
+
+    // 12. VERIFY CHECKOUT URL
+
+    let checkoutUrl: URL;
+
+    try {
+      checkoutUrl = new URL(cart.checkoutUrl);
+    } catch {
+      return NextResponse.json(
+        {
+          error: "Invalid Shopify checkout URL",
+        },
+        { status: 502 },
+      );
+    }
+
+    if (
+      checkoutUrl.protocol !== "https:" ||
+      (!checkoutUrl.hostname.endsWith(".myshopify.com") &&
+        checkoutUrl.hostname !==
+          new URL(`https://${process.env.SHOPIFY_DOMAIN ?? "invalid.example"}`)
+            .hostname)
+    ) {
+      // Shopify can return a custom
+      // storefront checkout domain.
+      //
+      // A different trusted checkout
+      // hostname must be explicitly
+      // configured if your shop uses one.
+      return NextResponse.json(
+        {
+          error: "Unexpected checkout URL domain",
+        },
+        { status: 502 },
+      );
+    }
+
+    // 13. SUCCESS
+
+    // This endpoint only creates a Shopify
+    // cart and returns a checkout URL.
+    //
+    // It does not collect payment.
+
+    return NextResponse.json(
+      {
+        checkoutUrl: cart.checkoutUrl,
+        checkoutType: "standard",
+        countryCode: "EE",
+      },
+      { status: 200 },
+    );
   } catch (error) {
-    console.error("=== Checkout API Error ===");
-    console.error("Error:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
+    console.error(
+      "Shopify Checkout API error:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
 
     return NextResponse.json(
       {
         error: "Failed to create checkout",
-        message: errorMessage,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

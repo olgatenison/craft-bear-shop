@@ -6,11 +6,11 @@ export default function TextBlockCenter({
   subtitle: string;
 }) {
   return (
-    <div className="mx-auto max-w-7xl py-2 px-6 ">
+    <div className="mx-auto max-w-7xl py-2 px-6 items-center  gap-6 lg:gap-12">
       <h2 className="text-balance text-3xl md:text-4xl font-semibold tracking-tight text-white sm:text-5xl text-center max-w-3xl mx-auto">
         {title}
       </h2>
-      <p className="mx-auto mt-6 max-w-xl text-base md:text-lg/8 text-gray-300 text-center text-balance">
+      <p className="mx-auto mt-6 max-w-3xl text-base md:text-lg/8 text-gray-300 text-center  text-balance">
         {subtitle}
       </p>
     </div>

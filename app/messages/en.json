@@ -385,13 +385,14 @@
     "sendResetCodeButton": "Send reset code",
     "resetPasswordButton": "Reset password"
   },
+
   "ShoppingCardOverviews": {
     "shoppingCart": "Shopping Cart",
     "description": "Items in your shopping cart",
     "orderSummary": "Order summary",
     "subtotal": "Subtotal",
-    "shippingEstimate": "Shipping estimate",
-    "shippingEstimateInfo": "Learn more about how shipping is calculated",
+    "shippingEstimate": "Estimated shipping",
+    "shippingEstimateInfo": "Learn more about shipping and delivery conditions",
     "taxEstimate": "Tax estimate",
     "taxEstimateInfo": "Learn more about how tax is calculated",
     "total": "Total",
@@ -399,7 +400,37 @@
     "empty": "Your cart is empty",
     "emptyDescription": "Add some products to get started!",
     "CTAAdd": "All Products",
-    "continueShopping": "Continue shopping"
+    "continueShopping": "Continue shopping",
+
+    "shippingPending": "To be confirmed",
+    "shippingModalTitle": "Shipping cost to be confirmed",
+    "shippingModalDescription": "For orders over €50 or deliveries outside Estonia, shipping costs are calculated individually. Our team will contact you to confirm the delivery cost.",
+    "shippingModalNotice": "Shipping is not included in the order total.",
+    "shippingModalConfirm": "Understood, continue",
+    "shippingModalCancel": "Back to cart",
+    "shippingTotalWithoutDelivery": "Order total excluding shipping",
+    "checkoutError": "Unable to proceed to checkout. Please try again.",
+
+    "shippingCountryLabel": "Delivery country",
+    "shippingCountryEstonia": "Estonia",
+    "shippingCountryFinland": "Finland",
+    "shippingCountryLatvia": "Latvia",
+    "shippingCountryLithuania": "Lithuania",
+    "shippingCountryOther": "Other country",
+    "shippingCountryCodeLabel": "Country code (ISO 3166-1 alpha-2)",
+
+    "shippingAddressTitle": "Delivery address",
+    "shippingFirstName": "First name",
+    "shippingLastName": "Last name",
+    "shippingAddress1": "Street address",
+    "shippingAddress2": "Apartment, suite, etc. (optional)",
+    "shippingCity": "City",
+    "shippingPostalCode": "Postal code",
+    "shippingPhone": "Phone number (optional)",
+
+    "shippingDraftSubmit": "Submit order request",
+    "shippingDraftSuccess": "Your order request has been received. Our team will contact you to confirm the shipping cost.",
+    "shippingDraftError": "Unable to submit your order request. Please try again."
   },
   "Contact": {
     "title": "Let's work together",

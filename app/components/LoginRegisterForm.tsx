@@ -353,8 +353,8 @@ export default function LoginRegisterForm({
 
       setError(messages.signInFlowIncomplete);
     } catch (err: unknown) {
-      console.error("Authentication error:", err);
-
+      // Показываем ошибку в форме без console.error,
+      // чтобы dev overlay Next.js не перекрывал интерфейс.
       setError(getErrorMessage(err, messages));
     } finally {
       setLoading(false);
